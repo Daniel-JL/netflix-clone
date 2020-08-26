@@ -4,6 +4,7 @@ import {
   NavLink,
 } from 'react-router-dom';
 import { AccountDropdown } from './account-dropdown';
+import { SearchBox } from './search-box';
 
 const IHeaderNavProps = {
 
@@ -24,7 +25,7 @@ export function HeaderNav() {
       </nav>
 
       <nav>
-        <NavLink to="/search">SEARCH HERE</NavLink>
+        <SearchBox />
         <NavLink to="/kids">KIDS</NavLink>
         <NavLink to="/dvd">DVD</NavLink>
         <AccountDropdown />
