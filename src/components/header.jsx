@@ -4,6 +4,12 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { HeaderNav } from './header-nav';
+import { RectPlayButton, RectInfoButton, LinkTextButton } from './buttons';
+import { SearchBox } from './search-box';
+import { Notifications } from './notifications';
+import { AccountDropdown } from './account-dropdown';
+
+
 
 const Nav = styled.div`
 
@@ -23,18 +29,27 @@ const IHeaderProps = {
 
 };
 
-function Header() {
+export function Header() {
   return (
-    <div>
+    <Nav>
       <NavLeft>
-        <HeaderNav />
+        <RectPlayButton />
+        <LinkTextButton>Home</LinkTextButton>
+        <LinkTextButton>Series</LinkTextButton>
+        <LinkTextButton>Films</LinkTextButton>
+        <LinkTextButton>Latest</LinkTextButton>
+        <LinkTextButton>My List</LinkTextButton>
+
+        
       </NavLeft>
-    </div>
+      
+      <NavRight>
+        <SearchBox />
+        <LinkTextButton>Children</LinkTextButton>
+        <RectPlayButton />
+        <Notifications />
+        <AccountDropdown />
+      </NavRight>
+    </Nav>
   );
 }
-
-export default Header;
-
-export {
-  Header,
-};

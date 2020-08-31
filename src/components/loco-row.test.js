@@ -1,12 +1,11 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+import { LocoRow } from './loco-row';
 
-import { MovieBrowser } from './movie-browser.jsx'
-
-describe('Movie browser component', () => {
+describe('Loco row component', () => {
   it('renders correctly', () => {
-    const wrapper = renderer.create(<MovieBrowser />).toJSON();
+    const wrapper = renderer.create(<LocoRow />).toJSON();
 
     expect(wrapper).toMatchSnapshot();
   });

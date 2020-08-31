@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Footer component renders correctly 1`] = `<div />`;
+
+exports[`Footer renders correctly 1`] = `<div />`;
