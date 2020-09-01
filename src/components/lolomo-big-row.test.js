@@ -25,4 +25,5 @@ describe('Lolomo big row row component', () => {
   it('should have two buttons and a description beside the video player', () => {
 
   });
+  
 });
