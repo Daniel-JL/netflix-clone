@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { HeaderNav } from './header-nav';
-import { RectPlayButton, RectInfoButton, LinkTextButton, RoundPlayButton, RoundDarkButton } from './buttons';
+import { RectPlayButton, RectInfoButton, LinkTextButton, NetflixButton, RoundPlayButton, RoundDarkButton } from './buttons';
 import { SearchBox } from './search-box';
 import { Notifications } from './notifications';
 import { AccountDropdown } from './account-dropdown';
@@ -28,16 +28,20 @@ async function postData() {
 postData();
 
 const Nav = styled.div`
-
+  background-color: #000000;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 10px;
+  
 `;
 
 const NavLeft = styled.div`
-  background-color: #000000;
-
+  padding-left: 40px;
 `;
 
 const NavRight = styled.div`
-
+  padding-right: 40px;
 `;
 
 const IHeaderProps = {
@@ -49,7 +53,7 @@ export function Header() {
   return (
     <Nav>
       <NavLeft>
-        <RectPlayButton />
+        <NetflixButton />
         <LinkTextButton>Home</LinkTextButton>
         <LinkTextButton>Series</LinkTextButton>
         <LinkTextButton>Films</LinkTextButton>

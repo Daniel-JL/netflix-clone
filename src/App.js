@@ -2,7 +2,7 @@
 /* eslint-disable react/self-closing-comp */
 import React from 'react';
 import { 
-  BrowserRouter as Router,
+  BrowserRouter,
   Switch,
   Route,
   Link,
@@ -15,12 +15,11 @@ import { Footer } from './components/footer';
 export default function App() {
 
   return (
-    <div>
-      <Router>
-        <Header className="header">
+    <main>
+      <Switch>
+      {/* <Header className="header">
 
-        </Header>
-      </Router>
+      </Header>
 
       <div id="large-image"></div>
 
@@ -28,7 +27,8 @@ export default function App() {
 
       <Footer className="footer">
 
-      </Footer>
-    </div>
+      </Footer> */}
+      </Switch>
+    </main>
   );
 }
