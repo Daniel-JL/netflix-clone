@@ -1,13 +1,15 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App.js';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
+import { Routes } from './routes';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <Routes />
   </BrowserRouter>,
   document.getElementById('root')
 );

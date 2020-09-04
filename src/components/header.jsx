@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   NavLink,
+  Link,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { HeaderNav } from './header-nav';
@@ -53,20 +54,31 @@ export function Header() {
   return (
     <Nav>
       <NavLeft>
-        <NetflixButton />
-        <LinkTextButton>Home</LinkTextButton>
-        <LinkTextButton>Series</LinkTextButton>
-        <LinkTextButton>Films</LinkTextButton>
-        <LinkTextButton>Latest</LinkTextButton>
-        <LinkTextButton>My List</LinkTextButton>
-
-        
+        <Link to='/browse'>
+          <NetflixButton />
+        </Link>
+        <Link to='/browse'>
+          <LinkTextButton>Home</LinkTextButton>
+        </Link>
+        <Link to='/browse/genre/83'>
+          <LinkTextButton>Series</LinkTextButton>
+        </Link>
+        <Link to='/browse/genre/34399'>
+          <LinkTextButton>Films</LinkTextButton>
+        </Link>
+        <Link to='/latest'>
+          <LinkTextButton>Latest</LinkTextButton>
+        </Link>
+        <Link to='/browse/my-list'>
+          <LinkTextButton>My List</LinkTextButton>
+        </Link>
       </NavLeft>
       
       <NavRight>
         <SearchBox />
-        <LinkTextButton>Children</LinkTextButton>
-        <RectPlayButton />
+        <Link to='/Kids'>
+          <LinkTextButton>Children</LinkTextButton>
+        </Link>
         <Notifications />
         <AccountDropdown />
       </NavRight>
