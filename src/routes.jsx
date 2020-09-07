@@ -25,6 +25,9 @@ export const Routes = () => {
         <Route exact path='/'>
           <Redirect to='/browse' />
         </Route>
+        <Route exact path='/search?q='>
+          <Redirect to='/browse' />
+        </Route>
         <Route exact path='/browse/genre/83' component={Series} />
         <Route exact path='/browse/genre/34399' component={Films} />
         <Route exact path='/latest' component={Latest} />

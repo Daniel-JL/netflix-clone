@@ -1,12 +1,26 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
-import {
-  NavLink,
-} from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { SearchButton } from './buttons';
+import { SearchInput } from './search-input';
 
-export function SearchBox() {
+const Wrapper = styled.div`
+  display: flex;
+  padding: 10px;
+`
+
+export const SearchBox = () => {
+  const [searchActivated, setSearchActivated] = useState(false);
+  const handleChange = (e) => {
+
+  };
+
   return (
-    <div />
+    <Wrapper>
+      <SearchButton
+        onClick={e => setSearchActivated((searchActivated) => !searchActivated)}
+      />
+      {searchActivated && <SearchInput />}
+    </Wrapper>
   );
-}
+};

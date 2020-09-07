@@ -43,6 +43,8 @@ const NavLeft = styled.div`
 
 const NavRight = styled.div`
   padding-right: 40px;
+  display: flex;
+  
 `;
 
 const IHeaderProps = {
@@ -57,21 +59,21 @@ export function Header() {
         <Link to='/browse'>
           <NetflixButton />
         </Link>
-        <Link to='/browse'>
+        <NavLink to='/browse'>
           <LinkTextButton>Home</LinkTextButton>
-        </Link>
-        <Link to='/browse/genre/83'>
+        </NavLink>
+        <NavLink to='/browse/genre/83'>
           <LinkTextButton>Series</LinkTextButton>
-        </Link>
-        <Link to='/browse/genre/34399'>
+        </NavLink>
+        <NavLink to='/browse/genre/34399'>
           <LinkTextButton>Films</LinkTextButton>
-        </Link>
-        <Link to='/latest'>
+        </NavLink>
+        <NavLink to='/latest'>
           <LinkTextButton>Latest</LinkTextButton>
-        </Link>
-        <Link to='/browse/my-list'>
+        </NavLink>
+        <NavLink to='/browse/my-list'>
           <LinkTextButton>My List</LinkTextButton>
-        </Link>
+        </NavLink>
       </NavLeft>
       
       <NavRight>
@@ -85,3 +87,4 @@ export function Header() {
     </Nav>
   );
 }
+

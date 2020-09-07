@@ -1,9 +1,9 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import { SearchBox } from './search-box';
+import { SearchInput } from './search-input';
 
-describe('Search box', () => {
+describe('Search input', () => {
   it('should render correctly', () => {
     const wrapper = renderer.create(<SearchBox />).toJSON();
 

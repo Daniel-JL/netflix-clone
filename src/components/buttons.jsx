@@ -1,6 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 import NetflixIcon from '../assets/images/netflix-logo.png';
+import SearchIcon from '../assets/images/magnifying-glass.png'
 
 const RectButton = styled.button`
   font-family: "Roboto", sans-serif;
@@ -53,6 +54,20 @@ export const NetflixButton = styled.button`
   border:none;
   width:80px;
   height:20px;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const SearchButton = styled.button`
+  padding-bottom: 5px;
+  background: url(${SearchIcon}) no-repeat;
+  background-size: cover;
+  cursor:pointer;
+  border:none;
+  width:18px;
+  height:18px;
 
   &:focus {
     outline: none;
