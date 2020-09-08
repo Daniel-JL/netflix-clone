@@ -7,6 +7,8 @@ import styled from 'styled-components';
 
 export const Search = () => {
   return(
-    <div></div>
+    <div data-test-id="search-view">tesssst</div>
+    
+  
   )
 }

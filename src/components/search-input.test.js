@@ -1,20 +1,38 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+import {
+  MemoryRouter,
+  Router,
+} from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { createMemoryHistory } from 'history';
 import { SearchInput } from './search-input';
 
 describe('Search input', () => {
   it('should render correctly', () => {
-    const wrapper = renderer.create(<SearchBox />).toJSON();
+    const wrapper = renderer.create(
+      <MemoryRouter>
+        <SearchInput />
+      </MemoryRouter>,
+    ).toJSON();
 
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('should dismount if another view is activated', () => {
-
-  });
-
   it('should cause app to enter search view when something is typed in bar', () => {
+    const history = createMemoryHistory();
+    const { getByRole } = render(
+      <Router history={history}>
+        <SearchInput />
+      </Router>,
+    );
+    const textInput = getByRole('textbox', { name: '' });
+
+    userEvent.type(textInput, 'a');
+    expect(history.location.pathname).toBe('/search');
+    expect(history.location.search).toBe('?q=a');
 
   });
 
@@ -26,11 +44,8 @@ describe('Search input', () => {
 
   });
 
-  it('should add an x button to the box when something is typed to clear search', () => {
+  it('should add an x button to the box when something is typed. This button clears the search ', () => {
 
   });
 
-  it('should dismount box if the magnifying glass symbol is pressed again', () => {
-
-  });
 });

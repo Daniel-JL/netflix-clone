@@ -25,14 +25,14 @@ export const Routes = () => {
         <Route exact path='/'>
           <Redirect to='/browse' />
         </Route>
-        <Route exact path='/search?q='>
+        {/* <Route exact path='/search?q='>
           <Redirect to='/browse' />
-        </Route>
+        </Route> */}
         <Route exact path='/browse/genre/83' component={Series} />
         <Route exact path='/browse/genre/34399' component={Films} />
         <Route exact path='/latest' component={Latest} />
         <Route exact path='/browse/my-list' component={MyList} />
-        <Route exact path='/search?q=' component={Search} />
+        <Route exact path='/search' component={Search} />
         <Route exact path='/Kids' component={Kids} />
         <Route exact path='/watch/:videoId' component={VideoPlayer} />
         <Route component={NoMatch} />

@@ -6,6 +6,6 @@ import styled from 'styled-components';
 
 export const Home = () => {
   return(
-    <div></div>
+    <div>HOOOOME</div>
   )
 }
