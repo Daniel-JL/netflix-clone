@@ -7,13 +7,10 @@ import { SearchInput } from './search-input';
 const Wrapper = styled.div`
   display: flex;
   padding: 10px;
-`
+`;
 
 export const SearchBox = () => {
   const [searchActivated, setSearchActivated] = useState(false);
-  const handleChange = (e) => {
-
-  };
 
   return (
     <Wrapper>

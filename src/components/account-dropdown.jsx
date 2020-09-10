@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   NavLink,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import { RectInfoButton } from './buttons';
+import { AccountDropdownMenu } from './account-dropdown-menu';
 
 
 const IDropdownProps = {
@@ -10,7 +12,12 @@ const IDropdownProps = {
 
 };
 
+const DropdownDiv = styled.div`
+
+`;
+
 export function AccountDropdown() {
+  const [dropdownActive, setDropdownActive] = useState(false);
 
   function toggleDropdown() {
     //  TODO
@@ -20,8 +27,12 @@ export function AccountDropdown() {
   return(
     <div>
       <nav>
-        <NavLink to="/settings">Settings</NavLink>
-
+        <RectInfoButton 
+          onMouseOver={e => setDropdownActive((dropdownActive) => !dropdownActive)}
+          onMouseOut={e => setDropdownActive((dropdownActive) => !dropdownActive)}
+        />
+        {dropdownActive && <AccountDropdownMenu />}
+        
       </nav>
     </div>
   )

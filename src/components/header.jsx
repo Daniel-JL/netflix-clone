@@ -11,10 +11,13 @@ import { Notifications } from './notifications';
 import { AccountDropdown } from './account-dropdown';
 
 const Nav = styled.div`
-  background-color: #000000;
+  background-color: transparent;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  width: 100%;
   padding-top: 10px;
   
 `;

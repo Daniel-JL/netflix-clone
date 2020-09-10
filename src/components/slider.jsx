@@ -4,10 +4,32 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { SliderItem } from './slider-item';
-import { Button } from './buttons';
+import { ArrowButton } from './buttons';
+
+const SliderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const ArrowButtonContainer = styled.div`
+  height: 140px;
+  width: 50px;
+`;
 
 export function Slider() {
   return(
-    <div></div>
+    <SliderContainer>
+      <ArrowButtonContainer />
+      <SliderItem />
+      <SliderItem />
+      <SliderItem />
+      <SliderItem />
+      <SliderItem />
+      <SliderItem />
+      <ArrowButtonContainer>
+        <ArrowButton />
+      </ArrowButtonContainer>
+    </SliderContainer>
   )
 }

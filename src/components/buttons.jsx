@@ -50,10 +50,10 @@ export const NetflixButton = styled.button`
   padding-bottom: 5px;
   background: url(${NetflixIcon}) no-repeat;
   background-size: cover;
-  cursor:pointer;
-  border:none;
-  width:80px;
-  height:20px;
+  cursor: pointer;
+  border: none;
+  width: 80px;
+  height: 20px;
 
   &:focus {
     outline: none;
@@ -64,10 +64,10 @@ export const SearchButton = styled.button`
   padding-bottom: 5px;
   background: url(${SearchIcon}) no-repeat;
   background-size: cover;
-  cursor:pointer;
-  border:none;
-  width:18px;
-  height:18px;
+  cursor: pointer;
+  border: none;
+  width: 18px;
+  height: 18px;
 
   &:focus {
     outline: none;
@@ -108,24 +108,12 @@ export const RoundDarkButton = styled(RoundButton)`
   };
 `;
 
+export const ArrowButton = styled.button`
+  height: 140px;
+  width: 40px;
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
 
-
-
-// export const Button = ({ 
-//   children, 
-//   type, 
-//   onClick, 
-//   buttonStyle, 
-//   buttonSize 
-// }) => {
-
-//   const checkButtonStyle = STYLES.includes(buttonStyle) ? buttonStyle : STYLES[0];
-  
-//   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
-
-//   return(
-//     <button className={`btn ${checkButtonStyle} ${checkButtonSize}`} onClick={onClick} type={type}>
-//       {children}
-//     </button>
-//   );
-// };
+`;
