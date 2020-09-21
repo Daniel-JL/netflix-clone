@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { MotionBackground } from '../motion-background';
 import { LocoRow } from '../loco-row';
 import { LolomoBigRow } from '../lolomo-big-row';
+import { Footer } from '../footer';
 
 const LocoRowGroup = () => (
   <div>
@@ -20,8 +21,9 @@ const LocoRowGroup = () => (
 
 export const Home = () => {
   let scrollGroupActive = useRef(0);
-  const [test, setTest] = useState(false);
+  const [toggleForRerender, setToggleForRerender] = useState(false);
   const [element, setElement] = useState(null);
+  const maxNumScrollLoads = 5;
 
   const prevY = useRef(0);
   const observer = useRef(
@@ -30,7 +32,7 @@ export const Home = () => {
         const firstEntry = entries[0];
         const { y } = firstEntry.boundingClientRect;
 
-        if (prevY.current > y) {
+        if (prevY.current > y && scrollGroupActive.current <= maxNumScrollLoads) {
           mountMoreComponents();
         }
 
@@ -42,7 +44,7 @@ export const Home = () => {
 
   const mountMoreComponents = () => {
     scrollGroupActive.current++;
-    setTest(test => !test);
+    setToggleForRerender(toggleForRerender => !toggleForRerender);
   };
 
   useEffect(() => {
@@ -76,6 +78,7 @@ export const Home = () => {
       {scrollGroupActive.current > 3 && <LocoRowGroup />}
       {scrollGroupActive.current > 4 && <LocoRowGroup />}
       <div ref={setElement} />
+      <Footer />
     </div>
   );
 };
