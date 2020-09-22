@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Motion background should render correctly 1`] = `
+<div
+  className="sc-AxhCb jZxptO"
+>
+  <div
+    className="sc-AxiKw cdDFZN"
+  >
+    <img
+      className="sc-AxirZ gMArys"
+      src="http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg"
+    />
+  </div>
+  <div
+    className="sc-AxjAm loUEeP"
+  />
+</div>
+`;

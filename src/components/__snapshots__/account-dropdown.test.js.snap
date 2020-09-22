@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`account dropdown in navbar renders correctly 1`] = `
+<div>
+  <nav>
+    <button
+      className="sc-AxjAm sc-AxhCb fNFtln"
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    />
+  </nav>
+</div>
+`;

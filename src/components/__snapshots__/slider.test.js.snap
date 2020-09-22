@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Slider should render correctly 1`] = `
+<div
+  className="sc-fzpans gxFaOO"
+>
+  <div
+    className="sc-fzplWN etOvms"
+  />
+  <div
+    className="sc-AxjAm jrPXsu"
+  />
+  <div
+    className="sc-AxjAm jrPXsu"
+  />
+  <div
+    className="sc-AxjAm jrPXsu"
+  />
+  <div
+    className="sc-AxjAm jrPXsu"
+  />
+  <div
+    className="sc-AxjAm jrPXsu"
+  />
+  <div
+    className="sc-AxjAm jrPXsu"
+  />
+  <div
+    className="sc-fzplWN etOvms"
+  >
+    <button
+      className="sc-fzoLsD bYBobW"
+    />
+  </div>
+</div>
+`;

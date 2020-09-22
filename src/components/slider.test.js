@@ -1,7 +1,8 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import { Slider } from './slider';
+import { Slider, fetchSliderItemIds } from './slider';
+import 'isomorphic-fetch';
 
 describe('Slider', () => {
   it('should render correctly', () => {
@@ -26,7 +27,17 @@ describe('Slider', () => {
 
   });
 
-  it('arrow buttons should be highlighted on mouseover', () => {
+  it('should highlight arrow buttons on mouseover', () => {
 
+  });
+
+  it('should fetch 42 movie/tv show ids and store them in an array', () => {
+    //  TODO
+    //  1. Figure out how to mock fetch - normal fetch is too slow
+    
+    const data = fetchSliderItemIds();
+    console.log(data);
+
+    expect(data).toHaveLength(42);
   });
 });

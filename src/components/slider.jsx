@@ -22,37 +22,31 @@ export function Slider(props) {
   const [paginationPage, setPaginationPage] = useState(0);
   const [buttonHasBeenPressed, setButtonHasBeenPressed] = useState(false);
   const [numOfVisibleSliderItems, setNumOfVisibleSliderItems] = useState(6);
-  const baseURL = 'https://api.themoviedb.org/3/';
-  let url = ''.concat(baseURL, 'trending/all/week?page=1&api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
-  // let url = ''.concat(baseURL, props.genre, 'trending/all/week?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
-  const mediaData = useFetch(url);
-  const sliderItemProcessedDataIndex = useRef(0);
-  console.log(mediaData);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  let movieTvShowIds = [];
 
   const mediaName = [];
   const imageId = [];
   const maturityRating = [];
   const numOfSeasons = [];
 
-  const fetchSliderItemData = () => {
-    
-  }
-
   const processSliderItemData = () => {
-    
-  }
+
+  };
 
   useEffect(() => {
     //  TODO
     //  1. Have a way of checking if we need to load data on state change
     //  2. If we need to get data then fetch it and process it
+    if (!dataLoaded) {
+      movieTvShowIds = fetchSliderItemIds();
+      console.log(movieTvShowIds);
+    }
   }, []);
 
-
-
-  return(
-    //  TODO 
-    //  Get a bunch of movie deets and then pass props to 
+  return (
+    //  TODO
+    //  Get a bunch of movie deets and then pass props to
     //  SliderItems so they can grab media they need
     <SliderContainer>
       <ArrowButtonContainer />
@@ -66,5 +60,37 @@ export function Slider(props) {
         <ArrowButton />
       </ArrowButtonContainer>
     </SliderContainer>
-  )
+  );
 }
+
+export const fetchSliderItemIds = () => {
+  const maxIdsNeeded = 42;
+  const itemsPerPage = 20;
+  let page = 1;
+  const idArr = [];
+
+  const fetchNow = () => {
+    fetch(`https://api.themoviedb.org/3/trending/all/week?page=${page}&api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < itemsPerPage; i++) {
+          if (mediaIsMovieOrTv(data.results[i].media_type)) {
+            idArr.push(data.results[i].id);
+          }
+
+          if (idArr.length >= maxIdsNeeded) {
+            break;
+          }
+        }
+
+        if (idArr.length < maxIdsNeeded) {
+          page++;
+          fetchNow();
+        }
+      });
+  };
+  fetchNow();
+  return idArr;
+};
+
+const mediaIsMovieOrTv = (item) => (item === 'movie' || item === 'tv');
