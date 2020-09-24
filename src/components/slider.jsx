@@ -24,14 +24,47 @@ export function Slider(props) {
   const [numOfVisibleSliderItems, setNumOfVisibleSliderItems] = useState(6);
   const [dataLoaded, setDataLoaded] = useState(false);
   let movieTvShowIds = [];
-
-  const mediaName = [];
-  const imageId = [];
-  const maturityRating = [];
-  const numOfSeasons = [];
+  movieTvShowIds = useRef(movieTvShowIds.fill(React.createRef(), 0, 41));
+  let movieTvShowType = [];
+  movieTvShowType = useRef(movieTvShowType.fill(React.createRef(), 0, 41));
+  const maxIdsNeeded = 42;
+  const itemsPerPage = 20;
+  const page = useRef(1);
 
   const processSliderItemData = () => {
 
+  };
+
+  // const getSliderItemIds = async () => {
+  //   try {
+  //     fetchNow();
+  //   } catch (e) {
+
+  //   } finally {
+  //     // console.log(movieTvShowIds);
+  //   }
+  // };
+
+  const fetchNow = () => {
+    fetch(`https://api.themoviedb.org/3/trending/all/week?page=${page.current}&api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = (0 + (page.current * 20 - 20)); i < (page.current * itemsPerPage); i++) {
+          if (mediaIsMovieOrTv(data.results[i - ((page.current * 20) - 20)].media_type)) {
+            movieTvShowIds.current[i] = data.results[i - (page.current * 20 - 20)].id;
+            movieTvShowType.current[i] = data.results[i - ((page.current * 20) - 20)].media_type;
+          }
+
+          if (movieTvShowIds.current.length >= maxIdsNeeded) {
+            setDataLoaded(true);
+            break;
+          }
+        }
+        if (movieTvShowIds.current.length < maxIdsNeeded) {
+          page.current++;
+          fetchNow();
+        }
+      });
   };
 
   useEffect(() => {
@@ -39,8 +72,7 @@ export function Slider(props) {
     //  1. Have a way of checking if we need to load data on state change
     //  2. If we need to get data then fetch it and process it
     if (!dataLoaded) {
-      movieTvShowIds = fetchSliderItemIds();
-      console.log(movieTvShowIds);
+      fetchNow();
     }
   }, []);
 
@@ -48,18 +80,25 @@ export function Slider(props) {
     //  TODO
     //  Get a bunch of movie deets and then pass props to
     //  SliderItems so they can grab media they need
-    <SliderContainer>
-      <ArrowButtonContainer />
-      <SliderItem />
-      <SliderItem />
-      <SliderItem />
-      <SliderItem />
-      <SliderItem />
-      <SliderItem />
-      <ArrowButtonContainer>
-        <ArrowButton />
-      </ArrowButtonContainer>
-    </SliderContainer>
+    <div>
+      {dataLoaded
+        && (
+        <SliderContainer>
+          <ArrowButtonContainer />
+
+          <SliderItem mediaType={movieTvShowType.current[0]} mediaId={movieTvShowIds.current[0]} />
+          <SliderItem mediaType={movieTvShowType.current[1]} mediaId={movieTvShowIds.current[1]} />
+          <SliderItem mediaType={movieTvShowType.current[2]} mediaId={movieTvShowIds.current[2]} />
+          <SliderItem mediaType={movieTvShowType.current[3]} mediaId={movieTvShowIds.current[3]} />
+          <SliderItem mediaType={movieTvShowType.current[4]} mediaId={movieTvShowIds.current[4]} />
+          <SliderItem mediaType={movieTvShowType.current[5]} mediaId={movieTvShowIds.current[5]} />
+          <ArrowButtonContainer>
+            <ArrowButton />
+          </ArrowButtonContainer>
+        </SliderContainer>
+        )}
+    </div>
+
   );
 }
 

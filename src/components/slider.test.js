@@ -36,7 +36,7 @@ describe('Slider', () => {
     //  1. Figure out how to mock fetch - normal fetch is too slow
     
     const data = fetchSliderItemIds();
-    console.log(data);
+    // console.log(data);
 
     expect(data).toHaveLength(42);
   });
