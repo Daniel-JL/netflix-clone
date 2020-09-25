@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import {
   NavLink,
@@ -29,27 +30,31 @@ export function SliderItem(props) {
   movieTvShowIds = useRef(movieTvShowIds.fill(React.createRef(), 0, 41));
   const maxIdsNeeded = 42;
   const itemsPerPage = 20;
-  let posterPath = useRef('');
+  const posterPath = useRef('');
 
-  const fetchUrlData = () => {
-    fetch(`https://api.themoviedb.org/3/${props.mediaType}/${props.mediaId}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
+  const fetchUrlData = async () => {
+    return fetch(`https://api.themoviedb.org/3/${props.mediaType}/${props.mediaId}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
       .then((response) => response.json())
       .then((data) => {
-        posterPath.current = `http://image.tmdb.org/t/p/original${data.poster_path}`;
+        console.log(data.backdrop_path);
+        posterPath.current = `http://image.tmdb.org/t/p/original${data.backdrop_path}`;
         setImgLoaded(true);
+      })
+      .catch((error) => {
+        console.error('Error', error);
       });
   };
 
   useEffect(() => {
-    if(!imgLoaded) {
+    if (!imgLoaded) {
       fetchUrlData();
     }
-  })
+  });
 
   return (
     <ItemContainer>
       {imgLoaded
-      && <SliderItemImage src={posterPath.current} />}
+      && <SliderItemImage alt="Slider image" src={posterPath.current} />}
     </ItemContainer>
   );
 }

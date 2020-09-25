@@ -1,13 +1,40 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { findByAltText, fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+import {
+  MemoryRouter,
+  Router,
+} from 'react-router-dom';
+// import fetch from 'node-fetch';
+import fetch from "jest-fetch-mock";
+import { createMemoryHistory } from 'history';
 import { SliderItem } from './slider-item';
+
+
+beforeEach(() => {
+  fetch.resetMocks();
+});
+// jest.mock('node-fetch');
+// global.fetch=jest.fn();
 
 describe('Slider item', () => {
   it('should render correctly', () => {
-    const wrapper = renderer.create(<Slider />).toJSON();
+    const wrapper = renderer.create(<SliderItem />).toJSON();
 
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('should fetch image correctly', async () => {
+    fetch.mockResponseOnce(JSON.stringify({ data: { backdrop_path: '/mGVrXeIjyecj6TKmwPVpHlscEmw.jpg' }}));
+    const history = createMemoryHistory();
+    const { getByRole, findByAltText } = render(
+      <Router history={history}>
+        <SliderItem />
+      </Router>,
+    );
+    const element = await findByAltText('Slider image');
+    expect(element).toBeInTheDocument();
+    // screen.getByRole('image', {name: 'Slider image'});
   });
 
   it('should play trailer video if available on mouseover', () => {
