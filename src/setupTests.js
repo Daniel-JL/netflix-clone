@@ -6,3 +6,11 @@ import '@testing-library/jest-dom/extend-expect';
 import fetchMock from 'jest-fetch-mock';
 
 fetchMock.enableMocks();
+
+window.matchMedia = window.matchMedia || function() {
+  return {
+  matches : false,
+  addListener : function() {},
+  removeListener: function() {}
+  };
+};

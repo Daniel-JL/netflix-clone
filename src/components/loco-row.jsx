@@ -3,7 +3,7 @@ import {
   NavLink,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import { Slider } from './slider';
+import { MediaSlider } from './media-slider';
 
 const RowContainer = styled.div`
   z-index: 4;
@@ -32,7 +32,7 @@ export function LocoRow() {
       <RowPadding />
         <RowHeader></RowHeader>
         <Row>
-          <Slider />
+          <MediaSlider />
         </Row>
       <RowPadding />
     </RowContainer>

@@ -1,8 +1,13 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import { Slider, fetchSliderItemIds } from './slider';
-import 'isomorphic-fetch';
+import {
+  MemoryRouter,
+  Router,
+} from 'react-router-dom';
+import fetch from "jest-fetch-mock";
+import '@testing-library/jest-dom/extend-expect';
+import { MediaSlider, fetchSliderItemIds } from './media-slider';
 
 describe('Slider', () => {
   it('should render correctly', () => {
@@ -32,12 +37,13 @@ describe('Slider', () => {
   });
 
   it('should fetch 42 movie/tv show ids and store them in an array', () => {
-    //  TODO
-    //  1. Figure out how to mock fetch - normal fetch is too slow
+    fetch.mockResponseOnce(JSON.stringify({ data: { backdrop_path: '/mGVrXeIjyecj6TKmwPVpHlscEmw.jpg' }}));
+    const history = createMemoryHistory();
+    const { findByTestId, findByAltText } = render(
+      <Router history={history}>
+        <MediaSlider />
+      </Router>,
+    );
     
-    const data = fetchSliderItemIds();
-    // console.log(data);
-
-    expect(data).toHaveLength(42);
   });
 });

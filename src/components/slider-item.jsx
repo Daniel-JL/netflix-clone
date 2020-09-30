@@ -26,24 +26,20 @@ const SliderItemImage = styled.img`
 
 export function SliderItem(props) {
   const [imgLoaded, setImgLoaded] = useState(false);
-  let movieTvShowIds = [];
-  movieTvShowIds = useRef(movieTvShowIds.fill(React.createRef(), 0, 41));
-  const maxIdsNeeded = 42;
-  const itemsPerPage = 20;
+  const [imgLoadingErr, setImgLoadingErr] = useState(false);
+  const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const posterPath = useRef('');
 
-  const fetchUrlData = async () => {
-    return fetch(`https://api.themoviedb.org/3/${props.mediaType}/${props.mediaId}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.backdrop_path);
-        posterPath.current = `http://image.tmdb.org/t/p/original${data.backdrop_path}`;
-        setImgLoaded(true);
-      })
-      .catch((error) => {
-        console.error('Error', error);
-      });
-  };
+  const fetchUrlData = async () => fetch(`https://api.themoviedb.org/3/${props.mediaType}/${props.mediaId}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
+    .then((response) => response.json())
+    .then((data) => {
+      // console.log(data.backdrop_path);
+      posterPath.current = `http://image.tmdb.org/t/p/original${data.backdrop_path}`;
+      setImgLoaded(true);
+    })
+    .catch((error) => {
+      console.error('Error', error);
+    });
 
   useEffect(() => {
     if (!imgLoaded) {
@@ -53,8 +49,18 @@ export function SliderItem(props) {
 
   return (
     <ItemContainer>
-      {imgLoaded
-      && <SliderItemImage alt="Slider image" src={posterPath.current} />}
+      {imgLoaded && !imgLoadingErr
+      && (
+      <SliderItemImage
+        alt="Slider image"
+        src={posterPath.current}
+        onError={() => setImgLoadingErr(true)}
+        onLoad={() => setImgLoadedSuccess(true)}
+      />
+      )}
+      {imgLoadedSuccess &&
+      <div id="imgSuccess" data-testid="imgSuccess" />
+      }
     </ItemContainer>
   );
 }
