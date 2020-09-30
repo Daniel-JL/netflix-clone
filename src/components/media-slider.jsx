@@ -6,11 +6,14 @@ import {
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { SliderItem } from './slider-item';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import './media-slider.css';
 import { ArrowButton } from './buttons';
 import { useFetch } from '../hooks/useFetch';
 
 const SliderContainer = styled.div`
-  display: flex;
+  display: block;
   flex-direction: row;
   justify-content: space-between;
 `;
@@ -66,22 +69,31 @@ export function MediaSlider(props) {
       {dataLoaded
         && (
         <SliderContainer>
-          <ArrowButtonContainer />
-
-          <SliderItem mediaType={movieTvShowType.current[0]} mediaId={movieTvShowIds.current[0]} />
-          <SliderItem mediaType={movieTvShowType.current[1]} mediaId={movieTvShowIds.current[1]} />
-          <SliderItem mediaType={movieTvShowType.current[2]} mediaId={movieTvShowIds.current[2]} />
-          <SliderItem mediaType={movieTvShowType.current[3]} mediaId={movieTvShowIds.current[3]} />
-          <SliderItem mediaType={movieTvShowType.current[4]} mediaId={movieTvShowIds.current[4]} />
-          <SliderItem mediaType={movieTvShowType.current[5]} mediaId={movieTvShowIds.current[5]} />
-          <ArrowButtonContainer>
-            <ArrowButton />
-          </ArrowButtonContainer>
+          <Slider 
+          arrows={true}
+          dots={false}
+          infinite={true}
+          speed={500}
+          slidesToScroll={6}
+          slidesToShow={6} 
+          className={'slides'}
+          >
+            {
+              [
+                ...Array(maxIdsNeeded),
+              ].map((value: undefined, index: number) => (
+                <div>
+                  <SliderItem mediaType={movieTvShowType.current[index]} mediaId={movieTvShowIds.current[index]} />
+                </div>
+              ))
+            }
+          </Slider>
         </SliderContainer>
         )}
     </div>
 
   );
+  
 }
 
 const mediaIsMovieOrTv = (item) => (item === 'movie' || item === 'tv');
