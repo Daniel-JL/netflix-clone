@@ -1,16 +1,21 @@
 .slides {
-  position: relative;
+  /* position: relative; */
+  /* background-color: black; */
+  margin: 60px;
   .slick-prev, .slick-next {
-    position: absolute;
+    /* position: absolute; */
     top: 50%;
+    /* color: black; */
   }
   .slick-prev {
-    left: 3% !important;
+    /* left: 3% !important; */
     z-index: 1;
-    color: black;
+    background-color: black;
   }
-  .slick-next {
-    right: 3% !important;
-    z-index: 1;
+  .slick-next:before {
+    /* right: 3% !important; */
+    z-index: 5;
+    /* background-color: black; */
+
   }
 }

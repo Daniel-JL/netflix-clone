@@ -13,7 +13,7 @@ const DropdownPanel = styled.div`
   margin-right: 50px;
   position: absolute;
   z-index: 2;
-`
+`;
 
 export const AccountDropdownMenu = () => {
 

@@ -99,6 +99,22 @@ export const RoundPlayButton = styled(RoundButton)`
   };
 `;
 
+export const RoundPlusButton = styled(RoundButton)`
+
+`;
+
+export const RoundThumbsUpButton = styled(RoundButton)`
+
+`;
+
+export const RoundThumbsDownButton = styled(RoundButton)`
+
+`;
+
+export const RoundEpsAndInfoButton = styled(RoundButton)`
+
+`;
+
 export const RoundDarkButton = styled(RoundButton)`
   background-color: transparent;
   color: white;

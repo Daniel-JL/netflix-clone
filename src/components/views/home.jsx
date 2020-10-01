@@ -63,7 +63,7 @@ export const Home = () => {
   }, [element]);
 
   return (
-    <div>
+    <div style={{backgroundColor: 'darkslategray', zIndex: -2}}>
       <MotionBackground />
       <LocoRow />
       <LocoRow />

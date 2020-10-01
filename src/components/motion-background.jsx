@@ -11,18 +11,17 @@ const BillboardImage = styled.img`
   position: absolute;
   width: 100%;
   top:0;
-  z-index: -1;
+  z-index: 0;
 
   height: 100%;
 `;
 
 const MotionBackgroundMediaContainer = styled.div`
   position: absolute;
-  // display: inline-block;
   width: 100%;
   padding-top: 56.25%;
   top:0;
-  z-index: -1;
+  z-index: 0;
 `;
 
 const MotionBackgroundContainer = styled.div`

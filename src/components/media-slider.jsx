@@ -13,9 +13,11 @@ import { ArrowButton } from './buttons';
 import { useFetch } from '../hooks/useFetch';
 
 const SliderContainer = styled.div`
-  display: block;
-  flex-direction: row;
-  justify-content: space-between;
+  // display: block;
+  // flex-direction: row;
+  // justify-content: space-between;
+  max-width: 100%;
+  width: 100%;
 `;
 
 const ArrowButtonContainer = styled.div`
@@ -48,6 +50,9 @@ export function MediaSlider(props) {
 
           if (movieTvShowIds.current.length >= maxIdsNeeded) {
             setDataLoaded(true);
+            console.log(data);
+            // console.log(movieTvShowType);
+            // console.log(movieTvShowIds);
             break;
           }
         }
@@ -77,6 +82,9 @@ export function MediaSlider(props) {
           slidesToScroll={6}
           slidesToShow={6} 
           className={'slides'}
+          centerMode={false}
+          variableWidth={false}
+
           >
             {
               [
