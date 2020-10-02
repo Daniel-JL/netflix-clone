@@ -24,11 +24,26 @@ const ItemContainer = styled.div`
   height: 139px;
   width: 250px;
   border: 1px solid black;
+
+  ${({ active }) => active && `
+    width: 400px;
+    height: 222px;
+    z-index: 5;
+  `}
 `;
 
 const SliderItemImage = styled.img`
   width: 100%;
   height: 100%;
+`;
+
+const ItemDetails = styled.div`
+  visibility: hidden;
+  background-color: gray;
+
+  ${({ active }) => active && `
+    visibility: visible;
+  `}
 `;
 
 export function SliderItem(props) {
@@ -37,8 +52,7 @@ export function SliderItem(props) {
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
   let posterPath = useRef('');
-  let runtime = useRef('');
-  let numberOfSeasons = useRef('');
+  let runtimeOrNumberOfSeasons = useRef('');
   let genres = useRef([]);
   let ageRating = useRef('');
   let ageRatingUrl = useRef(``);
@@ -61,9 +75,13 @@ export function SliderItem(props) {
       });
 
       if (props.mediaType === 'movie') {
-        runtime.current = data.runtime;
+        runtimeOrNumberOfSeasons.current = data.runtime + 'm';
       } else {
-        numberOfSeasons.current = data.number_of_seasons;
+        if(data.number_of_seasons > 1) {
+          runtimeOrNumberOfSeasons.current = data.number_of_seasons + ' Seasons';
+        } else {
+          runtimeOrNumberOfSeasons.current = data.number_of_seasons + ' Season';
+        }
       }
       setImgLoaded(true);
     })
@@ -75,6 +93,17 @@ export function SliderItem(props) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      for(let i = 0; i < data.results.length; i++) {
+        if (data.results[i].iso_3166_1 === "US") {
+          if (props.mediaType === "movie") {
+            ageRating.current = data.results[i].release_dates[0].certification;
+          } else {
+            ageRating.current = data.results[i].rating;
+          }
+          break;
+        }
+      }
+      console.log(ageRating);
       
     })
     .catch((error) => {
@@ -82,7 +111,6 @@ export function SliderItem(props) {
     });
 
   };
-
 
   const handleMouseOver = () => {
     if (imgLoadedSuccess) {
@@ -95,17 +123,18 @@ export function SliderItem(props) {
     setItemHoverActive((itemHoverActive) => false);
 
   };
+
   useEffect(() => {
     if (!imgLoaded) {
       fetchUrlData();
     }
-
   });
 
   return (
     <ItemContainer
       onMouseOver={() => handleMouseOver()}
       onMouseOut={() => handleMouseOut()}
+      active={itemHoverActive}
     >
       {imgLoaded && !imgLoadingErr
       && (
@@ -119,8 +148,7 @@ export function SliderItem(props) {
       {imgLoadedSuccess &&
       <div id="imgSuccess" data-testid="imgSuccess" />
       }
-      {itemHoverActive &&
-        <div>
+        <ItemDetails active={itemHoverActive}>
           <div id="buttons">
             <RoundPlayButton />
             <RoundPlusButton />
@@ -128,11 +156,9 @@ export function SliderItem(props) {
             <RoundThumbsDownButton />
             <RoundEpsAndInfoButton />
           </div>
-          <div id="media-info">
-
-          </div>
-        </div>
-      }
+          <div id="media-info">{ageRating.current} {runtimeOrNumberOfSeasons.current}</div>
+          <div id="genres">{genres.current[0]} * {genres.current[1]}</div>
+        </ItemDetails>
     </ItemContainer>
   );
 }

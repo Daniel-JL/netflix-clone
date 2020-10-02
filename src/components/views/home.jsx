@@ -66,7 +66,7 @@ export const Home = () => {
     <div style={{backgroundColor: 'darkslategray', zIndex: -2}}>
       <MotionBackground />
       <LocoRow />
-      <LocoRow />
+      {/* <LocoRow />
       <LocoRow />
       <LocoRow />
       <LolomoBigRow />
@@ -76,7 +76,7 @@ export const Home = () => {
       {scrollGroupActive.current > 1 && <LocoRowGroup />}
       {scrollGroupActive.current > 2 && <LocoRowGroup />}
       {scrollGroupActive.current > 3 && <LocoRowGroup />}
-      {scrollGroupActive.current > 4 && <LocoRowGroup />}
+      {scrollGroupActive.current > 4 && <LocoRowGroup />} */}
       <div ref={setElement} />
       <Footer />
     </div>
