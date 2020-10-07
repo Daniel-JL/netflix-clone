@@ -19,6 +19,10 @@ const LocoRowGroup = () => (
   </div>
 );
 
+const EpisodesAndInfoBoxPortal = styled.div`
+
+`;
+
 export const Home = () => {
   let scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
@@ -77,6 +81,7 @@ export const Home = () => {
       {scrollGroupActive.current > 2 && <LocoRowGroup />}
       {scrollGroupActive.current > 3 && <LocoRowGroup />}
       {scrollGroupActive.current > 4 && <LocoRowGroup />} */}
+      <EpisodesAndInfoBoxPortal id="episodes-and-info-box-portal" />
       <div ref={setElement} />
       <Footer />
     </div>

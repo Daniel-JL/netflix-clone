@@ -11,7 +11,7 @@ ReactDOM.render(
   <Router>
     <Routes />
   </Router>,
-  document.getElementById('root')
+  document.getElementById('react-root'),
 );
 
 // If you want your app to work offline and load faster, you can change

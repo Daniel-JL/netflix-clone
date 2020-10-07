@@ -100,19 +100,43 @@ export const RoundPlayButton = styled(RoundButton)`
 `;
 
 export const RoundPlusButton = styled(RoundButton)`
+  background-color: white;
+  font-size: 25px;
 
+
+  &:hover {
+    background-color: rgba(255,255,255, 0.8);
+  };
 `;
 
 export const RoundThumbsUpButton = styled(RoundButton)`
+  background-color: white;
+  font-size: 25px;
 
+
+  &:hover {
+    background-color: rgba(255,255,255, 0.8);
+  };
 `;
 
 export const RoundThumbsDownButton = styled(RoundButton)`
+  background-color: white;
+  font-size: 25px;
 
+
+  &:hover {
+    background-color: rgba(255,255,255, 0.8);
+  };
 `;
 
 export const RoundEpsAndInfoButton = styled(RoundButton)`
+  background-color: white;
+  font-size: 25px;
+  
 
+  &:hover {
+    background-color: rgba(255,255,255, 0.8);
+  };
 `;
 
 export const RoundDarkButton = styled(RoundButton)`

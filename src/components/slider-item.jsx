@@ -1,7 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import {
-  NavLink,
+  Link,
+  useLocation,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { 
@@ -11,6 +13,8 @@ import {
   RoundThumbsDownButton,
   RoundEpsAndInfoButton,
 } from './buttons';
+import { Portal } from './portal';
+import { EpisodesAndInfoBox } from './episodes-and-info-box';
 
 const ISliderItemProps = {
   mediaName: 'name',
@@ -21,14 +25,16 @@ const ISliderItemProps = {
 };
 
 const ItemContainer = styled.div`
+  position: relative;
   height: 139px;
   width: 250px;
   border: 1px solid black;
+  transition: width 0.2s, height 0.2s;
 
   ${({ active }) => active && `
     width: 400px;
     height: 222px;
-    z-index: 5;
+    z-index: 2;
   `}
 `;
 
@@ -47,10 +53,13 @@ const ItemDetails = styled.div`
 `;
 
 export function SliderItem(props) {
+  let location = useLocation();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
+  const [coords, setCoords] = useState({});
+  const [epsAndInfoBoxActive, setEpsAndInfoBoxActive] = useState(false);
   let posterPath = useRef('');
   let runtimeOrNumberOfSeasons = useRef('');
   let genres = useRef([]);
@@ -124,6 +133,11 @@ export function SliderItem(props) {
 
   };
 
+  const renderEpsAndInfoBox = () => {
+    console.log("it did this");
+    ReactDOM.createPortal(<EpisodesAndInfoBox />, document.getElementById("portal-root"));  
+  };
+
   useEffect(() => {
     if (!imgLoaded) {
       fetchUrlData();
@@ -154,7 +168,26 @@ export function SliderItem(props) {
             <RoundPlusButton />
             <RoundThumbsUpButton />
             <RoundThumbsDownButton />
-            <RoundEpsAndInfoButton />
+            <RoundEpsAndInfoButton 
+              onClick={(e) => {
+                // const rect = e.target.getBoundingClientRect();
+                // setCoords({
+                //   left: rect.x + rect.width / 2,
+                //   top: rect.y + window.scrollY
+                // });
+                setEpsAndInfoBoxActive(() => !epsAndInfoBoxActive);
+              }} 
+              >
+                <Link
+                  to={{
+                    pathname: `/browse?jbv=`,
+                    // This is the trick! This link sets
+                    // the `background` in location state.
+                    state: { background: location }
+                  }}
+                >
+                </Link>
+              </RoundEpsAndInfoButton>
           </div>
           <div id="media-info">{ageRating.current} {runtimeOrNumberOfSeasons.current}</div>
           <div id="genres">{genres.current[0]} * {genres.current[1]}</div>
