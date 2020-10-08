@@ -1,9 +1,10 @@
+/* eslint-disable import/prefer-default-export */
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-export const Portal = ({children}) => {
-  const mount = document.getElementById("portal-root");
-  const el = document.createElement("div");
+export const Portal = ({ children }) => {
+  const mount = document.getElementById('portal-root');
+  const el = document.createElement('div');
 
   useEffect(() => {
     mount.appendChild(el);

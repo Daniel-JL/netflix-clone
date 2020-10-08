@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 import styled from 'styled-components';
 import NetflixIcon from '../assets/images/netflix-logo.png';
-import SearchIcon from '../assets/images/magnifying-glass.png'
+import SearchIcon from '../assets/images/magnifying-glass.png';
 
 const RectButton = styled.button`
   font-family: "Roboto", sans-serif;
@@ -93,7 +93,6 @@ export const RoundPlayButton = styled(RoundButton)`
   background-color: white;
   font-size: 25px;
   
-
   &:hover {
     background-color: rgba(255,255,255, 0.8);
   };
@@ -155,5 +154,4 @@ export const ArrowButton = styled.button`
   border-width: 0 3px 3px 0;
   display: inline-block;
   padding: 3px;
-
 `;

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import React from 'react';
 import {
   NavLink,
@@ -6,6 +7,6 @@ import styled from 'styled-components';
 
 export function Notifications() {
   return (
-    <div></div>
-  )
+    <div />
+  );
 }

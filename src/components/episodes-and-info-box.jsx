@@ -1,33 +1,33 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState } from 'react';
 import {
-  NavLink,
-  useLocation,
   useHistory,
-  Link,
 } from 'react-router-dom';
 import styled from 'styled-components';
 
 const EpisodesAndInfoBoxContainer = styled.div`
-  width: 100%;
+  position: absolute;
   height: 200px;
-  background-color: black;
+  width: 100%;
+  background: #fff;
+  top: 200px;
+  padding: 15;
+  border: 2px solid #444;
+  color: black;
 `;
 
 export function EpisodesAndInfoBox(props) {
-  let history = useHistory();
-  let location = useLocation();
+  const history = useHistory();
 
-  const back = (e) => {
-    e.stopPropagation();
+  const back = () => {
     history.goBack();
   };
 
   return (
     <EpisodesAndInfoBoxContainer
-      onClick={back}
+      onClick={() => back()}
     >
-      
+      TEEEEEEEEEEEEEEEEEEEEEEEEEEEST
     </EpisodesAndInfoBoxContainer>
   );
 }

@@ -40,16 +40,14 @@ describe('Slider item', () => {
   it('should display image as long as there is no image error', async () => {
     fetch.mockResponseOnce(JSON.stringify({ data: { backdrop_path: '/mGVrXeIjyecj6TKmwPVpHlscEmw.jpg' }}));
     const history = createMemoryHistory();
-    const { findByTestId, findByAltText } = render(
+    const { findByAltText } = render(
       <Router history={history}>
         <SliderItem />
       </Router>,
     );
 
     const element1 = await findByAltText('Slider image');
-    // const element = await screen.findByTestId('imgSuccess');
     expect(element1).toBeInTheDocument();
-    
   });
 
   it('should play trailer video if available on mouseover', () => {

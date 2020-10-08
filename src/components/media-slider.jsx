@@ -1,21 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  NavLink,
-} from 'react-router-dom';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { SliderItem } from './slider-item';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './media-slider.css';
-import { ArrowButton } from './buttons';
-import { useFetch } from '../hooks/useFetch';
 
 const SliderContainer = styled.div`
-  // display: block;
-  // flex-direction: row;
-  // justify-content: space-between;
   max-width: 100%;
   width: 100%;
 `;
@@ -50,9 +42,6 @@ export function MediaSlider(props) {
 
           if (movieTvShowIds.current.length >= maxIdsNeeded) {
             setDataLoaded(true);
-            console.log(data);
-            // console.log(movieTvShowType);
-            // console.log(movieTvShowIds);
             break;
           }
         }

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import React from 'react';
 import {
   NavLink,
@@ -30,11 +31,11 @@ export function LocoRow() {
   return (
     <RowContainer>
       <RowPadding />
-        <RowHeader></RowHeader>
-        <Row>
-          <MediaSlider />
-        </Row>
+      <RowHeader />
+      <Row>
+        <MediaSlider />
+      </Row>
       <RowPadding />
     </RowContainer>
-  )
+  );
 }

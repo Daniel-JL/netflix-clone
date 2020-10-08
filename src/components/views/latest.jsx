@@ -1,11 +1,10 @@
+/* eslint-disable import/prefer-default-export */
 import React from 'react';
-import { 
+import {
   NavLink,
 } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const Latest = () => {
-  return(
-    <div></div>
-  )
-}
+export const Latest = () => (
+  <div />
+);

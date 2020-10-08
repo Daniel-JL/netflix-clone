@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+/* eslint-disable import/prefer-default-export */
+import React from 'react';
 import {
   NavLink,
 } from 'react-router-dom';
@@ -9,8 +10,8 @@ const FooterContainer = styled.div`
   height: 300px;
 `;
 
-export function Footer () {
-  return(
+export function Footer() {
+  return (
     <FooterContainer />
   );
 }

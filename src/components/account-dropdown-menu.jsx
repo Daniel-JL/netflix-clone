@@ -16,7 +16,6 @@ const DropdownPanel = styled.div`
 `;
 
 export const AccountDropdownMenu = () => {
-
   return (
     <DropdownPanel>
       <NavLink to="/profiles/manage">Manage Profiles</NavLink>

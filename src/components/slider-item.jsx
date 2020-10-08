@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import {
   Link,
   useLocation,
@@ -13,8 +12,6 @@ import {
   RoundThumbsDownButton,
   RoundEpsAndInfoButton,
 } from './buttons';
-import { Portal } from './portal';
-import { EpisodesAndInfoBox } from './episodes-and-info-box';
 
 const ISliderItemProps = {
   mediaName: 'name',
@@ -58,8 +55,6 @@ export function SliderItem(props) {
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
-  const [coords, setCoords] = useState({});
-  const [epsAndInfoBoxActive, setEpsAndInfoBoxActive] = useState(false);
   let posterPath = useRef('');
   let runtimeOrNumberOfSeasons = useRef('');
   let genres = useRef([]);
@@ -125,17 +120,6 @@ export function SliderItem(props) {
     if (imgLoadedSuccess) {
       setItemHoverActive((itemHoverActive) => true);
     }
-
-  };
-
-  const handleMouseOut = () => {
-    setItemHoverActive((itemHoverActive) => false);
-
-  };
-
-  const renderEpsAndInfoBox = () => {
-    console.log("it did this");
-    ReactDOM.createPortal(<EpisodesAndInfoBox />, document.getElementById("portal-root"));  
   };
 
   useEffect(() => {
@@ -147,7 +131,7 @@ export function SliderItem(props) {
   return (
     <ItemContainer
       onMouseOver={() => handleMouseOver()}
-      onMouseOut={() => handleMouseOut()}
+      onMouseOut={() => setItemHoverActive((itemHoverActive) => false)}
       active={itemHoverActive}
     >
       {imgLoaded && !imgLoadingErr
@@ -168,26 +152,18 @@ export function SliderItem(props) {
             <RoundPlusButton />
             <RoundThumbsUpButton />
             <RoundThumbsDownButton />
-            <RoundEpsAndInfoButton 
-              onClick={(e) => {
-                // const rect = e.target.getBoundingClientRect();
-                // setCoords({
-                //   left: rect.x + rect.width / 2,
-                //   top: rect.y + window.scrollY
-                // });
-                setEpsAndInfoBoxActive(() => !epsAndInfoBoxActive);
-              }} 
-              >
-                <Link
-                  to={{
-                    pathname: `/browse?jbv=`,
-                    // This is the trick! This link sets
-                    // the `background` in location state.
-                    state: { background: location }
-                  }}
-                >
-                </Link>
-              </RoundEpsAndInfoButton>
+            
+            <Link
+              key={1}
+              to={{
+                pathname: `/browse/epsinfobox`,
+                // This is the trick! This link sets
+                // the `background` in location state.
+                state: { background: location }
+              }}
+            >
+              <RoundEpsAndInfoButton />
+            </Link>
           </div>
           <div id="media-info">{ageRating.current} {runtimeOrNumberOfSeasons.current}</div>
           <div id="genres">{genres.current[0]} * {genres.current[1]}</div>

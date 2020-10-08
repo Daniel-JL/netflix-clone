@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { MotionBackground } from '../motion-background';
 import { LocoRow } from '../loco-row';
 import { LolomoBigRow } from '../lolomo-big-row';
-import { Footer } from '../footer';
 
 const LocoRowGroup = () => (
   <div>
@@ -83,7 +82,6 @@ export const Home = () => {
       {scrollGroupActive.current > 4 && <LocoRowGroup />} */}
       <EpisodesAndInfoBoxPortal id="episodes-and-info-box-portal" />
       <div ref={setElement} />
-      <Footer />
     </div>
   );
 };

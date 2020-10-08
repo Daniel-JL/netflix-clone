@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { SearchButton } from './buttons';
 import { SearchInput } from './search-input';
 
-const Wrapper = styled.div`
+const SearchBoxContainer = styled.div`
   display: flex;
   padding: 10px;
 `;
@@ -13,11 +13,11 @@ export const SearchBox = () => {
   const [searchActivated, setSearchActivated] = useState(false);
 
   return (
-    <Wrapper>
+    <SearchBoxContainer>
       <SearchButton
-        onClick={e => setSearchActivated((searchActivated) => !searchActivated)}
+        onClick={e => setSearchActivated(() => !searchActivated)}
       />
       {searchActivated && <SearchInput />}
-    </Wrapper>
+    </SearchBoxContainer>
   );
 };

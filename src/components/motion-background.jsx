@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import React from 'react';
 import styled from 'styled-components';
 import { useFetch } from '../hooks/useFetch';
@@ -30,17 +31,14 @@ const MotionBackgroundContainer = styled.div`
 
 const baseURL = 'https://api.themoviedb.org/3/';
 
-// let url = ''.concat(baseURL, 'movie/310131/images?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
 let url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
 
 export function MotionBackground() {
-  // const fetchData = useFetch(url);
 
   return (
     <MotionBackgroundContainer>
       <MotionBackgroundMediaContainer>
         <BillboardImage src="http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg" />
-                  
         {/* <iframe src='https://www.youtube.com/embed/5794f65592514142a4002ec0'
         frameborder='0'
         allow='autoplay; encrypted-media'

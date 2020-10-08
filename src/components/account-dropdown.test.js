@@ -10,7 +10,7 @@ describe('account dropdown in navbar', () => {
 
     expect(wrapper).toMatchSnapshot();
   });
-  
+
   it('should show all available users', () => {
 
   });
