@@ -5,10 +5,10 @@ import {
   useLocation,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import { 
-  RoundPlayButton, 
-  RoundPlusButton, 
-  RoundThumbsUpButton, 
+import {
+  RoundPlayButton,
+  RoundPlusButton,
+  RoundThumbsUpButton,
   RoundThumbsDownButton,
   RoundEpsAndInfoButton,
 } from './buttons';
@@ -50,16 +50,16 @@ const ItemDetails = styled.div`
 `;
 
 export function SliderItem(props) {
-  let location = useLocation();
+  const location = useLocation();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
-  let posterPath = useRef('');
-  let runtimeOrNumberOfSeasons = useRef('');
-  let genres = useRef([]);
-  let ageRating = useRef('');
-  let ageRatingUrl = useRef(``);
+  const posterPath = useRef('');
+  const runtimeOrNumberOfSeasons = useRef('');
+  const genres = useRef([]);
+  const ageRating = useRef('');
+  const ageRatingUrl = useRef('');
 
   if (props.mediaType === 'movie') {
     ageRatingUrl.current = `movie/${props.mediaId}/release_dates`;
@@ -69,51 +69,43 @@ export function SliderItem(props) {
 
   const fetchUrlData = async () => {
     fetch(`https://api.themoviedb.org/3/${props.mediaType}/${props.mediaId}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
-    .then((response) => response.json())
-    .then((data) => {
-      posterPath.current = `http://image.tmdb.org/t/p/original${data.backdrop_path}`;
-      genres.current = [
-        ...Array(data.genres.length)
-      ].map((value:undefined, index:number) => {
-        return data.genres[index].name;
+      .then((response) => response.json())
+      .then((data) => {
+        posterPath.current = `http://image.tmdb.org/t/p/original${data.backdrop_path}`;
+        genres.current = [
+          ...Array(data.genres.length),
+        ].map((undefined, index) => data.genres[index].name);
+
+        if (props.mediaType === 'movie') {
+          runtimeOrNumberOfSeasons.current = `${data.runtime}m`;
+        } else if (data.number_of_seasons > 1) {
+          runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Seasons`;
+        } else {
+          runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Season`;
+        }
+        setImgLoaded(true);
+      })
+      .catch((error) => {
+        console.error('Error', error);
       });
 
-      if (props.mediaType === 'movie') {
-        runtimeOrNumberOfSeasons.current = data.runtime + 'm';
-      } else {
-        if(data.number_of_seasons > 1) {
-          runtimeOrNumberOfSeasons.current = data.number_of_seasons + ' Seasons';
-        } else {
-          runtimeOrNumberOfSeasons.current = data.number_of_seasons + ' Season';
-        }
-      }
-      setImgLoaded(true);
-    })
-    .catch((error) => {
-      console.error('Error', error);
-    });
-
     fetch(`https://api.themoviedb.org/3/${ageRatingUrl.current}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      for(let i = 0; i < data.results.length; i++) {
-        if (data.results[i].iso_3166_1 === "US") {
-          if (props.mediaType === "movie") {
-            ageRating.current = data.results[i].release_dates[0].certification;
-          } else {
-            ageRating.current = data.results[i].rating;
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.results.length; i++) {
+          if (data.results[i].iso_3166_1 === 'US') {
+            if (props.mediaType === 'movie') {
+              ageRating.current = data.results[i].release_dates[0].certification;
+            } else {
+              ageRating.current = data.results[i].rating;
+            }
+            break;
           }
-          break;
         }
-      }
-      console.log(ageRating);
-      
-    })
-    .catch((error) => {
-      console.error('Error', error);
-    });
-
+      })
+      .catch((error) => {
+        console.error('Error', error);
+      });
   };
 
   const handleMouseOver = () => {
@@ -143,31 +135,37 @@ export function SliderItem(props) {
         onLoad={() => setImgLoadedSuccess(true)}
       />
       )}
-      {imgLoadedSuccess &&
-      <div id="imgSuccess" data-testid="imgSuccess" />
-      }
-        <ItemDetails active={itemHoverActive}>
-          <div id="buttons">
-            <RoundPlayButton />
-            <RoundPlusButton />
-            <RoundThumbsUpButton />
-            <RoundThumbsDownButton />
-            
-            <Link
-              key={1}
-              to={{
-                pathname: `/browse/epsinfobox`,
-                // This is the trick! This link sets
-                // the `background` in location state.
-                state: { background: location }
-              }}
-            >
-              <RoundEpsAndInfoButton />
-            </Link>
-          </div>
-          <div id="media-info">{ageRating.current} {runtimeOrNumberOfSeasons.current}</div>
-          <div id="genres">{genres.current[0]} * {genres.current[1]}</div>
-        </ItemDetails>
+      {imgLoadedSuccess
+      && <div id="imgSuccess" data-testid="imgSuccess" />}
+      <ItemDetails active={itemHoverActive}>
+        <div id="buttons">
+          <RoundPlayButton />
+          <RoundPlusButton />
+          <RoundThumbsUpButton />
+          <RoundThumbsDownButton />
+          <Link
+            key={1}
+            to={{
+              pathname: '/browse/epsinfobox',
+              state: { background: location },
+            }}
+          >
+            <RoundEpsAndInfoButton>v</RoundEpsAndInfoButton>
+          </Link>
+        </div>
+        <div id="media-info">
+          {ageRating.current}
+          {' '}
+          {runtimeOrNumberOfSeasons.current}
+        </div>
+        <div id="genres">
+          {genres.current[0]}
+          {' '}
+          *
+          {' '}
+          {genres.current[1]}
+        </div>
+      </ItemDetails>
     </ItemContainer>
   );
 }

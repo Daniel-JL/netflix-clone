@@ -37,7 +37,17 @@ describe('Search input', () => {
   });
 
   it('should add text to url as it is input', () => {
+    const history = createMemoryHistory();
+    const { getByRole } = render(
+      <Router history={history}>
+        <SearchInput />
+      </Router>,
+    );
+    const textInput = getByRole('textbox', { name: '' });
 
+    userEvent.type(textInput, 'a');
+    expect(history.location.pathname).toBe('/search');
+    expect(history.location.search).toBe('?q=a');
   });
 
   it('should remember initial url state', () => {

@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 
 export const SearchInput = () => {
-  let location = useLocation();
+  const location = useLocation();
   const history = useHistory();
   const [searchInputText, setSearchInputText] = useState(`${location.pathname}`);
   const [initialUrl] = useState(`${location.pathname}`);
