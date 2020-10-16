@@ -1,10 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import {
-  MemoryRouter,
-  Router,
-} from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import fetch from "jest-fetch-mock";
 import '@testing-library/jest-dom/extend-expect';
 
@@ -15,8 +12,6 @@ beforeEach(() => {
   require('dotenv').config();
   fetch.resetMocks();
 });
-// jest.mock('node-fetch');
-// global.fetch=jest.fn();
 
 describe('Slider item', () => {
   it('should render correctly', () => {

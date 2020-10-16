@@ -1,6 +1,10 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router-dom';
+import '@testing-library/jest-dom/extend-expect';
+
 import { Header } from './header';
 
 describe('Main header bar', () => {
@@ -10,15 +14,38 @@ describe('Main header bar', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('should contain a left side and a right side', () => {
+  it('should change the url if the buttons are clicked', () => {
+    const history = createMemoryHistory();
+    const { getByRole } = render(
+      <Router history={history}>
+        <Header />
+      </Router>,
+    );
 
-  });
+    const homeButton = getByRole('button', { name: 'Home' });
+    const seriesButton = getByRole('button', { name: 'Series' });
+    const filmsButton = getByRole('button', { name: 'Films' });
+    const latestButton = getByRole('button', { name: 'Latest' });
+    const myListButton = getByRole('button', { name: 'My List' });
+    const kidsButton = getByRole('button', { name: 'Children' });
 
-  it('should have 6 clickable buttons on the left side', () => {
+    fireEvent.click(seriesButton);
+    expect(history.location.pathname).toEqual('/browse/genre/83');
 
-  });
+    fireEvent.click(filmsButton);
+    expect(history.location.pathname).toEqual('/browse/genre/34399');
 
-  it('should have 5 clickable elements on the right side', () => {
+    fireEvent.click(latestButton);
+    expect(history.location.pathname).toEqual('/latest');
+
+    fireEvent.click(myListButton);
+    expect(history.location.pathname).toEqual('/browse/my-list');
+
+    fireEvent.click(kidsButton);
+    expect(history.location.pathname).toEqual('/Kids');
+
+    fireEvent.click(homeButton);
+    expect(history.location.pathname).toEqual('/browse');
 
   });
 
@@ -26,7 +53,4 @@ describe('Main header bar', () => {
 
   });
 
-  it('should change the app page state if navigation buttons are clicked', () => {
-
-  });
 });

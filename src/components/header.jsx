@@ -39,21 +39,26 @@ export function Header() {
   return (
     <Nav>
       <NavLeft>
-        <Link to="/browse">
+        <NavLink to="/browse">
           <NetflixButton />
-        </Link>
+        </NavLink>
+
         <NavLink to="/browse">
           <LinkTextButton>Home</LinkTextButton>
         </NavLink>
+
         <NavLink to="/browse/genre/83">
           <LinkTextButton>Series</LinkTextButton>
         </NavLink>
+
         <NavLink to="/browse/genre/34399">
           <LinkTextButton>Films</LinkTextButton>
         </NavLink>
+
         <NavLink to="/latest">
           <LinkTextButton>Latest</LinkTextButton>
         </NavLink>
+
         <NavLink to="/browse/my-list">
           <LinkTextButton>My List</LinkTextButton>
         </NavLink>
@@ -61,10 +66,13 @@ export function Header() {
 
       <NavRight>
         <SearchBox />
+
         <Link to="/Kids">
           <LinkTextButton>Children</LinkTextButton>
         </Link>
+
         <Notifications />
+
         <AccountDropdown />
       </NavRight>
     </Nav>

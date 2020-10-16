@@ -9,4 +9,8 @@ describe('Button', () => {
 
     expect(wrapper).toMatchSnapshot();
   });
+
+  it('should highlight text if LinkTextButton is clicked', () => {
+
+  });
 });

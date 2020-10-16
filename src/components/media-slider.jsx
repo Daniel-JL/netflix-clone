@@ -64,23 +64,25 @@ export function MediaSlider(props) {
         && (
         <SliderContainer>
           <Slider 
-          arrows={true}
-          dots={false}
-          infinite={true}
-          speed={500}
-          slidesToScroll={6}
-          slidesToShow={6} 
-          className={'slides'}
-          centerMode={false}
-          variableWidth={false}
-
+            arrows={true}
+            dots={false}
+            infinite={true}
+            speed={500}
+            slidesToScroll={6}
+            slidesToShow={6} 
+            className={'slides'}
+            centerMode={false}
+            variableWidth={false}
           >
             {
               [
                 ...Array(maxIdsNeeded),
               ].map((value: undefined, index: number) => (
                 <div>
-                  <SliderItem mediaType={movieTvShowType.current[index]} mediaId={movieTvShowIds.current[index]} />
+                  <SliderItem 
+                    mediaType={movieTvShowType.current[index]} 
+                    mediaId={movieTvShowIds.current[index]} 
+                  />
                 </div>
               ))
             }

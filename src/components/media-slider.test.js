@@ -44,6 +44,6 @@ describe('Slider', () => {
         <MediaSlider />
       </Router>,
     );
-    
+
   });
 });
