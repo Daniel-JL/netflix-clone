@@ -49,8 +49,6 @@ describe('Main header bar', () => {
 
   });
 
-  it('should highlight left elements if clicked except for netflix button', () => {
 
-  });
 
 });

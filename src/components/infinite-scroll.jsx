@@ -4,10 +4,9 @@ import {
   NavLink,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import { InfiniteScroll } from '../infinite-scroll'
-import { MotionBackground } from '../motion-background';
-import { LocoRow } from '../loco-row';
-import { LolomoBigRow } from '../lolomo-big-row';
+import { MotionBackground } from './motion-background';
+import { LocoRow } from './loco-row';
+import { LolomoBigRow } from './lolomo-big-row';
 
 const LocoRowGroup = () => (
   <div>
@@ -19,7 +18,46 @@ const LocoRowGroup = () => (
   </div>
 );
 
-export const Home = () => {
+const infiniteScrollFirstLoadGroup = {
+  home: () => (
+    <>
+      <LocoRow />
+      <LolomoBigRow />
+      <LocoRow />
+      <LocoRow />
+      <LocoRow />
+    </>
+  ),
+  films: () => (
+    <div>
+      <LocoRow />
+      <LolomoBigRow />
+      <LocoRow />
+      <LocoRow />
+      <LocoRow />
+    </div>
+  ),
+  series: () => (
+    <div>
+      <LocoRow />
+      <LolomoBigRow />
+      <LocoRow />
+      <LocoRow />
+      <LocoRow />
+    </div>
+  ),
+  search: () => (
+    <div>
+      <LocoRow />
+      <LocoRow />
+      <LocoRow />
+      <LocoRow />
+      <LocoRow />
+    </div>
+  ),
+}
+
+export const InfiniteScroll = (props) => {
   let scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [element, setElement] = useState(null);
@@ -61,13 +99,17 @@ export const Home = () => {
       }
     };
   }, [element]);
+  console.log(infiniteScrollFirstLoadGroup['home']);
 
   return (
     <div style={{backgroundColor: 'darkslategray', zIndex: -2}}>
-      <InfiniteScroll />
-      {/* <MotionBackground />
+      <MotionBackground />
       <LocoRow />
-      {/* <LocoRow />
+      
+      {scrollGroupActive.current > 0 && infiniteScrollFirstLoadGroup['home']}
+      {scrollGroupActive.current > 1 && infiniteScrollFirstLoadGroup['home']}
+
+      <LocoRow />
       <LocoRow />
       <LocoRow />
       <LolomoBigRow />
@@ -77,8 +119,8 @@ export const Home = () => {
       {scrollGroupActive.current > 1 && <LocoRowGroup />}
       {scrollGroupActive.current > 2 && <LocoRowGroup />}
       {scrollGroupActive.current > 3 && <LocoRowGroup />}
-      {scrollGroupActive.current > 4 && <LocoRowGroup />} */}
-      {/* <div ref={setElement} />  */}
+      {scrollGroupActive.current > 4 && <LocoRowGroup />}
+      <div ref={setElement} />
     </div>
   );
 };
