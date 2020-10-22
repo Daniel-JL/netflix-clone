@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { MotionBackground } from './motion-background';
 import { LocoRow } from './loco-row';
 import { LolomoBigRow } from './lolomo-big-row';
+import { InfiniteScrollHomeComponents } from './infinite-scroll-home-components';
 
 const LocoRowGroup = () => (
   <div>
@@ -61,7 +62,7 @@ export const InfiniteScroll = (props) => {
   let scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [element, setElement] = useState(null);
-  const maxNumScrollLoads = 5;
+  const maxNumScrollLoads = props.maxNumScrollLoads;
 
   const prevY = useRef(0);
   const observer = useRef(
@@ -102,24 +103,11 @@ export const InfiniteScroll = (props) => {
   console.log(infiniteScrollFirstLoadGroup['home']);
 
   return (
-    <div style={{backgroundColor: 'darkslategray', zIndex: -2}}>
-      <MotionBackground />
-      <LocoRow />
-      
-      {scrollGroupActive.current > 0 && infiniteScrollFirstLoadGroup['home']}
-      {scrollGroupActive.current > 1 && infiniteScrollFirstLoadGroup['home']}
-
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-      <LolomoBigRow />
-      <LocoRow />
-      <LocoRow />
-      {scrollGroupActive.current > 0 && <LocoRowGroup />}
-      {scrollGroupActive.current > 1 && <LocoRowGroup />}
-      {scrollGroupActive.current > 2 && <LocoRowGroup />}
-      {scrollGroupActive.current > 3 && <LocoRowGroup />}
-      {scrollGroupActive.current > 4 && <LocoRowGroup />}
+    <div>
+      {props.viewName === 'home' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
+      {props.viewName === 'series' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
+      {props.viewName === 'films' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
+      {props.viewName === 'search' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
       <div ref={setElement} />
     </div>
   );

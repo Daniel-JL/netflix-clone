@@ -29,7 +29,7 @@ export const Routes = () => {
       <Header />
 
       <Switch location={background || location}>
-        <Route exact path="/browse" component={Home} />
+        <Route exact path="/browse" children={<Home />} />
         <Route exact path="/">
           <Redirect to="/browse" />
         </Route>

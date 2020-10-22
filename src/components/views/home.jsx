@@ -25,46 +25,46 @@ export const Home = () => {
   const [element, setElement] = useState(null);
   const maxNumScrollLoads = 5;
 
-  const prevY = useRef(0);
-  const observer = useRef(
-    new IntersectionObserver(
-      (entries) => {
-        const firstEntry = entries[0];
-        const { y } = firstEntry.boundingClientRect;
+  // const prevY = useRef(0);
+  // const observer = useRef(
+  //   new IntersectionObserver(
+  //     (entries) => {
+  //       const firstEntry = entries[0];
+  //       const { y } = firstEntry.boundingClientRect;
 
-        if (prevY.current > y && scrollGroupActive.current <= maxNumScrollLoads) {
-          mountMoreComponents();
-        }
+  //       if (prevY.current > y && scrollGroupActive.current <= maxNumScrollLoads) {
+  //         mountMoreComponents();
+  //       }
 
-        prevY.current = y;
-      },
-      { threshold: 0.5 },
-    ),
-  );
+  //       prevY.current = y;
+  //     },
+  //     { threshold: 0.5 },
+  //   ),
+  // );
 
-  const mountMoreComponents = () => {
-    scrollGroupActive.current++;
-    setToggleForRerender(toggleForRerender => !toggleForRerender);
-  };
+  // const mountMoreComponents = () => {
+  //   scrollGroupActive.current++;
+  //   setToggleForRerender(toggleForRerender => !toggleForRerender);
+  // };
 
-  useEffect(() => {
-    const currentElement = element;
-    const currentObserver = observer.current;
+  // useEffect(() => {
+  //   const currentElement = element;
+  //   const currentObserver = observer.current;
 
-    if (currentElement) {
-      currentObserver.observe(currentElement);
-    }
+  //   if (currentElement) {
+  //     currentObserver.observe(currentElement);
+  //   }
 
-    return () => {
-      if (currentElement) {
-        currentObserver.unobserve(currentElement);
-      }
-    };
-  }, [element]);
+  //   return () => {
+  //     if (currentElement) {
+  //       currentObserver.unobserve(currentElement);
+  //     }
+  //   };
+  // }, [element]);
 
   return (
     <div style={{backgroundColor: 'darkslategray', zIndex: -2}}>
-      <InfiniteScroll />
+      <InfiniteScroll viewName={'home'} maxNumScrollLoads={maxNumScrollLoads}/>
       {/* <MotionBackground />
       <LocoRow />
       {/* <LocoRow />
