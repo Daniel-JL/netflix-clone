@@ -1,10 +1,18 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
-import {
-  NavLink,
-} from 'react-router-dom';
-import styled from 'styled-components';
+import { MotionBackground } from '../motion-background';
+import { LocoRow } from '../loco-row';
+import { InfiniteScroll } from '../infinite-scroll';
 
-export const Films = () => (
-  <div />
-);
+export const Films = () => {
+  const maxNumScrollLoads = 5;
+
+  return (
+    <div style={{ backgroundColor: 'darkslategray', zIndex: -2 }}>
+      <MotionBackground />
+      <LocoRow />
+      <LocoRow />
+      <InfiniteScroll viewName="films" maxNumScrollLoads={maxNumScrollLoads} />
+    </div>
+  );
+};

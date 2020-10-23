@@ -6,5 +6,5 @@ import {
 import styled from 'styled-components';
 
 export const NoMatch = () => (
-  <div />
+  <div>EH ALTER DAS IST KEINE GÜLTIGE URL!!</div>
 );

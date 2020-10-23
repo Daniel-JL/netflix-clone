@@ -5,11 +5,11 @@ import { Router } from 'react-router-dom';
 import fetch from "jest-fetch-mock";
 import '@testing-library/jest-dom/extend-expect';
 import { createMemoryHistory } from 'history';
-import { InfiniteScroll } from './infinite-scroll';
+import { InfiniteScrollComponents } from './infinite-scroll-components';
 
 describe('Infinite scroll component', () => {
   it('should render correctly', () => {
-    const wrapper = renderer.create(<InfiniteScroll />).toJSON();
+    const wrapper = renderer.create(<InfiniteScrollComponents />).toJSON();
 
     expect(wrapper).toMatchSnapshot();
   });

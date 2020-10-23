@@ -1,68 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  NavLink,
-} from 'react-router-dom';
-import styled from 'styled-components';
-import { MotionBackground } from './motion-background';
-import { LocoRow } from './loco-row';
-import { LolomoBigRow } from './lolomo-big-row';
-import { InfiniteScrollHomeComponents } from './infinite-scroll-home-components';
-
-const LocoRowGroup = () => (
-  <div>
-    <LocoRow />
-    <LocoRow />
-    <LocoRow />
-    <LocoRow />
-    <LocoRow />
-  </div>
-);
-
-const infiniteScrollFirstLoadGroup = {
-  home: () => (
-    <>
-      <LocoRow />
-      <LolomoBigRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-    </>
-  ),
-  films: () => (
-    <div>
-      <LocoRow />
-      <LolomoBigRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-    </div>
-  ),
-  series: () => (
-    <div>
-      <LocoRow />
-      <LolomoBigRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-    </div>
-  ),
-  search: () => (
-    <div>
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-    </div>
-  ),
-}
+import { InfiniteScrollComponents } from './infinite-scroll-components';
 
 export const InfiniteScroll = (props) => {
-  let scrollGroupActive = useRef(0);
+  const scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [element, setElement] = useState(null);
-  const maxNumScrollLoads = props.maxNumScrollLoads;
+  const { maxNumScrollLoads } = props;
 
   const prevY = useRef(0);
   const observer = useRef(
@@ -83,7 +27,7 @@ export const InfiniteScroll = (props) => {
 
   const mountMoreComponents = () => {
     scrollGroupActive.current++;
-    setToggleForRerender(toggleForRerender => !toggleForRerender);
+    setToggleForRerender((toggleForRerender) => !toggleForRerender);
   };
 
   useEffect(() => {
@@ -100,14 +44,14 @@ export const InfiniteScroll = (props) => {
       }
     };
   }, [element]);
-  console.log(infiniteScrollFirstLoadGroup['home']);
 
   return (
     <div>
-      {props.viewName === 'home' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
-      {props.viewName === 'series' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
-      {props.viewName === 'films' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
-      {props.viewName === 'search' && <InfiniteScrollHomeComponents scrollLimitReached={scrollGroupActive.current} />}
+      <InfiniteScrollComponents
+        scrollLimitReached={scrollGroupActive.current}
+        maxNumScrollLoads={props.maxNumScrollLoads}
+        viewName={props.viewName}
+      />
       <div ref={setElement} />
     </div>
   );
