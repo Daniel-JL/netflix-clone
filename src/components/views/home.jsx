@@ -11,8 +11,8 @@ export const Home = () => {
     <div style={{ backgroundColor: 'darkslategray', zIndex: -2 }}>
       <MotionBackground />
       <LocoRow />
-      <LocoRow />
-      <InfiniteScroll viewName="home" maxNumScrollLoads={maxNumScrollLoads} />
+      {/* <LocoRow />
+      <InfiniteScroll viewName="home" maxNumScrollLoads={maxNumScrollLoads} /> */}
     </div>
   );
 };

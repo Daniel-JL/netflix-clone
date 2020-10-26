@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
-import { SliderItem } from './slider-item';
+import { SliderItemContainer } from './slider-item-container';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './media-slider.css';
@@ -41,6 +41,7 @@ export function MediaSlider(props) {
           }
 
           if (movieTvShowIds.current.length >= maxIdsNeeded) {
+            console.log('test');
             setDataLoaded(true);
             break;
           }
@@ -79,7 +80,7 @@ export function MediaSlider(props) {
                 ...Array(maxIdsNeeded),
               ].map((value: undefined, index: number) => (
                 <div>
-                  <SliderItem 
+                  <SliderItemContainer 
                     mediaType={movieTvShowType.current[index]} 
                     mediaId={movieTvShowIds.current[index]} 
                   />

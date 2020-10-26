@@ -12,6 +12,7 @@ import {
   RoundThumbsDownButton,
   RoundEpsAndInfoButton,
 } from './buttons';
+import { SliderItem } from './slider-item';
 
 const ISliderItemProps = {
   mediaName: 'name',
@@ -49,7 +50,7 @@ const ItemDetails = styled.div`
   `}
 `;
 
-export function SliderItem(props) {
+export function SliderItemContainer(props) {
   const location = useLocation();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
@@ -118,6 +119,14 @@ export function SliderItem(props) {
     setItemHoverActive(false);
   };
 
+  const handleImgLoadingErr = () => {
+    setImgLoadingErr(true);
+  };
+
+  const handleImgLoadedSuccess = () => {
+    setImgLoadedSuccess(true);
+  };
+
   useEffect(() => {
     if (!imgLoaded) {
       fetchUrlData();
@@ -125,55 +134,22 @@ export function SliderItem(props) {
   });
 
   return (
-    <ItemContainer
-      onMouseOver={props.handleMouseOver}
-      onMouseOut={props.handleMouseOut}
-      active={props.itemHoverActive}
-    >
+    <SliderItem
+      ageRating={ageRating.current}
+      genres={genres.current}
+      imgLoadedSuccess={imgLoadedSuccess}
+      imgLoadingErr={imgLoadingErr}
+      imgLoaded={imgLoaded}
+      posterPath={posterPath.current}
+      runtimeOrNumberOfSeasons={runtimeOrNumberOfSeasons.current}
+      itemHoverActive={itemHoverActive}
+      handleMouseOver={handleMouseOver()}
+      handleMouseOut={handleMouseOut()}
+      setItemHoverActive={setItemHoverActive()}
+      setImgLoadingErr={handleImgLoadingErr()}
+      setImgLoadSuccess={handleImgLoadedSuccess()}
 
-      {props.imgLoaded && !props.imgLoadingErr
-      && (
-      <SliderItemImage
-        alt="Slider image"
-        src={props.posterPath}
-        onError={props.handleImgLoadingErr}
-        onLoad={props.handleImgLoadedSuccess}
-      />
-      )}
-
-      {imgLoadedSuccess
-      && <div id="imgSuccess" data-testid="imgSuccess" />}
-
-      <ItemDetails active={props.itemHoverActive}>
-        <div id="buttons">
-          <RoundPlayButton />
-          <RoundPlusButton />
-          <RoundThumbsUpButton />
-          <RoundThumbsDownButton />
-          <Link
-            key={1}
-            to={{
-              pathname: '/browse/epsinfobox',
-              state: { background: location },
-            }}
-          >
-            <RoundEpsAndInfoButton>v</RoundEpsAndInfoButton>
-          </Link>
-        </div>
-        <div id="media-info">
-          {props.ageRating}
-          {' '}
-          {props.runtimeOrNumberOfSeasons}
-        </div>
-        <div id="genres">
-          {props.genres[0]}
-          {' '}
-          *
-          {' '}
-          {props.genres[1]}
-        </div>
-      </ItemDetails>
-    </ItemContainer>
+    />
   );
 }
 
