@@ -1,57 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  Link,
-  useLocation,
-} from 'react-router-dom';
-import styled from 'styled-components';
-import {
-  RoundPlayButton,
-  RoundPlusButton,
-  RoundThumbsUpButton,
-  RoundThumbsDownButton,
-  RoundEpsAndInfoButton,
-} from './buttons';
 import { SliderItem } from './slider-item';
 
-const ISliderItemProps = {
-  mediaName: 'name',
-  imageID: 1,
-  maturityRating: 'rating',
-  numOfSeasons: 1,
-
-};
-
-const ItemContainer = styled.div`
-  position: relative;
-  height: 139px;
-  width: 250px;
-  border: 1px solid black;
-  transition: width 0.2s, height 0.2s;
-
-  ${({ active }) => active && `
-    width: 400px;
-    height: 222px;
-    z-index: 2;
-  `}
-`;
-
-const SliderItemImage = styled.img`
-  width: 100%;
-  height: 100%;
-`;
-
-const ItemDetails = styled.div`
-  visibility: hidden;
-  background-color: gray;
-
-  ${({ active }) => active && `
-    visibility: visible;
-  `}
-`;
-
 export function SliderItemContainer(props) {
-  const location = useLocation();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
@@ -124,11 +75,14 @@ export function SliderItemContainer(props) {
   };
 
   const handleImgLoadedSuccess = () => {
+    console.log('loadSuccess');
+
     setImgLoadedSuccess(true);
   };
 
   useEffect(() => {
     if (!imgLoaded) {
+      console.log('useEffect');
       fetchUrlData();
     }
   });
@@ -143,20 +97,14 @@ export function SliderItemContainer(props) {
       posterPath={posterPath.current}
       runtimeOrNumberOfSeasons={runtimeOrNumberOfSeasons.current}
       itemHoverActive={itemHoverActive}
-      handleMouseOver={handleMouseOver()}
-      handleMouseOut={handleMouseOut()}
-      setItemHoverActive={setItemHoverActive()}
-      setImgLoadingErr={handleImgLoadingErr()}
-      setImgLoadSuccess={handleImgLoadedSuccess()}
-
+      handleMouseOver={handleMouseOver}
+      handleMouseOut={handleMouseOut}
+      setImgLoadingErr={handleImgLoadingErr}
+      setImgLoadSuccess={handleImgLoadedSuccess}
     />
   );
 }
 
-const mediaIsMovie = (mediaType) => {
-  return mediaType === 'movie';
-};
+const mediaIsMovie = (mediaType) => mediaType === 'movie';
 
-const moreThanOneSeason = (numberOfSeasons) => {
-  return numberOfSeasons > 1;
-};
+const moreThanOneSeason = (numberOfSeasons) => numberOfSeasons > 1;
