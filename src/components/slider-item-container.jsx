@@ -1,9 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import { SliderItem } from './slider-item';
+import { getMediaData } from '../helpers/getMediaData';
+import { getAgeRating } from '../helpers/getAgeRating';
 
 export function SliderItemContainer(props) {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
@@ -19,45 +21,26 @@ export function SliderItemContainer(props) {
     ageRatingUrl.current = `tv/${props.mediaId}/content_ratings`;
   }
 
-  const fetchUrlData = async () => {
-    fetch(`https://api.themoviedb.org/3/${props.mediaType}/${props.mediaId}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
-      .then((response) => response.json())
-      .then((data) => {
-        posterPath.current = `http://image.tmdb.org/t/p/original${data.backdrop_path}`;
-        genres.current = [
-          ...Array(data.genres.length),
-        ].map((undefined, index) => data.genres[index].name);
+  const fetchItemData = async () => {
+    const data = await getMediaData(props.mediaType, props.mediaId);
 
-        if (mediaIsMovie(props.mediaType)) {
-          runtimeOrNumberOfSeasons.current = `${data.runtime}m`;
-        } else if (moreThanOneSeason(data.number_of_seasons)) {
-          runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Seasons`;
-        } else {
-          runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Season`;
-        }
-        setImgLoaded(true);
-      })
-      .catch((error) => {
-        console.error('Error', error);
-      });
+    posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
 
-    fetch(`https://api.themoviedb.org/3/${ageRatingUrl.current}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
-      .then((response) => response.json())
-      .then((data) => {
-        for (let i = 0; i < data.results.length; i++) {
-          if (data.results[i].iso_3166_1 === 'US') {
-            if (props.mediaType === 'movie') {
-              ageRating.current = data.results[i].release_dates[0].certification;
-            } else {
-              ageRating.current = data.results[i].rating;
-            }
-            break;
-          }
-        }
-      })
-      .catch((error) => {
-        console.error('Error', error);
-      });
+    genres.current = [
+      ...Array(data.genres.length),
+    ].map((undefined, index) => data.genres[index].name);
+
+    if (mediaIsMovie(props.mediaType)) {
+      runtimeOrNumberOfSeasons.current = `${data.runtime}m`;
+    } else if (moreThanOneSeason(data.number_of_seasons)) {
+      runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Seasons`;
+    } else {
+      runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Season`;
+    }
+
+    ageRating.current = await getAgeRating(ageRatingUrl.current, props.mediaType);
+    setDataLoaded(true);
+
   };
 
   const handleMouseOver = () => {
@@ -75,15 +58,12 @@ export function SliderItemContainer(props) {
   };
 
   const handleImgLoadedSuccess = () => {
-    console.log('loadSuccess');
-
     setImgLoadedSuccess(true);
   };
 
   useEffect(() => {
-    if (!imgLoaded) {
-      console.log('useEffect');
-      fetchUrlData();
+    if (!dataLoaded) {
+      fetchItemData();
     }
   });
 
@@ -93,7 +73,7 @@ export function SliderItemContainer(props) {
       genres={genres.current}
       imgLoadedSuccess={imgLoadedSuccess}
       imgLoadingErr={imgLoadingErr}
-      imgLoaded={imgLoaded}
+      dataLoaded={dataLoaded}
       posterPath={posterPath.current}
       runtimeOrNumberOfSeasons={runtimeOrNumberOfSeasons.current}
       itemHoverActive={itemHoverActive}

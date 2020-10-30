@@ -25,7 +25,6 @@ export const getMediaIdsAndTypes = async (numIdsNeeded) => {
   }
 
   return processPageData(data, numIdsNeeded);
-
 };
 
 const processPageData = (data, numIdsNeeded) => {
@@ -45,4 +44,4 @@ const processPageData = (data, numIdsNeeded) => {
   return movieTvShowIdsAndTypes;
 };
 
-const mediaIsMovieOrTv = (item) => (item === 'movie' || item === 'tv');
+// const mediaIsMovieOrTv = (item) => (item === 'movie' || item === 'tv');

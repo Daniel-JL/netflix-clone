@@ -18,7 +18,6 @@ const ArrowButtonContainer = styled.div`
 `;
 
 export function MediaSlider(props) {
-  const [paginationPage, setPaginationPage] = useState(0);
 
   return (
     <div>

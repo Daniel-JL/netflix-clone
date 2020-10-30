@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import {
   Link,
   useLocation,
@@ -58,7 +58,7 @@ export function SliderItem(props) {
       active={props.itemHoverActive}
     >
 
-      {props.imgLoaded && !props.imgLoadingErr
+      {props.dataLoaded && !props.imgLoadingErr
       && (
       <SliderItemImage
         alt="Slider image"
