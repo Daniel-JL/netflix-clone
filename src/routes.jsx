@@ -19,6 +19,7 @@ import { Search } from './components/views/search';
 import { Kids } from './components/views/kids';
 import { VideoPlayer } from './components/views/video-player';
 import { NoMatch } from './components/views/no-match';
+import { Modal } from './components/modal';
 
 export const Routes = () => {
   const location = useLocation();
@@ -33,20 +34,41 @@ export const Routes = () => {
         <Route exact path="/">
           <Redirect to="/browse" />
         </Route>
-        <Route path="/browse/epsinfobox" children={<EpisodesAndInfoBox />} />
-        <Route exact path="/browse/genre/83" component={Series} />
-        <Route exact path="/browse/genre/34399" component={Films} />
-        <Route exact path="/latest" component={Latest} />
-        <Route exact path="/browse/my-list" component={MyList} />
-        <Route exact path="/search" component={Search} />
-        <Route exact path="/Kids" component={Kids} />
-        <Route exact path="/watch/:videoId" component={VideoPlayer} />
-        <Route component={NoMatch} />
+        {/* <Route
+          path="/browse/epsinfobox"
+          render={() =>
+            <Modal>
+              <EpisodesAndInfoBox />
+            </Modal>
+          }
+        >
+        </Route> */}
+        {/* <Route path="/browse/epsinfobox" children={<EpisodesAndInfoBox />} /> */}
+        <Route exact path="/browse/genre/83" children={<Series />} />
+        <Route exact path="/browse/genre/34399" children={<Films />} />
+        <Route exact path="/latest" children={<Latest />} />
+        <Route exact path="/browse/my-list" children={<MyList />} />
+        <Route exact path="/search" children={<Search />} />
+        <Route exact path="/Kids" children={<Kids />} />
+        <Route exact path="/watch/:videoId" children={<VideoPlayer />} />
+        <Route children={<NoMatch />} />
       </Switch>
+      {background
+        && (
+        <Route
+          path="/browse/epsinfobox"
+          render={() => (
+            <Modal children={<EpisodesAndInfoBox />}>
+              {/* <EpisodesAndInfoBox /> */}
+            </Modal>
+          )}
+        />
+        )}
 
       <Footer />
 
-      {background && <Route path="/browse/epsinfobox" children={<EpisodesAndInfoBox />} />}
+      
+      {/* {background && <Route path="/browse/epsinfobox" children={<EpisodesAndInfoBox />} />} */}
     </div>
   );
 };

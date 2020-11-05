@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Link,
   useLocation,
+  Route,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -12,6 +13,8 @@ import {
   RoundThumbsDownButton,
   RoundEpsAndInfoButton,
 } from './buttons';
+import { EpisodesAndInfoBox } from './episodes-and-info-box';
+import { Modal } from './modal';
 
 const ISliderItemProps = {
   mediaName: 'name',
