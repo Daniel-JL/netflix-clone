@@ -1,8 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createContext } from 'react';
 import { SliderItem } from './slider-item';
 import { getMediaData } from '../helpers/getMediaData';
 import { getAgeRating } from '../helpers/getAgeRating';
+import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 
 export function SliderItemContainer(props) {
   const [dataLoaded, setDataLoaded] = useState(false);

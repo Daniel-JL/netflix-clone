@@ -1,34 +1,54 @@
 /* eslint-disable import/prefer-default-export */
-import React, { useEffect } from 'react';
+import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
 import { createPortal } from 'react-dom';
+import { EpisodesAndInfoBox } from './episodes-and-info-box';
+import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 
-const modalStyle = {
-  position: "fixed",
-  height: 1000,
-  left: 0,
-  top: 0,
-  bottom: 0,
-  right: 0,
-  // backgroundColor: "rgba(0,0,0,.2)",
-  // color: "##FFF",
-  // fontSize: "40px",
-};
+const ModalContainer = styled.div`
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  overflow: scroll;
+  z-index: 2;
+
+  ${({ scrollActive }) => !scrollActive && `
+    overflow: hidden;
+  `}
+`;
 
 export const Modal = (props) => {
-  // const mount = document.getElementById('modal-root');
-  // const el = document.createElement('div');
+  const [scrollActive, setScrollActive] = useState(true);
 
-  // useEffect(() => {
-  //   mount.appendChild(el);
-  //   return () => mount.removeChild(el);
-  // }, [el, mount]);
-
-  // return createPortal(children, el);
+  const setScrollHidden = () => {
+    setScrollActive(false);
+  };
 
   return createPortal(
-    <div style={modalStyle}>
-      {props.children}
-    </div>,
+    <ModalContainer scrollActive={scrollActive}>
+      <EpisodesAndInfoBoxContext.Provider
+      // value={{
+      //   mediaId,
+      //   mediaType,
+      //   posterPath,
+      //   runtimeOrNumberOfSeasons,
+      //   genres,
+      //   ageRating,
+      // }}
+      >
+        <EpisodesAndInfoBox
+        setScrollHidden={setScrollHidden}
+        />
+      </EpisodesAndInfoBoxContext.Provider>
+      
+    </ModalContainer>,
     document.getElementById("modal-root"),
   );
 };

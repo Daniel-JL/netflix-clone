@@ -34,16 +34,6 @@ export const Routes = () => {
         <Route exact path="/">
           <Redirect to="/browse" />
         </Route>
-        {/* <Route
-          path="/browse/epsinfobox"
-          render={() =>
-            <Modal>
-              <EpisodesAndInfoBox />
-            </Modal>
-          }
-        >
-        </Route> */}
-        {/* <Route path="/browse/epsinfobox" children={<EpisodesAndInfoBox />} /> */}
         <Route exact path="/browse/genre/83" children={<Series />} />
         <Route exact path="/browse/genre/34399" children={<Films />} />
         <Route exact path="/latest" children={<Latest />} />
@@ -53,22 +43,18 @@ export const Routes = () => {
         <Route exact path="/watch/:videoId" children={<VideoPlayer />} />
         <Route children={<NoMatch />} />
       </Switch>
+
       {background
         && (
         <Route
           path="/browse/epsinfobox"
           render={() => (
-            <Modal children={<EpisodesAndInfoBox />}>
-              {/* <EpisodesAndInfoBox /> */}
-            </Modal>
+            <Modal />
           )}
         />
         )}
 
       <Footer />
-
-      
-      {/* {background && <Route path="/browse/epsinfobox" children={<EpisodesAndInfoBox />} />} */}
     </div>
   );
 };
