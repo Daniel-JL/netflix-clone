@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Route,
   Switch,
@@ -7,6 +7,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import useSliderItemData from './hooks/useSliderItemData';
 import { Header } from './components/header';
 import { EpisodesAndInfoBox } from './components/episodes-and-info-box';
 import { Footer } from './components/footer';
@@ -24,6 +25,7 @@ import { Modal } from './components/modal';
 export const Routes = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
+  global.sliderItemData = useSliderItemData();
 
   return (
     <div>
@@ -45,14 +47,14 @@ export const Routes = () => {
       </Switch>
 
       {background
-        && (
+        &&
         <Route
           path="/browse/epsinfobox"
           render={() => (
             <Modal />
           )}
         />
-        )}
+          }
 
       <Footer />
     </div>

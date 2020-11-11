@@ -28,6 +28,7 @@ export function EpisodesAndInfoBox(props) {
   const context = useContext(EpisodesAndInfoBoxContext);
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
+  console.log(global.sliderItemData);
 
   const back = () => {
     props.setScrollHidden();

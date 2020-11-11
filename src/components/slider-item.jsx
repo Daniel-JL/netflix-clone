@@ -87,7 +87,9 @@ export function SliderItem(props) {
               state: { background: location },
             }}
           >
-            <RoundEpsAndInfoButton>v</RoundEpsAndInfoButton>
+            <RoundEpsAndInfoButton onClick={props.handleEpsAndInfoButtonClick}>
+              {'v'}
+            </RoundEpsAndInfoButton>
           </Link>
         </div>
         <div id="media-info">
@@ -104,5 +106,6 @@ export function SliderItem(props) {
         </div>
       </ItemDetails>
     </ItemContainer>
+
   );
 }

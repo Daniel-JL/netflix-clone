@@ -62,6 +62,16 @@ export function SliderItemContainer(props) {
     setImgLoadedSuccess(true);
   };
 
+  const handleEpsAndInfoButtonClick = () => {
+    global.sliderItemData.setMediaId(props.mediaId);
+    global.sliderItemData.setMediaType(props.mediaType);
+    global.sliderItemData.setPosterPath(posterPath.current);
+    global.sliderItemData.setRuntimeOrNumberOfSeasons(runtimeOrNumberOfSeasons.current);
+    global.sliderItemData.setGenres(genres.current);
+    global.sliderItemData.setAgeRating(ageRating.current);
+
+  };
+
   useEffect(() => {
     if (!dataLoaded) {
       fetchItemData();
@@ -82,6 +92,7 @@ export function SliderItemContainer(props) {
       handleMouseOut={handleMouseOut}
       setImgLoadingErr={handleImgLoadingErr}
       setImgLoadSuccess={handleImgLoadedSuccess}
+      handleEpsAndInfoButtonClick={handleEpsAndInfoButtonClick}
     />
   );
 }

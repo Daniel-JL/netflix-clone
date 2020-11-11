@@ -30,24 +30,11 @@ export const Modal = (props) => {
   const setScrollHidden = () => {
     setScrollActive(false);
   };
-
   return createPortal(
     <ModalContainer scrollActive={scrollActive}>
-      <EpisodesAndInfoBoxContext.Provider
-      // value={{
-      //   mediaId,
-      //   mediaType,
-      //   posterPath,
-      //   runtimeOrNumberOfSeasons,
-      //   genres,
-      //   ageRating,
-      // }}
-      >
-        <EpisodesAndInfoBox
+      <EpisodesAndInfoBox
         setScrollHidden={setScrollHidden}
-        />
-      </EpisodesAndInfoBoxContext.Provider>
-      
+      />
     </ModalContainer>,
     document.getElementById("modal-root"),
   );
