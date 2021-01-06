@@ -34,12 +34,13 @@ export function MediaSlider(props) {
             className={'slides'}
             centerMode={false}
             variableWidth={false}
+            useTransform={true}
           >
             {
               [
                 ...Array(props.maxIdsNeeded),
               ].map((value: undefined, index: number) => (
-                <div>
+                <div data-index={index} key={index} >
                   <SliderItemContainer 
                     mediaType={props.movieTvShowType[index]} 
                     mediaId={props.movieTvShowIds[index]} 

@@ -50,6 +50,6 @@ export default function useSliderItemData () {
     genres,
     setGenres,
     ageRating,
-    setAgeRating
-  }
+    setAgeRating,
+  };
 }

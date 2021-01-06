@@ -56,7 +56,6 @@ export const InfiniteScrollComponents = (props) => {
     console.log(scrollLimitReached);
   }, [props.scrollLimitReached]);
 
-  console.log('test');
   return (
     <div>
       {scrollLimitReached > 0 && firstComponentGroup}

@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   useHistory,
 } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { MotionBackground } from './motion-background';
 import { LocoRow } from './loco-row';
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
+import EpisodesList from './episodes-list';
+import RecommendedMovieBox from './recommended-movie-box';
 
 const EpisodesAndInfoBoxContainer = styled.div`
   position: absolute;
@@ -25,7 +27,6 @@ const EpisodesAndInfoBoxContainer = styled.div`
 export function EpisodesAndInfoBox(props) {
   const history = useHistory();
   const ref = useRef();
-  const context = useContext(EpisodesAndInfoBoxContext);
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
   console.log(global.sliderItemData);
@@ -39,9 +40,13 @@ export function EpisodesAndInfoBox(props) {
   return (
     <EpisodesAndInfoBoxContainer ref={ref}>
       <MotionBackground />
-      {/* <LocoRow />
-      <LocoRow />
-      <LocoRow /> */}
+      {global.sliderItemData.mediaType.current === 'movie' && 
+        <RecommendedMovieBox />
+      }
+      {global.sliderItemData.mediaType.current === 'tv' &&
+        <EpisodesList />
+      }
+      
     </EpisodesAndInfoBoxContainer>
   );
 }

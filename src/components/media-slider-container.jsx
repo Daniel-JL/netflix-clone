@@ -1,7 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
+import styled from 'styled-components';
 import { MediaSlider } from './media-slider';
 import { getMediaIdsAndTypes } from '../helpers/getMediaIdsAndTypes';
+
+const Container = styled.div`
+  width: 100%;
+`;
 
 export function MediaSliderContainer(props) {
   const [paginationPage, setPaginationPage] = useState(0);
@@ -26,7 +31,7 @@ export function MediaSliderContainer(props) {
   }, []);
 
   return (
-    <div>
+    <Container>
       {dataLoaded
         && (
         <MediaSlider
@@ -37,6 +42,6 @@ export function MediaSliderContainer(props) {
         />
         )}
 
-    </div>
+    </Container>
   );
 }
