@@ -8,7 +8,7 @@ import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { MotionBackground } from './motion-background';
 import { LocoRow } from './loco-row';
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
-import EpisodesList from './episodes-list';
+import EpisodesListContainer from './episodes-list-container';
 import RecommendedMovieBox from './recommended-movie-box';
 
 const EpisodesAndInfoBoxContainer = styled.div`
@@ -29,7 +29,6 @@ export function EpisodesAndInfoBox(props) {
   const ref = useRef();
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
-  console.log(global.sliderItemData);
 
   const back = () => {
     props.setScrollHidden();
@@ -40,13 +39,16 @@ export function EpisodesAndInfoBox(props) {
   return (
     <EpisodesAndInfoBoxContainer ref={ref}>
       <MotionBackground />
-      {global.sliderItemData.mediaType.current === 'movie' && 
-        <RecommendedMovieBox />
-      }
-      {global.sliderItemData.mediaType.current === 'tv' &&
-        <EpisodesList />
-      }
-      
+      {global.sliderItemData.mediaType.current === 'movie'
+        && <RecommendedMovieBox />}
+      {global.sliderItemData.mediaType.current === 'tv'
+        && (
+        <EpisodesListContainer
+          mediaId={global.sliderItemData.mediaId.current}
+          numSeasons={global.sliderItemData.runtimeOrNumberOfSeasons.current}
+        />
+        )}
+
     </EpisodesAndInfoBoxContainer>
   );
 }

@@ -95,7 +95,8 @@ export function SliderItem(props) {
         <div id="media-info">
           {props.ageRating}
           {' '}
-          {props.runtimeOrNumberOfSeasons}
+          {props.runtimeOrNumberOfSeasons > 1 && props.runtimeOrNumberOfSeasons + ' Seasons'}
+          {props.runtimeOrNumberOfSeasons === 1 && props.runtimeOrNumberOfSeasons+' Season'}
         </div>
         <div id="genres">
           {props.genres[0]}

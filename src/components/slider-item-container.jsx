@@ -24,7 +24,7 @@ export function SliderItemContainer(props) {
 
   const fetchItemData = async () => {
     const data = await getMediaData(props.mediaType, props.mediaId);
-
+    // console.log(data);
     posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
 
     genres.current = [
@@ -33,10 +33,8 @@ export function SliderItemContainer(props) {
 
     if (mediaIsMovie(props.mediaType)) {
       runtimeOrNumberOfSeasons.current = `${data.runtime}m`;
-    } else if (moreThanOneSeason(data.number_of_seasons)) {
-      runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Seasons`;
     } else {
-      runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Season`;
+      runtimeOrNumberOfSeasons.current = data.number_of_seasons;
     }
 
     ageRating.current = await getAgeRating(ageRatingUrl.current, props.mediaType);
