@@ -8,14 +8,20 @@ const Container = styled.div`
 `;
 
 function EpisodesListContainer(props) {
-  const [selectedSeason, setSelectedSeason] = useState(1);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [epsPerSeason, setEpsPerSeason] = useState([]);
+  const [seasonEpisodeData, setSeasonEpisodeData] = useState([]);
 
   const fetchAllSeasonData = async () => {
     const data = await getSeasonData(props.mediaId, props.numSeasons);
     console.log(data);
 
-    
+    for (let i = 0; i < data.length; i++) {
+      setSeasonEpisodeData((seasonEpisodeData) => [...seasonEpisodeData, data[i].episodes])
+      // setEpsPerSeason((epsPerSeason) => [...epsPerSeason, data[i].episodes.length]);
+    }
+    setDataLoaded(true);
+
     // const data = await getMediaData(props.mediaType, props.mediaId);
     // console.log(data);
     // posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
@@ -33,19 +39,27 @@ function EpisodesListContainer(props) {
     // }
 
     // ageRating.current = await getAgeRating(ageRatingUrl.current, props.mediaType);
-    // setDataLoaded(true);
   };
 
   useEffect(() => {
     if (!dataLoaded) {
       fetchAllSeasonData();
     }
-  });
+  }, []);
 
   return (
-    <EpisodesList>
-
-    </EpisodesList>
+    <div>
+      {dataLoaded
+      && (
+        <EpisodesList
+          mediaId={props.mediaId}
+          seasonEpisodeData={seasonEpisodeData}
+          dataLoaded={dataLoaded}
+        />
+      )
+      }
+    </div>
+    
   );
 }
 
