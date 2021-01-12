@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
-import { MotionBackground } from './motion-background';
+import { MotionBackGroundEpsInfoBox } from './motion-background';
 import { LocoRow } from './loco-row';
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 import EpisodesListContainer from './episodes-list-container';
@@ -13,9 +13,12 @@ import RecommendedMovieBox from './recommended-movie-box';
 
 const EpisodesAndInfoBoxContainer = styled.div`
   position: absolute;
-  align-self: center;
-  justify-content: center;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  // align-self: center;
+  // justify-content: center;
+  // align-items: center;
+  // margin: auto;
   width: 80%;
   background: #fff;
   border: 2px solid #444;
@@ -38,7 +41,7 @@ export function EpisodesAndInfoBox(props) {
 
   return (
     <EpisodesAndInfoBoxContainer ref={ref}>
-      <MotionBackground />
+      <MotionBackGroundEpsInfoBox />
       {global.sliderItemData.mediaType.current === 'movie'
         && <RecommendedMovieBox />}
       {global.sliderItemData.mediaType.current === 'tv'

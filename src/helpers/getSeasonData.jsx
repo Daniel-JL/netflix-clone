@@ -8,7 +8,6 @@ const getSeasonData = async (mediaId, numSeasons) => {
   for (let i = 0; i < numSeasons; i++) {
     seasonDataArr[i] = [i + 1];
   }
-  console.log(seasonDataArr);
 
   try {
     data = await Promise.all(

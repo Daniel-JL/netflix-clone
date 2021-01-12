@@ -4,6 +4,11 @@ import getSeasonData from '../helpers/getSeasonData';
 import EpisodesList from './episodes-list';
 
 const Container = styled.div`
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
 
 `;
 
@@ -22,23 +27,6 @@ function EpisodesListContainer(props) {
     }
     setDataLoaded(true);
 
-    // const data = await getMediaData(props.mediaType, props.mediaId);
-    // console.log(data);
-    // posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
-
-    // genres.current = [
-    //   ...Array(data.genres.length),
-    // ].map((undefined, index) => data.genres[index].name);
-
-    // if (mediaIsMovie(props.mediaType)) {
-    //   runtimeOrNumberOfSeasons.current = `${data.runtime}m`;
-    // } else if (moreThanOneSeason(data.number_of_seasons)) {
-    //   runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Seasons`;
-    // } else {
-    //   runtimeOrNumberOfSeasons.current = `${data.number_of_seasons} Season`;
-    // }
-
-    // ageRating.current = await getAgeRating(ageRatingUrl.current, props.mediaType);
   };
 
   useEffect(() => {
@@ -48,7 +36,7 @@ function EpisodesListContainer(props) {
   }, []);
 
   return (
-    <div>
+    <Container>
       {dataLoaded
       && (
         <EpisodesList
@@ -58,7 +46,7 @@ function EpisodesListContainer(props) {
         />
       )
       }
-    </div>
+    </Container>
     
   );
 }
