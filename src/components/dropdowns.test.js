@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import { AccountDropdown } from './account-dropdown';
+import { AccountDropdown } from './dropdowns';
 
 describe('account dropdown in navbar', () => {
 

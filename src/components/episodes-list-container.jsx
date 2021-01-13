@@ -35,6 +35,12 @@ function EpisodesListContainer(props) {
     }
   }, []);
 
+  useEffect(() => {
+    if (dataLoaded) {
+      console.log(seasonEpisodeData);
+    }
+  });
+
   return (
     <Container>
       {dataLoaded

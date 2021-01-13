@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import EpisodesListItemContainer from './episodes-list-item-container';
+import { EpisodeDropdown } from './dropdowns';
 
 const Container = styled.div`
   width: 100%;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-  // align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
 
 `;
 
@@ -19,6 +20,14 @@ const ListContainer = styled.div`
   align-items: center;
 `;
 
+const EpisodeDropDownContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
+
+`;
+
 function EpisodesList(props) {
   const [selectedSeason, setSelectedSeason] = useState(1);
 
@@ -27,6 +36,13 @@ function EpisodesList(props) {
       {props.dataLoaded
         && (
         <ListContainer>
+          <EpisodeDropDownContainer>
+            {'Episodes'}
+            <EpisodeDropdown 
+              selectedSeason={selectedSeason}
+              seasonEpisodeData={props.seasonEpisodeData}
+            />
+          </EpisodeDropDownContainer>
           {
               [
                 ...Array(props.seasonEpisodeData[selectedSeason - 1].length),

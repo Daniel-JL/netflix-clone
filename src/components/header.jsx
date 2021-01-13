@@ -11,7 +11,7 @@ import {
 } from './buttons';
 import { SearchBox } from './search-box';
 import { Notifications } from './notifications';
-import { AccountDropdown } from './account-dropdown';
+import { AccountDropdown } from './dropdowns';
 
 const Nav = styled.div`
   background-color: transparent;

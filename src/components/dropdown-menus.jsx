@@ -25,3 +25,18 @@ export const AccountDropdownMenu = () => {
     </DropdownPanel>
   );
 };
+
+export const EpisodeDropdownMenu = (props) => {
+  return (
+    <DropdownPanel>
+      {
+        [
+          ...Array(props.numOfSeasons),
+        ].map((value: undefined, index: number) => (
+          <NavLink to={`/watch/${index}`} key={index}>Season {index}</NavLink>
+          
+        ))
+      }
+    </DropdownPanel>
+  );
+};
