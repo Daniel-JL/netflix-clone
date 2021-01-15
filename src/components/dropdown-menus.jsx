@@ -6,6 +6,7 @@ import {
   useHistory,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import { DropdownLinkTextButton } from './buttons';
 
 const DropdownPanel = styled.div`
   display: flex;
@@ -33,7 +34,12 @@ export const EpisodeDropdownMenu = (props) => {
         [
           ...Array(props.numOfSeasons),
         ].map((value: undefined, index: number) => (
-          <NavLink to={`/watch/${index}`} key={index}>Season {index}</NavLink>
+          <DropdownLinkTextButton 
+            key={index}
+            onClick={() => props.changeSelectedSeason(props.seasonEpisodeData[index].seasonNum)}
+          >
+            Season {props.seasonEpisodeData[index].seasonNum} ({props.seasonEpisodeData[index].episodeData.length} Episodes)
+          </DropdownLinkTextButton>
           
         ))
       }

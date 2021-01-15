@@ -40,9 +40,9 @@ export function EpisodeDropdown(props) {
 
   const handleSeasonEpisodeData = () => {
     setNumOfSeasons((numOfSeasons) => props.seasonEpisodeData.length);
-    for (let i = 0; i < props.seasonEpisodeData.length; i++) {
-      setEpsPerSeason((epsPerSeason) => [...epsPerSeason, props.seasonEpisodeData[i].length]);
-    }
+    // for (let i = 0; i < props.seasonEpisodeData.length; i++) {
+    //   setEpsPerSeason((epsPerSeason) => [...epsPerSeason, props.seasonEpisodeData[i].length]);
+    // }
   };
 
   useEffect(() => {
@@ -55,17 +55,18 @@ export function EpisodeDropdown(props) {
   });
 
   return (
-    <div>
+    <div ref={ref}>
       <nav>
         <RectInfoButton
-          ref={ref}
+          
           onClick={() => setDropdownActive((dropdownActive) => !dropdownActive)}
         />
         {dropdownActive
         && (
           <EpisodeDropdownMenu
             numOfSeasons={numOfSeasons}
-            epsPerSeason={epsPerSeason}
+            seasonEpisodeData={props.seasonEpisodeData}
+            changeSelectedSeason={props.changeSelectedSeason}
           />
         )}
 

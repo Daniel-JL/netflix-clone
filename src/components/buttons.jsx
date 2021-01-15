@@ -89,6 +89,10 @@ export const LinkTextButton = styled(RectButton)`
   }
 `;
 
+export const DropdownLinkTextButton = styled(LinkTextButton)`
+  color: black;
+`;
+
 export const RoundPlayButton = styled(RoundButton)`
   background-color: white;
   font-size: 25px;

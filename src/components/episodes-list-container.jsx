@@ -9,24 +9,32 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   align-self: center;
-
 `;
 
 function EpisodesListContainer(props) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [epsPerSeason, setEpsPerSeason] = useState([]);
   const [seasonEpisodeData, setSeasonEpisodeData] = useState([]);
+  const [selectedSeason, setSelectedSeason] = useState(1);
 
   const fetchAllSeasonData = async () => {
     const data = await getSeasonData(props.mediaId, props.numSeasons);
     console.log(data);
 
     for (let i = 0; i < data.length; i++) {
-      setSeasonEpisodeData((seasonEpisodeData) => [...seasonEpisodeData, data[i].episodes])
+      setSeasonEpisodeData((seasonEpisodeData) => [...seasonEpisodeData,
+        {
+          seasonNum: i + 1,
+          episodeData: data[i].episodes,
+        },
+      ]);
       // setEpsPerSeason((epsPerSeason) => [...epsPerSeason, data[i].episodes.length]);
     }
     setDataLoaded(true);
+  };
 
+  const changeSelectedSeason = (newSelectedSeason) => {
+    setSelectedSeason((selectedSeason) => newSelectedSeason);
   };
 
   useEffect(() => {
@@ -38,6 +46,7 @@ function EpisodesListContainer(props) {
   useEffect(() => {
     if (dataLoaded) {
       console.log(seasonEpisodeData);
+      console.log(selectedSeason);
     }
   });
 
@@ -48,12 +57,12 @@ function EpisodesListContainer(props) {
         <EpisodesList
           mediaId={props.mediaId}
           seasonEpisodeData={seasonEpisodeData}
+          selectedSeason={selectedSeason}
+          changeSelectedSeason={changeSelectedSeason}
           dataLoaded={dataLoaded}
         />
-      )
-      }
+      )}
     </Container>
-    
   );
 }
 

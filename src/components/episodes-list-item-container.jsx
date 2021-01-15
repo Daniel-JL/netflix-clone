@@ -18,6 +18,7 @@ function EpisodesListItemContainer(props) {
   const [runtime, setRuntime] = useState('');
 
   const fetchEpisodeData = async () => {
+    console.log(props.episodeData);
     setEpisodeName((episodeName) => props.episodeData.name);
     setEpisodeDescription((episodeDescription) => props.episodeData.overview);
     setEpisodeNumber((episodeNumber) => props.episodeData.episode_number);

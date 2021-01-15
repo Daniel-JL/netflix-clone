@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import EpisodesListItemContainer from './episodes-list-item-container';
 import { EpisodeDropdown } from './dropdowns';
@@ -29,7 +29,12 @@ const EpisodeDropDownContainer = styled.div`
 `;
 
 function EpisodesList(props) {
-  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [selectedSeasonChange, setSelectedSeasonChange] = useState(false);
+
+  useEffect(() => {
+    console.log(selectedSeasonChange);
+    setSelectedSeasonChange((selectedSeasonChange) => !selectedSeasonChange);
+  }, [props.selectedSeason]);
 
   return (
     <Container>
@@ -39,21 +44,22 @@ function EpisodesList(props) {
           <EpisodeDropDownContainer>
             {'Episodes'}
             <EpisodeDropdown 
-              selectedSeason={selectedSeason}
+              selectedSeason={props.selectedSeason}
               seasonEpisodeData={props.seasonEpisodeData}
+              changeSelectedSeason={props.changeSelectedSeason}
             />
           </EpisodeDropDownContainer>
           {
               [
-                ...Array(props.seasonEpisodeData[selectedSeason - 1].length),
+                ...Array(props.seasonEpisodeData[props.selectedSeason - 1].episodeData.length),
               ].map((value: undefined, index: number) => (
                 // <div data-index={index} key={index} >
                   <EpisodesListItemContainer
                     key={index}
                     mediaId={props.mediaId}
                     episodeNum={index + 1}
-                    seasonNum={selectedSeason}
-                    episodeData={props.seasonEpisodeData[selectedSeason - 1][index]}
+                    seasonNum={props.selectedSeason}
+                    episodeData={props.seasonEpisodeData[props.selectedSeason - 1].episodeData[index]}
                   />
                 // </div>
               ))
