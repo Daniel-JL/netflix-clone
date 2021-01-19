@@ -27,11 +27,14 @@ function EpisodesListItemContainer(props) {
   };
 
   const handleImgLoadingErr = () => {
+    console.log('img-error');
     setImgLoadingErr(true);
   };
 
   const handleImgLoadedSuccess = () => {
+    console.log('imgloadsuccess-EpListItem');
     setImgLoadedSuccess(true);
+    // props.handleImgLoaded();
   };
 
   useEffect(() => {
@@ -51,8 +54,8 @@ function EpisodesListItemContainer(props) {
         imagePath={imagePath}
         imgLoadedSuccess={imgLoadedSuccess}
         imgLoadingErr={imgLoadingErr}
-        setImgLoadingErr={handleImgLoadingErr}
-        setImgLoadSuccess={handleImgLoadedSuccess}
+        handleImgLoadingErr={handleImgLoadingErr}
+        handleImgLoadedSuccess={handleImgLoadedSuccess}
       />
       )}
     </Container>

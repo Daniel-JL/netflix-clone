@@ -35,8 +35,10 @@ function EpisodesListItem(props) {
         <EpisodeImage
           alt="Slider image"
           src={props.imagePath}
-          onError={() => props.setImgLoadingErr()}
-          onLoad={() => props.setImgLoadSuccess()}
+          onError={() => props.handleImgLoadingErr()}
+          onLoad={
+            () => props.handleImgLoadedSuccess()
+          }
         />
       )}
       <EpisodeDetailsContainer>
@@ -44,7 +46,7 @@ function EpisodesListItem(props) {
           {props.episodeName}
           23m
         </EpisodeTitleRuntimeContainer>
-        {props.EpisodeDescription}
+        {props.episodeDescription}
       </EpisodeDetailsContainer>
     </ItemContainer>
   );

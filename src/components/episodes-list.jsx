@@ -34,12 +34,13 @@ function EpisodesList(props) {
   const [episodesListItemData, setEpisodesListItemData] = useState([]);
 
   useEffect(() => {
-    console.log(selectedSeasonChange);
-    console.log(props.selectedSeason);
+    // console.log(selectedSeasonChange);
+    // console.log(props.selectedSeason);
+    // console.log(props.episodesListItemData);
     setSelectedSeason((selectedSeason) => props.selectedSeason);
     setEpisodesListItemData((episodesListItemData) => props.episodesListItemData[props.selectedSeason - 1]);
     setSelectedSeasonChange((selectedSeasonChange) => !selectedSeasonChange);
-  }, [props.selectedSeason]);
+  }, [JSON.stringify(props.episodesListItemData), props.selectedSeason]);
 
   useEffect(() => {
     console.log(episodesListItemData);
@@ -51,16 +52,18 @@ function EpisodesList(props) {
         && (
         <ListContainer>
           <EpisodeDropDownContainer>
-            {'Episodes'}
-            <EpisodeDropdown 
+            Episodes
+            <EpisodeDropdown
               selectedSeason={props.selectedSeason}
               seasonEpisodeData={props.seasonEpisodeData}
               changeSelectedSeason={props.changeSelectedSeason}
             />
           </EpisodeDropDownContainer>
-          {
-            // props.episodesListItemData[props.selectedSeason - 1].episodeListItems
-            episodesListItemData.episodeListItems
+          {props.isLoading
+            ? <div>Test</div>
+            : episodesListItemData.episodeListItems
+
+            // :props.episodesListItemData[props.selectedSeason - 1].episodeListItems
           }
         </ListContainer>
         )}
