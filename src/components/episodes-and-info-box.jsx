@@ -10,6 +10,7 @@ import { LocoRow } from './loco-row';
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 import EpisodesListContainer from './episodes-list-container';
 import RecommendedMovieBox from './recommended-movie-box';
+import MoreLikeThisBoxContainer from './more-like-this-box-container';
 
 const EpisodesAndInfoBoxContainer = styled.div`
   position: absolute;
@@ -51,6 +52,10 @@ export function EpisodesAndInfoBox(props) {
           numSeasons={global.sliderItemData.runtimeOrNumberOfSeasons.current}
         />
         )}
+      <MoreLikeThisBoxContainer
+        mediaId={global.sliderItemData.mediaId.current}
+        mediaType={global.sliderItemData.mediaType.current}
+      />
 
     </EpisodesAndInfoBoxContainer>
   );
