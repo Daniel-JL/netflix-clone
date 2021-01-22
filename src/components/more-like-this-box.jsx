@@ -15,7 +15,6 @@ const GridContainer = styled.div`
 
 const GridItem = styled.div`
   display: flex;
-  width: 20vw;
   justify-content: center;
   align-items: center;
   align-self: center;
@@ -33,6 +32,7 @@ function MoreLikeThisBox(props) {
               <GridItem data-index={index} key={index}>
                 <MoreLikeThisItem 
                   imgSrc={props.imgSrcArray[index]} 
+                  mediaDetails={props.mediaDetails[index]}
                 />
               </GridItem>
                

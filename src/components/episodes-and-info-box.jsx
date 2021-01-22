@@ -20,7 +20,7 @@ const EpisodesAndInfoBoxContainer = styled.div`
   // justify-content: center;
   // align-items: center;
   // margin: auto;
-  width: 80%;
+  width: 50%;
   background: #fff;
   border: 2px solid #444;
   color: black;

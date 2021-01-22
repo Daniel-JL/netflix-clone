@@ -63,12 +63,12 @@ export function SliderItem(props) {
 
       {props.dataLoaded && !props.imgLoadingErr
       && (
-      <SliderItemImage
-        alt="Slider image"
-        src={props.posterPath}
-        onError={() => props.setImgLoadingErr()}
-        onLoad={() => props.setImgLoadSuccess()}
-      />
+        <SliderItemImage
+          alt="Slider image"
+          src={props.posterPath}
+          onError={() => props.setImgLoadingErr()}
+          onLoad={() => props.setImgLoadSuccess()}
+        />
       )}
 
       {props.imgLoadedSuccess

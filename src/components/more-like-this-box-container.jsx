@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import getSimilar from '../helpers/getRecommendations';
+import truncate from '../helpers/truncate'
 import MoreLikeThisBox from './more-like-this-box';
 
 const Container = styled.div`
@@ -13,6 +14,7 @@ const Container = styled.div`
 
 function MoreLikeThisBoxContainer(props) {
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [mediaDetails, setMediaDetails] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [episodesListItemData, setEpisodesListItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,9 +23,10 @@ function MoreLikeThisBoxContainer(props) {
 
   const fetchSimilarContentData = async () => {
     const data = await getSimilar(props.mediaType, props.mediaId);
-     
     console.log(data);
     setIsLoading((isLoading) => true);
+
+    handleMediaDetails(data);
 
     handleSrcArray(data);
 
@@ -37,6 +40,20 @@ function MoreLikeThisBoxContainer(props) {
     ));
 
     setImgSrcArray((imgSrcArray) => srcArrayCopy);
+  };
+
+  const handleMediaDetails = (data) => {
+    // const regex = /^.*?[\.!\?](?:\s|$)/;
+    const mediaDetailsCopy = data.results.map((undefined, index) => (
+      {
+        name: data.results[index].name,
+        // overview: data.results[index].overview.match(regex),
+        overview: truncate(data.results[index].overview, 120),
+      }
+    ));
+    console.log(mediaDetailsCopy);
+
+    setMediaDetails((mediaDetails) => mediaDetailsCopy);
   };
 
   // const handleSrcArray = (season) => {
@@ -85,6 +102,7 @@ function MoreLikeThisBoxContainer(props) {
         <MoreLikeThisBox
           isLoading={isLoading}
           imgSrcArray={imgSrcArray}
+          mediaDetails={mediaDetails}
         />
       )}
     </Container>

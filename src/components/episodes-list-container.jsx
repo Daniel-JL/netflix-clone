@@ -54,15 +54,24 @@ function EpisodesListContainer(props) {
 
   const handleSrcArray = (season) => {
     const srcArrayCopy = seasonEpisodeData[season - 1].episodeData.map((undefined, index) => (
-      `http://image.tmdb.org/t/p/w780${seasonEpisodeData[season - 1].episodeData[index].still_path}`
+      seasonEpisodeData[season - 1].episodeData[index].still_path
+        ? `http://image.tmdb.org/t/p/w780${seasonEpisodeData[season - 1].episodeData[index].still_path}`
+        : ''
 
     ));
+
+    for (let i = 0; i < srcArrayCopy.length; i++) {
+      if (srcArrayCopy[i] === '') {
+        srcArrayCopy.splice(i, 1);
+        i -= 1;
+      }
+    }
 
     setSrcArray((srcArray) => srcArrayCopy);
   };
 
   const initialiseEpisodesListItemData = () => {
-    let episodesListItemDataInitial = seasonEpisodeData.map((undefined, index) => (
+    const episodesListItemDataInitial = seasonEpisodeData.map((undefined, index) => (
       {
         seasonNum: index + 1,
         episodeListItems: [],
@@ -115,22 +124,19 @@ function EpisodesListContainer(props) {
 
     if (episodesListItemData[newSelectedSeason - 1].episodeListItems.length === 0) {
       handleSrcArray(newSelectedSeason);
-
     } else {
       setAlreadyLoaded(true);
     }
   };
 
   const cacheImages = async (srcArray) => {
-    const promises = await srcArray.map((src) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
+    const promises = await srcArray.map((src) => new Promise((resolve, reject) => {
+      const img = new Image();
 
-        img.src = src;
-        img.onload = resolve();
-        img.onerror = reject();
-      });
-    });
+      img.src = src;
+      img.onload = resolve();
+      img.onerror = reject();
+    }));
 
     await Promise.all(promises);
   };
