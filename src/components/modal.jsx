@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
-import { EpisodesAndInfoBox } from './episodes-and-info-box';
+import { EpisodesAndInfoBox } from './episodes-and-info-box/episodes-and-info-box';
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 
 const ModalContainer = styled.div`
@@ -34,6 +34,13 @@ export const Modal = (props) => {
     <ModalContainer scrollActive={scrollActive}>
       <EpisodesAndInfoBox
         setScrollHidden={setScrollHidden}
+        mediaId={props.epsAndInfoBoxProps.mediaId}
+        mediaType={props.epsAndInfoBoxProps.mediaType}
+        posterPath={props.epsAndInfoBoxProps.posterPath}
+        runtimeOrNumberOfSeasons={props.epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
+        genres={props.epsAndInfoBoxProps.genres}
+        ageRating={props.epsAndInfoBoxProps.ageRating}
+        epsAndInfoBoxProps={props.epsAndInfoBoxProps}
       />
     </ModalContainer>,
     document.getElementById("modal-root"),

@@ -4,12 +4,11 @@ import {
   useHistory,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../hooks/useOnClickOutside';
-import { MotionBackGroundEpsInfoBox } from './motion-background';
-import { LocoRow } from './loco-row';
-import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { MotionBackGroundEpsInfoBox } from '../motion-background';
+import { LocoRow } from '../slider/loco-row';
+import { EpisodesAndInfoBoxContext } from '../context/episodes-and-info-box-context/episodes-and-info-box-context';
 import EpisodesListContainer from './episodes-list-container';
-import RecommendedMovieBox from './recommended-movie-box';
 import MoreLikeThisBoxContainer from './more-like-this-box-container';
 
 const EpisodesAndInfoBoxContainer = styled.div`
@@ -33,28 +32,25 @@ export function EpisodesAndInfoBox(props) {
   const ref = useRef();
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
-
+  console.log(props);
   const back = () => {
     props.setScrollHidden();
     history.goBack();
     document.body.style.overflow = 'scroll';
   };
-
   return (
     <EpisodesAndInfoBoxContainer ref={ref}>
       <MotionBackGroundEpsInfoBox />
-      {global.sliderItemData.mediaType.current === 'movie'
-        && <RecommendedMovieBox />}
-      {global.sliderItemData.mediaType.current === 'tv'
+      {props.mediaType === 'tv'
         && (
         <EpisodesListContainer
-          mediaId={global.sliderItemData.mediaId.current}
-          numSeasons={global.sliderItemData.runtimeOrNumberOfSeasons.current}
+          mediaId={props.mediaId}
+          numSeasons={props.runtimeOrNumberOfSeasons}
         />
         )}
       <MoreLikeThisBoxContainer
-        mediaId={global.sliderItemData.mediaId.current}
-        mediaType={global.sliderItemData.mediaType.current}
+        mediaId={props.mediaId}
+        mediaType={props.mediaType}
       />
 
     </EpisodesAndInfoBoxContainer>

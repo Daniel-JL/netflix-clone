@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import getSeasonData from '../helpers/getSeasonData';
+import getSeasonData from '../../helpers/getSeasonData';
 import EpisodesList from './episodes-list';
 import MoreLikeThisItem from './more-like-this-item';
 

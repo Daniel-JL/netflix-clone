@@ -12,9 +12,9 @@ import {
   RoundThumbsUpButton,
   RoundThumbsDownButton,
   RoundEpsAndInfoButton,
-} from './buttons';
-import { EpisodesAndInfoBox } from './episodes-and-info-box';
-import { Modal } from './modal';
+} from '../buttons';
+import { EpisodesAndInfoBox } from '../episodes-and-info-box/episodes-and-info-box';
+import { Modal } from '../modal';
 
 const ISliderItemProps = {
   mediaName: 'name',

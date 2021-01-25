@@ -1,15 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
-import { LocoRow } from '../loco-row';
+import { LocoRow } from '../slider/loco-row';
 
-export const Latest = () => {
+export const Latest = (props) => {
   return (
     <div style={{backgroundColor: 'darkslategray', zIndex: -2}}>
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
-      <LocoRow />
+      <LocoRow setModalProps={props.setModalProps}/>
+      <LocoRow setModalProps={props.setModalProps}/>
+      <LocoRow setModalProps={props.setModalProps}/>
+      <LocoRow setModalProps={props.setModalProps}/>
+      <LocoRow setModalProps={props.setModalProps}/>
     </div>
   );
 };

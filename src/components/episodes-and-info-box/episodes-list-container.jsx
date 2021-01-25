@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import getSeasonData from '../helpers/getSeasonData';
+import getSeasonData from '../../helpers/getSeasonData';
 import EpisodesList from './episodes-list';
 import EpisodesListItemContainer from './episodes-list-item-container';
 
@@ -34,10 +34,21 @@ function EpisodesListContainer(props) {
   };
 
   const handleSeasonEpisodeData = (data) => {
+    const validEpisodes = [];
+
+    for (let i = 0; i < data.length; i++) {
+      validEpisodes.push([]);
+      for (let j = 0; j < data[i].episodes.length; j++) {
+        if (data[i].episodes[j].still_path !== null) {
+          validEpisodes[i].push(data[i].episodes[j]);
+        }
+      }
+    }
+
     const seasonEpisodeDataCopy = data.map((undefined, index) => (
       {
         seasonNum: index + 1,
-        episodeData: data[index].episodes,
+        episodeData: validEpisodes[index],
       }));
 
     setSeasonEpisodeData((seasonEpisodeData) => seasonEpisodeDataCopy);

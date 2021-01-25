@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import fetch from "jest-fetch-mock";
 import '@testing-library/jest-dom/extend-expect';
-import { MediaSlider, fetchSliderItemIds } from './media-slider';
+import { MediaSlider, fetchSliderItemIds } from '../media-slider';
 
 describe('Slider', () => {
   it('should render correctly', () => {

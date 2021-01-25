@@ -2,8 +2,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MotionBackground } from './motion-background';
-import { LocoRow } from './loco-row';
-import { LolomoBigRow } from './lolomo-big-row';
+import { LocoRow } from './slider/loco-row';
+import { LolomoBigRow } from './slider/lolomo-big-row';
 
 const FirstLoadGroupHomeSearchFilms = (props) => (
   <div>

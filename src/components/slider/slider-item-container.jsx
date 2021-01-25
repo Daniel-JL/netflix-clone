@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect, createContext } from 'react';
 import { SliderItem } from './slider-item';
-import { getMediaData } from '../helpers/getMediaData';
-import { getAgeRating } from '../helpers/getAgeRating';
-import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
+import { getMediaData } from '../../helpers/getMediaData';
+import { getAgeRating } from '../../helpers/getAgeRating';
+import { EpisodesAndInfoBoxContext } from '../context/episodes-and-info-box-context/episodes-and-info-box-context';
 
 export function SliderItemContainer(props) {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -61,13 +61,14 @@ export function SliderItemContainer(props) {
   };
 
   const handleEpsAndInfoButtonClick = () => {
-    global.sliderItemData.setMediaId(props.mediaId);
-    global.sliderItemData.setMediaType(props.mediaType);
-    global.sliderItemData.setPosterPath(posterPath.current);
-    global.sliderItemData.setRuntimeOrNumberOfSeasons(runtimeOrNumberOfSeasons.current);
-    global.sliderItemData.setGenres(genres.current);
-    global.sliderItemData.setAgeRating(ageRating.current);
-
+    props.setModalProps(
+      props.mediaId,
+      props.mediaType,
+      posterPath.current,
+      runtimeOrNumberOfSeasons.current,
+      genres.current,
+      ageRating.current,
+    );
   };
 
   useEffect(() => {

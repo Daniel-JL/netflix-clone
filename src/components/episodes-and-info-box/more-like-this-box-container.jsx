@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import getSimilar from '../helpers/getRecommendations';
-import truncate from '../helpers/truncate'
+import getSimilar from '../../helpers/getRecommendations';
+import truncate from '../../helpers/truncate'
 import MoreLikeThisBox from './more-like-this-box';
 
 const Container = styled.div`

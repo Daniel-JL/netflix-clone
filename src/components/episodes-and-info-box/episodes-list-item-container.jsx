@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import getEpisodeData from '../helpers/getEpisodeData';
+import getEpisodeData from '../../helpers/getEpisodeData';
 import EpisodesListItem from './episodes-list-item';
 
 const Container = styled.div`

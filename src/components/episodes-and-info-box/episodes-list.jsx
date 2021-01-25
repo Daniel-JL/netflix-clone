@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import EpisodesListItemContainer from './episodes-list-item-container';
-import { EpisodeDropdown } from './dropdowns';
+import { EpisodeDropdown } from '../dropdowns';
 
 const Container = styled.div`
   width: 100%;

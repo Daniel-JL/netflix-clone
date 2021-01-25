@@ -42,6 +42,7 @@ export function MediaSlider(props) {
               ].map((value: undefined, index: number) => (
                 <div data-index={index} key={index} >
                   <SliderItemContainer 
+                    setModalProps={props.setModalProps}
                     mediaType={props.movieTvShowType[index]} 
                     mediaId={props.movieTvShowIds[index]} 
                   />

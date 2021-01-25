@@ -6,10 +6,7 @@ import {
   Redirect,
   useLocation,
 } from 'react-router-dom';
-import styled from 'styled-components';
-import useSliderItemData from './hooks/useSliderItemData';
 import { Header } from './components/header';
-import { EpisodesAndInfoBox } from './components/episodes-and-info-box';
 import { Footer } from './components/footer';
 import { Home } from './components/views/home';
 import { Series } from './components/views/series';
@@ -23,38 +20,56 @@ import { NoMatch } from './components/views/no-match';
 import { Modal } from './components/modal';
 
 export const Routes = () => {
+  const [epsAndInfoBoxProps, setEpsAndInfoBoxProps] = useState({});
   const location = useLocation();
   const background = location.state && location.state.background;
-  global.sliderItemData = useSliderItemData();
+
+  const setModalProps = (
+    mediaId,
+    mediaType,
+    posterPath,
+    runtimeOrNumberOfSeasons,
+    genres,
+    ageRating,
+  ) => {
+    setEpsAndInfoBoxProps((epsAndInfoBoxProps) => ({
+      mediaId,
+      mediaType,
+      posterPath,
+      runtimeOrNumberOfSeasons,
+      genres,
+      ageRating,
+    }));
+  };
 
   return (
     <div>
       <Header />
 
       <Switch location={background || location}>
-        <Route exact path="/browse" children={<Home />} />
+        <Route exact path="/browse" children={<Home setModalProps={setModalProps}/>} />
         <Route exact path="/">
           <Redirect to="/browse" />
         </Route>
-        <Route exact path="/browse/genre/83" children={<Series />} />
-        <Route exact path="/browse/genre/34399" children={<Films />} />
-        <Route exact path="/latest" children={<Latest />} />
+        <Route exact path="/browse/genre/83" children={<Series setModalProps={setModalProps}/>} />
+        <Route exact path="/browse/genre/34399" children={<Films setModalProps={setModalProps}/>} />
+        <Route exact path="/latest" children={<Latest setModalProps={setModalProps}/>} />
         <Route exact path="/browse/my-list" children={<MyList />} />
-        <Route exact path="/search" children={<Search />} />
+        <Route exact path="/search" children={<Search setModalProps={setModalProps}/>} />
         <Route exact path="/Kids" children={<Kids />} />
         <Route exact path="/watch/:videoId" children={<VideoPlayer />} />
         <Route children={<NoMatch />} />
       </Switch>
 
       {background
-        &&
+        && (
         <Route
           path="/browse/epsinfobox"
           render={() => (
-            <Modal />
+            <Modal epsAndInfoBoxProps={epsAndInfoBoxProps}/>
           )}
         />
-          }
+        )}
 
       <Footer />
     </div>

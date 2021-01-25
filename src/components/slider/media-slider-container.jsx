@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MediaSlider } from './media-slider';
-import { getMediaIdsAndTypes } from '../helpers/getMediaIdsAndTypes';
+import { getMediaIdsAndTypes } from '../../helpers/getMediaIdsAndTypes';
 
 const Container = styled.div`
   width: 100%;
@@ -35,6 +35,7 @@ export function MediaSliderContainer(props) {
       {dataLoaded
         && (
         <MediaSlider
+          setModalProps={props.setModalProps}
           dataLoaded={dataLoaded}
           maxIdsNeeded={maxIdsNeeded}
           movieTvShowType={mediaIdsAndTypes.current.types}
