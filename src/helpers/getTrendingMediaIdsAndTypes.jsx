@@ -1,7 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 import { React } from 'react';
 
-export const getMediaIdsAndTypes = async (numIdsNeeded) => {
+const getTrendingMediaIdsAndTypes = async (numIdsNeeded) => {
   const numPagesNeeded = Math.ceil(numIdsNeeded / 20);
   const pages = new Array(numPagesNeeded);
   let data;
@@ -43,5 +42,7 @@ const processPageData = (data, numIdsNeeded) => {
   }
   return movieTvShowIdsAndTypes;
 };
+
+export default getTrendingMediaIdsAndTypes;
 
 // const mediaIsMovieOrTv = (item) => (item === 'movie' || item === 'tv');

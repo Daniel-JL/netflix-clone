@@ -1,6 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import getGenres from '../helpers/getGenres';
+import getMediaListByGenre from '../helpers/getMediaListByGenre';
+import shuffleArray from '../helpers/shuffleArray';
 import { MotionBackground } from './motion-background';
 import { LocoRow } from './slider/loco-row';
 import { LolomoBigRow } from './slider/lolomo-big-row';
@@ -40,6 +43,9 @@ const LocoRowGroupSearch = (props) => (
 export const InfiniteScrollComponents = (props) => {
   const maxNumScrollLoads = props.maxNumScrollLoads;
   const [scrollLimitReached, setScrollLimitReached] = useState(props.scrollLimitReached);
+  const [movieGenres, setMovieGenres] = useState();
+  const [tvGenres, setTvGenres] = useState();
+
   let firstComponentGroup = 0;
   let locoRowGroup = 0;
 
@@ -51,13 +57,28 @@ export const InfiniteScrollComponents = (props) => {
     locoRowGroup = <LocoRowGroupSearch />
   }
 
+  const fetchGenres = async () => {
+    let data = await getGenres('movie');
+    setMovieGenres((movieGenres) => data.genres);
+    data = await getGenres('tv');
+    setTvGenres((tvGenres) => data.genres);
+
+    console.log(data);
+  };
+
   useEffect(() => {
     setScrollLimitReached(props.scrollLimitReached);
     console.log(scrollLimitReached);
   }, [props.scrollLimitReached]);
+  
+  useEffect(() => {
+    fetchGenres();
+  }, []);
 
   return (
     <div>
+      <MotionBackground />
+      <LocoRow setModalProps={props.setModalProps}/>
       {scrollLimitReached > 0 && firstComponentGroup}
       {
         [

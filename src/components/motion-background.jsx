@@ -49,6 +49,8 @@ let url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_APP
 
 export function MotionBackground() {
 
+  
+
   return (
     <MotionBackgroundContainer>
       <MotionBackgroundMediaContainer>

@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MediaSlider } from './media-slider';
-import { getMediaIdsAndTypes } from '../../helpers/getMediaIdsAndTypes';
+import getTrendingMediaIdsAndTypes from '../../helpers/getTrendingMediaIdsAndTypes';
 
 const Container = styled.div`
   width: 100%;
@@ -17,7 +17,7 @@ export function MediaSliderContainer(props) {
   let mediaIdsAndTypes = useRef({});
 
   const fetchNow = async () => {
-    mediaIdsAndTypes.current = await getMediaIdsAndTypes(maxIdsNeeded);
+    mediaIdsAndTypes.current = await getTrendingMediaIdsAndTypes(maxIdsNeeded);
 
     if (mediaIdsAndTypes.current.ids.length >= maxIdsNeeded) {
       setDataLoaded(true);
