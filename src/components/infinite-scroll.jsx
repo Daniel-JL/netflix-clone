@@ -2,11 +2,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { InfiniteScrollComponents } from './infinite-scroll-components';
 
-export const InfiniteScroll = (props) => {
+export const InfiniteScroll = ({
+  motionBackground,
+  locoRow,
+  maxNumScrollLoads,
+  movieGenres,
+  tvGenres,
+}) => {
   const scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
+  const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
   const [element, setElement] = useState(null);
-  const { maxNumScrollLoads } = props;
+  // const { maxNumScrollLoads } = props;
 
   const prevY = useRef(0);
   const observer = useRef(
@@ -45,14 +52,39 @@ export const InfiniteScroll = (props) => {
     };
   }, [element]);
 
+  useEffect(() => {
+    setScrollLimitReached(scrollGroupActive.current);
+    console.log(scrollLimitReached);
+  }, [scrollGroupActive.current]);
+
+  useEffect(() => {
+
+  }, []);
+
   return (
     <div>
-      <InfiniteScrollComponents
-        scrollLimitReached={scrollGroupActive.current}
-        maxNumScrollLoads={props.maxNumScrollLoads}
-        viewName={props.viewName}
-      />
-      <div ref={setElement} />
+      <div>
+        {motionBackground}
+        {locoRow}
+        {locoRow}
+        {/* <InfiniteScrollComponents
+          scrollLimitReached={scrollGroupActive.current}
+          maxNumScrollLoads={props.maxNumScrollLoads}
+        /> */}
+        { 
+          [
+            ...Array(maxNumScrollLoads - 1),
+          ].map((value: undefined, index: number) => (
+            scrollLimitReached + 1 > index && 
+            React.Children.map(locoRow, (child) => 
+              React.cloneElement(child, {
+                genreName:movieGenres[index].name,
+                genreId:movieGenres[index].id
+              })
+          )))
+        }
+      </div>
+      <div id="scrollPoint" ref={setElement} />
     </div>
   );
 };
