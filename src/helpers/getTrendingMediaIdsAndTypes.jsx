@@ -1,6 +1,4 @@
-import { React } from 'react';
-
-const getTrendingMediaIdsAndTypes = async (numIdsNeeded) => {
+const getTrendingMediaIdsAndTypes = async (numIdsNeeded, mediaType) => {
   const numPagesNeeded = Math.ceil(numIdsNeeded / 20);
   const pages = new Array(numPagesNeeded);
   let data;
@@ -12,7 +10,7 @@ const getTrendingMediaIdsAndTypes = async (numIdsNeeded) => {
   try {
     data = await Promise.all(
       pages.map(
-        (pages) => fetch(`https://api.themoviedb.org/3/trending/all/week?page=${pages}&api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
+        (pages) => fetch(`https://api.themoviedb.org/3/trending/${mediaType}/week?page=${pages}&api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`)
           .then(
             (response) => response.json(),
           ),

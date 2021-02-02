@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { InfiniteScrollComponents } from './infinite-scroll-components';
 
-export const InfiniteScroll = ({
+const InfiniteScroll = ({
   motionBackground,
   locoRow,
   maxNumScrollLoads,
@@ -88,3 +88,5 @@ export const InfiniteScroll = ({
     </div>
   );
 };
+
+export default InfiniteScroll;

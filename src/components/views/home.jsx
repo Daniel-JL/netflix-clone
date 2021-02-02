@@ -2,35 +2,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MotionBackground } from '../motion-background';
 import { LocoRow } from '../slider/loco-row';
-import { InfiniteScroll } from '../infinite-scroll';
-import getTrendingMediaIdsAndTypes from '../../helpers/getTrendingMediaIdsAndTypes';
-import getGenres from '../../helpers/getGenres';
-import processIdsAndTypes from '../../helpers/processIdsAndTypes';
+import InfiniteScroll from '../infinite-scroll';
 
-export const Home = (props) => {
+export const Home = ({
+  setModalProps,
+  trendingItemId,
+  movieGenres,
+  tvGenres,
+}) => {
+  const [mediaIdList, setMediaIdList] = useState([]);
   const maxNumScrollLoads = 5;
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [trendingItemId, setTrendingItemId] = useState();
-  const [movieGenres, setMovieGenres] = useState();
-  const [tvGenres, setTvGenres] = useState();
+  console.log(trendingItemId);
 
-  const fetchTrendingItemsAndGenreData = async () => {
-    let data = await getTrendingMediaIdsAndTypes(1);
-    data = processIdsAndTypes(data);
-
-    setTrendingItemId((trendingItemId) => data.ids[0]);
-
-    data = await getGenres('movie');
-    setMovieGenres((movieGenres) => data.genres);
-    console.log(data);
-
-    data = await getGenres('tv');
-    setTvGenres((tvGenres) => data.genres);
-    setDataLoaded(true);
+  const handleNewMediaIds = (newIds) => {
+    setMediaIdList((mediaIdList) => [...mediaIdList, newIds]);
   };
 
   useEffect(() => {
-    fetchTrendingItemsAndGenreData();
+    handleNewMediaIds(trendingItemId);
   }, []);
 
   return (
@@ -38,25 +27,24 @@ export const Home = (props) => {
       {/* <MotionBackground />
       <LocoRow setModalProps={props.setModalProps}/> */}
       {/* <LocoRow /> */}
-      {dataLoaded
-        && (
-        <InfiniteScroll
-          maxNumScrollLoads={maxNumScrollLoads}
-          movieGenres={movieGenres}
-          tvGenres={tvGenres}
-          motionBackground={
-            <MotionBackground mediaId={trendingItemId} />
+      <InfiniteScroll
+        maxNumScrollLoads={maxNumScrollLoads}
+        movieGenres={movieGenres}
+        tvGenres={tvGenres}
+        motionBackground={
+          <MotionBackground mediaId={trendingItemId} />
           }
-          locoRow={
-            <LocoRow
-              setModalProps={props.setModalProps}
-              mediaType="all"
-              genreName="trending"
-              genreId=""
-            />
-          }
-        />
-        )}
+        locoRow={(
+          <LocoRow
+            setModalProps={setModalProps}
+            mediaIdList={mediaIdList}
+            handleNewMediaIds={handleNewMediaIds}
+            mediaType="all"
+            genreName="trending"
+            genreId=""
+          />
+          )}
+      />
 
     </div>
   );

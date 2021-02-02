@@ -2,7 +2,7 @@
 import React from 'react';
 import { MotionBackground } from '../motion-background';
 import { LocoRow } from '../slider/loco-row';
-import { InfiniteScroll } from '../infinite-scroll';
+import InfiniteScroll from '../infinite-scroll';
 
 export const Films = (props) => {
   const maxNumScrollLoads = 5;

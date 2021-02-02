@@ -38,7 +38,8 @@ export function MediaSlider(props) {
           >
             {
               [
-                ...Array(props.maxIdsNeeded),
+                // ...Array(props.maxIdsNeeded),
+                ...Array(10),
               ].map((value: undefined, index: number) => (
                 <div data-index={index} key={index} >
                   <SliderItemContainer 

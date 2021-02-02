@@ -27,14 +27,25 @@ const Row = styled.div`
   width: 100%;
 `;
 
-export function LocoRow({ setModalProps, mediaType, genreName, genreId }) {
+export function LocoRow(
+  {
+    setModalProps,
+    mediaIdList,
+    handleNewMediaIds,
+    mediaType,
+    genreName,
+    genreId,
+  },
+) {
   return (
     <RowContainer>
       <RowPadding />
       <RowHeader />
       <Row>
-        <MediaSliderContainer 
+        <MediaSliderContainer
           setModalProps={setModalProps}
+          mediaIdList={mediaIdList}
+          handleNewMediaIds={handleNewMediaIds}
           mediaType={mediaType}
           genreName={genreName}
           genreId={genreId}
