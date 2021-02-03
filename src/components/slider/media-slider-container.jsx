@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { MediaSlider } from './media-slider';
 import getTrendingMediaIdsAndTypes from '../../helpers/getTrendingMediaIdsAndTypes';
 import getMediaListByGenre from '../../helpers/getMediaListByGenre';
-import sortDataForUniqueSlider from '../../helpers/sortDataForUniqueSlider';
 import processIdsAndTypes from '../../helpers/processIdsAndTypes';
 
 const Container = styled.div`
@@ -14,8 +13,7 @@ const Container = styled.div`
 export function MediaSliderContainer(
   {
     setModalProps,
-    mediaIdList,
-    handleNewMediaIds,
+    numSlidersLoaded,
     mediaType,
     genreName,
     genreId,
@@ -29,20 +27,14 @@ export function MediaSliderContainer(
   const mediaIdsAndTypes = useRef({});
 
   const fetchNow = async () => {
-    console.log(genreName);
     let data;
     if (genreName === 'trending') {
-      data = await getTrendingMediaIdsAndTypes(maxIdsNeeded, mediaType);
-      // let sortedData = await sortDataForUniqueSlider(data, mediaIdList, mediaType, genreName);
-      // console.log(sortedData);
+      data = await getTrendingMediaIdsAndTypes(maxIdsNeeded, numSlidersLoaded, mediaType);
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded);
     } else {
-      console.log('not trending');
-      const data = await getMediaListByGenre('movie', genreId, maxIdsNeeded);
-      console.log(data);
-      mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded, 'movie');
+      const data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
+      mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded, mediaType);
     }
-    console.log(mediaIdsAndTypes.current);
     if (mediaIdsAndTypes.current.ids.length >= maxIdsNeeded) {
       setDataLoaded(true);
     }

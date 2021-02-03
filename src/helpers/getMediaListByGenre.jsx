@@ -1,12 +1,13 @@
 import { React } from 'react';
 
-export const getMediaListByGenre = async (mediaType, genreId, numIdsNeeded) => {
+export const getMediaListByGenre = async (mediaType, startingPage, genreId, numIdsNeeded) => {
   const numPagesNeeded = Math.ceil(numIdsNeeded / 20);
   const pages = new Array(numPagesNeeded);
   let data;
 
+
   for (let i = 0; i < numPagesNeeded; i++) {
-    pages[i] = [i + 1];
+    pages[i] = [i + startingPage + 1];
   }
 
   try {

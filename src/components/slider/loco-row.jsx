@@ -30,8 +30,7 @@ const Row = styled.div`
 export function LocoRow(
   {
     setModalProps,
-    mediaIdList,
-    handleNewMediaIds,
+    numSlidersLoaded,
     mediaType,
     genreName,
     genreId,
@@ -44,8 +43,7 @@ export function LocoRow(
       <Row>
         <MediaSliderContainer
           setModalProps={setModalProps}
-          mediaIdList={mediaIdList}
-          handleNewMediaIds={handleNewMediaIds}
+          numSlidersLoaded={numSlidersLoaded}
           mediaType={mediaType}
           genreName={genreName}
           genreId={genreId}

@@ -26,7 +26,6 @@ export function SliderItemContainer(props) {
     const data = await getMediaData(props.mediaType, props.mediaId);
     // console.log(data);
     posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
-
     genres.current = [
       ...Array(data.genres.length),
     ].map((undefined, index) => data.genres[index].name);

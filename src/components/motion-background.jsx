@@ -1,7 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useFetch } from '../hooks/useFetch';
+import { getMediaData } from '../helpers/getMediaData';
+
 
 const BillboardRow = styled.div`
   width: 100%;
@@ -43,18 +45,35 @@ const MotionBackgroundContainer = styled.div`
 
 `;
 
-const baseURL = 'https://api.themoviedb.org/3/';
+const baseURL = 'https://image.tmdb.org/t/p/';
 
 let url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
 
-export function MotionBackground() {
+export const MotionBackground = ({
+  itemData,
+}) => {
+  const [posterPath, setPosterPath] = useState();
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  
+  const fetchItemData = async () => {
+    console.log(itemData.mediaType);
+    console.log(itemData.id);
+    const data = await getMediaData(itemData.mediaType, itemData.id);
+    console.log(data);
+    setPosterPath((posterPath) => baseURL + 'original' + data.poster_path);
+    setDataLoaded(true);
+  };
 
+  useEffect(() => {
+    fetchItemData();
+  }, []);
+  // "http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg"
   return (
     <MotionBackgroundContainer>
       <MotionBackgroundMediaContainer>
-        <BillboardImage src="http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg" />
+        {dataLoaded &&
+          <BillboardImage src={posterPath} />
+        }
         {/* <iframe src='https://www.youtube.com/embed/5794f65592514142a4002ec0'
         frameborder='0'
         allow='autoplay; encrypted-media'

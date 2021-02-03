@@ -5,15 +5,14 @@ import { InfiniteScrollComponents } from './infinite-scroll-components';
 const InfiniteScroll = ({
   motionBackground,
   locoRow,
-  maxNumScrollLoads,
-  movieGenres,
-  tvGenres,
+  genreTypeArr,
+  numSlidersLoaded,
 }) => {
   const scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
   const [element, setElement] = useState(null);
-  // const { maxNumScrollLoads } = props;
+  const maxNumScrollLoads = genreTypeArr.length;
 
   const prevY = useRef(0);
   const observer = useRef(
@@ -54,23 +53,14 @@ const InfiniteScroll = ({
 
   useEffect(() => {
     setScrollLimitReached(scrollGroupActive.current);
-    console.log(scrollLimitReached);
   }, [scrollGroupActive.current]);
 
-  useEffect(() => {
-
-  }, []);
 
   return (
     <div>
       <div>
         {motionBackground}
         {locoRow}
-        {locoRow}
-        {/* <InfiniteScrollComponents
-          scrollLimitReached={scrollGroupActive.current}
-          maxNumScrollLoads={props.maxNumScrollLoads}
-        /> */}
         { 
           [
             ...Array(maxNumScrollLoads - 1),
@@ -78,8 +68,10 @@ const InfiniteScroll = ({
             scrollLimitReached + 1 > index && 
             React.Children.map(locoRow, (child) => 
               React.cloneElement(child, {
-                genreName:movieGenres[index].name,
-                genreId:movieGenres[index].id
+                genreName:genreTypeArr[index].genre.name,
+                genreId:genreTypeArr[index].genre.id,
+                mediaType:genreTypeArr[index].mediaType,
+                numSlidersLoaded:index + 1,
               })
           )))
         }

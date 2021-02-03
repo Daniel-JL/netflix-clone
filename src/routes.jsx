@@ -27,9 +27,9 @@ export const Routes = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [trendingMovieId, setTrendingMovieId] = useState();
-  const [trendingSeriesId, setTrendingSeriesId] = useState();
-  const [trendingItemId, setTrendingItemId] = useState();
+  const [trendingMovieData, setTrendingMovieData] = useState();
+  const [trendingSeriesData, setTrendingSeriesData] = useState();
+  const [trendingItemData, setTrendingItemData] = useState();
   const [movieGenres, setMovieGenres] = useState();
   const [tvGenres, setTvGenres] = useState();
 
@@ -52,23 +52,27 @@ export const Routes = () => {
   };
 
   const fetchTrendingItemsAndGenreData = async () => {
-    let data = await getTrendingMediaIdsAndTypes(1, 'movie');
+    let data = await getTrendingMediaIdsAndTypes(1, 0, 'movie');
     data = processIdsAndTypes(data);
-    setTrendingMovieId((trendingMovieId) => data.ids[0]);
-    const trendingMovieIdCopy = data.ids[0];
+    const trendingMovieDataCopy = {
+      id: data.ids[0],
+      mediaType: 'movie',
+    };
+    setTrendingMovieData((trendingMovieData) => trendingMovieDataCopy);
+    
 
-    data = await getTrendingMediaIdsAndTypes(1, 'tv');
+    data = await getTrendingMediaIdsAndTypes(1, 0, 'tv');
     data = processIdsAndTypes(data);
-    setTrendingSeriesId((trendingSeriesId) => data.ids[0]);
-    const trendingSeriesIdCopy = data.ids[0];
+    const trendingSeriesDataCopy = {
+      id: data.ids[0],
+      mediaType: 'tv',
+    };
+    setTrendingSeriesData((trendingSeriesData) => trendingSeriesDataCopy);
 
-    setTrendingItemId((trendingItemId) => {
-      return Math.random() < 0.5 ? trendingMovieIdCopy : trendingSeriesIdCopy;
-    });
+    setTrendingItemData((trendingItemData) => (Math.random() < 0.5 ? trendingMovieDataCopy : trendingSeriesDataCopy));
 
     data = await getGenres('movie');
     setMovieGenres((movieGenres) => data.genres);
-    console.log(data);
 
     data = await getGenres('tv');
     setTvGenres((tvGenres) => data.genres);
@@ -91,7 +95,7 @@ export const Routes = () => {
             children={(
               <Home
                 setModalProps={setModalProps}
-                trendingItemId={trendingItemId}
+                trendingItemData={trendingItemData}
                 movieGenres={movieGenres}
                 tvGenres={tvGenres}
               />
@@ -106,7 +110,7 @@ export const Routes = () => {
             children={(
               <Series
                 setModalProps={setModalProps}
-                trendingSeriesId={trendingSeriesId}
+                trendingSeriesData={trendingSeriesData}
                 tvGenres={tvGenres}
               />
           )}
@@ -118,7 +122,7 @@ export const Routes = () => {
               <Films
                 setModalProps={setModalProps}
                 movieGenres={movieGenres}
-                trendingMovieId={trendingMovieId}
+                trendingMovieData={trendingMovieData}
               />
           )}
           />
