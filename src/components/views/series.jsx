@@ -45,7 +45,7 @@ export const Series = (
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
           motionBackground={
-            <MotionBackground mediaData={trendingSeriesData} />
+            <MotionBackground itemData={trendingSeriesData} />
             }
           locoRow={(
             <LocoRow

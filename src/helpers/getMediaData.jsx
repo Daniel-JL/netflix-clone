@@ -1,6 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import { React } from 'react';
-
 export const getMediaData = async (mediaType, mediaId) => {
   let data;
 

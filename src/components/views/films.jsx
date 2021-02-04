@@ -6,9 +6,9 @@ import { LocoRow } from '../slider/loco-row';
 import InfiniteScroll from '../infinite-scroll';
 
 export const Films = ({
-  setModalProps,
-  trendingMovieData,
-  movieGenres,
+    setModalProps,
+    trendingMovieData,
+    movieGenres,
   }
 ) => {
   const [numSlidersLoaded, setNumSlidersLoaded] = useState(0);
@@ -44,7 +44,7 @@ export const Films = ({
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
           motionBackground={
-            <MotionBackground mediaData={trendingMovieData} />
+            <MotionBackground itemData={trendingMovieData} />
             }
           locoRow={(
             <LocoRow

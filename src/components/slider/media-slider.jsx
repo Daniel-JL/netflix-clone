@@ -17,15 +17,48 @@ const ArrowButtonContainer = styled.div`
   width: 50px;
 `;
 
-export function MediaSlider(props) {
+function Arrow({className, style, onClick}) {
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "green" }}
+      onClick={onClick}
+    />
+  ); 
+}
+
+export function MediaSlider(
+  {
+    setModalProps,
+    dataLoaded,
+    maxIdsNeeded,
+    movieTvShowType,
+    movieTvShowIds,
+  }
+) {
+
+  const handleArrowClick = (direction) => {
+    console.log('direction');
+  }
+
+  const next = () => {
+    this.slider.slickNext();
+  };
+
+  const previous = () => {
+    this.slider.slickPrev();
+  };
 
   return (
     <div>
-      {props.dataLoaded
+      {dataLoaded
         && (
         <SliderContainer>
           <Slider 
+            // nextArrow={<Arrow type="next" onClick={() => handleArrowClick}/>}
+            // prevArrow={<Arrow type="prev" onClick={handleArrowClick}/>}
             arrows={true}
+            draggable={false}
             dots={false}
             infinite={true}
             speed={500}
@@ -35,17 +68,32 @@ export function MediaSlider(props) {
             centerMode={false}
             variableWidth={false}
             useTransform={true}
+            lazyLoad={'ondemand'}
           >
+            {/* { 
+          [
+            ...Array(maxNumScrollLoads - 1),
+          ].map((value: undefined, index: number) => (
+            scrollLimitReached + 1 > index && 
+            React.Children.map(locoRow, (child) => 
+              React.cloneElement(child, {
+                genreName:genreTypeArr[index].genre.name,
+                genreId:genreTypeArr[index].genre.id,
+                mediaType:genreTypeArr[index].mediaType,
+                numSlidersLoaded:index + 1,
+              })
+          )))
+        } */}
             {
               [
-                // ...Array(props.maxIdsNeeded),
-                ...Array(10),
+                // ...Array(maxIdsNeeded),
+                ...Array(maxIdsNeeded),
               ].map((value: undefined, index: number) => (
                 <div data-index={index} key={index} >
                   <SliderItemContainer 
-                    setModalProps={props.setModalProps}
-                    mediaType={props.movieTvShowType[index]} 
-                    mediaId={props.movieTvShowIds[index]} 
+                    setModalProps={setModalProps}
+                    mediaType={movieTvShowType[index]} 
+                    mediaId={movieTvShowIds[index]} 
                   />
                 </div>
               ))

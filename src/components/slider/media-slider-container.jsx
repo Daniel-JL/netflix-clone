@@ -30,6 +30,7 @@ export function MediaSliderContainer(
     let data;
     if (genreName === 'trending') {
       data = await getTrendingMediaIdsAndTypes(maxIdsNeeded, numSlidersLoaded, mediaType);
+      console.log(data);
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded);
     } else {
       const data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
