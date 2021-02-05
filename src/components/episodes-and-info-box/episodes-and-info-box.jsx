@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import { MotionBackGroundEpsInfoBox } from '../motion-background';
+import { MotionBackground } from '../motion-background';
 import { LocoRow } from '../slider/loco-row';
 import { EpisodesAndInfoBoxContext } from '../context/episodes-and-info-box-context/episodes-and-info-box-context';
 import EpisodesListContainer from './episodes-list-container';
@@ -40,7 +40,7 @@ export function EpisodesAndInfoBox(props) {
   };
   return (
     <EpisodesAndInfoBoxContainer ref={ref}>
-      <MotionBackGroundEpsInfoBox />
+      <MotionBackground isEpsInfoBox={true}/>
       {props.mediaType === 'tv'
         && (
         <EpisodesListContainer

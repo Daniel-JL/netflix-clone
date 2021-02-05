@@ -6,14 +6,15 @@ const InfiniteScroll = ({
   motionBackground,
   locoRow,
   genreTypeArr,
-  numSlidersLoaded,
 }) => {
   const scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
   const [element, setElement] = useState(null);
+  // const [motionBackgroundRef, motionBackgroundRef] = useState(null);
   const maxNumScrollLoads = genreTypeArr.length;
 
+  let videoDiv = document.querySelector('#motion-background');
   const prevY = useRef(0);
   const observer = useRef(
     new IntersectionObserver(
@@ -56,9 +57,22 @@ const InfiniteScroll = ({
   }, [scrollGroupActive.current]);
 
 
+  // const setupVideoObserver = () => {
+    
+  //   // let isPaused = false; /* Flag for auto-paused video */
+    
+  // };
+
+
+
   return (
     <div>
       <div>
+        {/* {React.Children.map(motionBackground, (child) => 
+              React.cloneElement(child, {
+                isPaused: isPaused,
+              })
+          )} */}
         {motionBackground}
         {locoRow}
         { 

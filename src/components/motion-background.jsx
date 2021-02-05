@@ -19,12 +19,22 @@ const BillboardImage = styled.img`
   position: absolute;
   width: 100%;
   top:0;
-  z-index: 0;
+  z-index: 1;
+
+  ${({ fadeOut }) => fadeOut
+    && `opacity: 0;
+    transition: opacity 1.5s ease-in-out;`
+} 
+
+  ${({ fadeIn }) => fadeIn
+    && `opacity: 1;
+    transition: opacity 0.5s ease-in-out;`
+} 
 
   // height: 100%;
 `;
 
-const BillboardMedia = styled.div`
+const BillboardVideo = styled.div`
   position: absolute;
   width: 100%;
   top:0;
@@ -34,11 +44,27 @@ const BillboardMedia = styled.div`
 `;
 
 const MotionBackgroundMediaContainer = styled.div`
-  position: absolute;
-  width: 100%;
-  padding-top: 56.25%;
-  top:0;
   z-index: 0;
+
+  ${({ isEpsInfoBox }) => !isEpsInfoBox
+  && `
+    position: absolute;
+    width: 100%;
+    padding-top: 56.25%;
+    top:0;
+  `
+  } 
+
+  ${({ isEpsInfoBox }) => isEpsInfoBox
+  && `
+    position: static;
+    width: 100%;
+    padding-top: 56.25%;
+    top:0;
+  `
+  } 
+
+
 `;
 
 const MotionBackgroundMediaContainerEpsInfoBox = styled(MotionBackgroundMediaContainer)`
@@ -61,57 +87,107 @@ const url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_A
 
 export const MotionBackground = ({
   itemData,
+  isEpsInfoBox,
 }) => {
   const [backdropPath, setBackdropPath] = useState();
   const [videoURL, setVideoURL] = useState();
+  const [imgFadeOut, setImgFadeOut] = useState(false);
+  const [imgFadeIn, setImgFadeIn] = useState(false);
+  const billboardImgRef = useRef();
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [videoPlayerRef, setVideoPlayerRef] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  // const [videoEnded, setVideoEnded] = useState(false);
+  const videoEnded = useRef(false);
 
   const fetchItemData = async () => {
     let data = await getMediaData(itemData.mediaType, itemData.id);
-    console.log(data);
     setBackdropPath((backdropPath) => `${baseURL}original${data.backdrop_path}`);
 
     data = await getVideos(itemData.mediaType, itemData.id);
-    console.log(data);
     setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
     setDataLoaded(true);
+  };
+
+  const handleVideoPlaying = () => {
+    setImgFadeOut((imgFadeOut) => true);
+  };
+
+  const handleVideoEnded = () => {
+    setImgFadeOut((imgFadeOut) => false);
+    setImgFadeIn((imgFadeIn) => true);
+    videoEnded.current = true;
   };
 
   useEffect(() => {
     fetchItemData();
   }, []);
+
+  useEffect(() => {
+    if (videoPlayerRef !== null) {
+      const videoObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio != 1 && isPlaying) {
+            setIsPlaying(false);
+          } else if (entry.intersectionRatio === 1 && !videoEnded.current) {
+            setIsPlaying(true);
+          }
+        });
+      }, { threshold: 1 });
+      videoObserver.observe(videoPlayerRef);
+    }
+  }, [videoPlayerRef]);
+
   // "http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg"
   return (
     <MotionBackgroundContainer>
-      <MotionBackgroundMediaContainer id="media-container">
+      <MotionBackgroundMediaContainer 
+       
+      id="media-container"
+      isEpsInfoBox={isEpsInfoBox}
+      >
         {dataLoaded
           && (
-          <BillboardMedia>
-            <ReactPlayer
-              className="videoFrame"
-              url={videoURL}
-              // light={backdropPath}
-              playing={true}
-              controls={false}
-              playIcon={false}
-              onReady={() => console.log('ready')}
-              width="100%"
-              height="100%"
-              config={{
-                youtube: {
-                  playerVars: {
-                    // autoplay: 1,
-                    autohide:1,
-                    showinfo:0,
-                    controls: 0,
-                    disablekb: 1,
-                    fs: 0,
-                    modestbranding: 1,
-                  },
-                },
-              }}
-            />
-          </BillboardMedia>
+            <div>
+              <BillboardImage
+                ref={billboardImgRef}
+                src={backdropPath}
+                fadeOut={imgFadeOut}
+                fadeIn={imgFadeIn}
+              />
+              <BillboardVideo>
+                <ReactPlayer
+                  className="videoFrame"
+                  url={videoURL}
+                  playing={isPlaying}
+                  controls={false}
+                  playIcon={false}
+                  muted
+                  onStart={() => handleVideoPlaying()}
+                  onProgress={(played) => {
+                    console.log(played.played);
+                    if (played.played >= 0.94) {
+                      handleVideoEnded();
+                    }
+                  }}
+                  width="100%"
+                  height="100%"
+                  config={{
+                    youtube: {
+                      playerVars: {
+                        cc_load_policy: 3,
+                        iv_load_policy: 3,
+                        rel: 0,
+                        controls: 0,
+                        disablekb: 1,
+                        fs: 0,
+                        modestbranding: 1,
+                      },
+                    },
+                  }}
+                />
+              </BillboardVideo>
+            </div>
           )
 
           // <BillboardImage src={backdropPath} />
@@ -124,7 +200,7 @@ export const MotionBackground = ({
             /> */}
       </MotionBackgroundMediaContainer>
 
-      <BillboardRow />
+      <BillboardRow ref={setVideoPlayerRef} />
     </MotionBackgroundContainer>
   );
 };

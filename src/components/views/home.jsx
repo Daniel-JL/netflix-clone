@@ -14,6 +14,8 @@ export const Home = ({
   const [numSlidersLoaded, setNumSlidersLoaded] = useState(0);
   const [genreTypeArr, setGenreTypeArr] = useState('');
   const [genreTypeArrFilled, setGenreTypeArrFilled] = useState(false);
+  const [motionBackgroundRef, setMotionBackgroundRef] = useState();
+  // const motionBackgroundRef = useRef();
   const maxNumScrollLoads = 5;
 
   const fillGenreTypeArr = () => {
@@ -52,8 +54,13 @@ export const Home = ({
         <InfiniteScroll
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
+          motionBackgroundRef={motionBackgroundRef}
           motionBackground={
-            <MotionBackground itemData={trendingItemData} />
+            <MotionBackground 
+              ref={setMotionBackgroundRef}
+              itemData={trendingItemData} 
+              isEpsInfoBox={false}
+            />
             }
           locoRow={(
             <LocoRow
