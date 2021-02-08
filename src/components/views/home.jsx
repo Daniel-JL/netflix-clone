@@ -14,7 +14,6 @@ export const Home = ({
   const [numSlidersLoaded, setNumSlidersLoaded] = useState(0);
   const [genreTypeArr, setGenreTypeArr] = useState('');
   const [genreTypeArrFilled, setGenreTypeArrFilled] = useState(false);
-  const [motionBackgroundRef, setMotionBackgroundRef] = useState();
   // const motionBackgroundRef = useRef();
   const maxNumScrollLoads = 5;
 
@@ -37,10 +36,9 @@ export const Home = ({
         );
       }
     }
-    let shuffledArray = shuffleArray(genreTypeArrCopy);
+    const shuffledArray = shuffleArray(genreTypeArrCopy);
     setGenreTypeArr((genreTypeArr) => shuffledArray);
     setGenreTypeArrFilled(true);
-
   };
 
   useEffect(() => {
@@ -54,14 +52,13 @@ export const Home = ({
         <InfiniteScroll
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
-          motionBackgroundRef={motionBackgroundRef}
-          motionBackground={
-            <MotionBackground 
-              ref={setMotionBackgroundRef}
-              itemData={trendingItemData} 
+          motionBackground={(
+            <MotionBackground
+              mediaType={trendingItemData.mediaType}
+              mediaId={trendingItemData.id}
               isEpsInfoBox={false}
             />
-            }
+          )}
           locoRow={(
             <LocoRow
               setModalProps={setModalProps}

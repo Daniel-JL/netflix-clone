@@ -10,6 +10,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   align-self: center;
+  padding-top: 1vh;
 `;
 
 function MoreLikeThisBoxContainer(props) {

@@ -6,11 +6,10 @@ import { LocoRow } from '../slider/loco-row';
 import InfiniteScroll from '../infinite-scroll';
 
 export const Films = ({
-    setModalProps,
-    trendingMovieData,
-    movieGenres,
-  }
-) => {
+  setModalProps,
+  trendingMovieData,
+  movieGenres,
+}) => {
   const [numSlidersLoaded, setNumSlidersLoaded] = useState(0);
   const [genreTypeArr, setGenreTypeArr] = useState('');
   const [genreTypeArrFilled, setGenreTypeArrFilled] = useState(false);
@@ -26,10 +25,9 @@ export const Films = ({
         },
       );
     }
-    let shuffledArray = shuffleArray(genreTypeArrCopy);
+    const shuffledArray = shuffleArray(genreTypeArrCopy);
     setGenreTypeArr((genreTypeArr) => shuffledArray);
     setGenreTypeArrFilled(true);
-
   };
 
   useEffect(() => {
@@ -43,9 +41,13 @@ export const Films = ({
         <InfiniteScroll
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
-          motionBackground={
-            <MotionBackground itemData={trendingMovieData} />
-            }
+          motionBackground={(
+            <MotionBackground
+              mediaType={trendingMovieData.mediaType}
+              mediaId={trendingMovieData.id}
+              isEpsInfoBox={false}
+            />
+          )}
           locoRow={(
             <LocoRow
               setModalProps={setModalProps}

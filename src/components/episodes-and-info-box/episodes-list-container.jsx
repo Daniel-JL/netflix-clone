@@ -10,6 +10,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   align-self: center;
+  padding-top: 1vh;
 `;
 
 function EpisodesListContainer(props) {
@@ -35,11 +36,19 @@ function EpisodesListContainer(props) {
 
   const handleSeasonEpisodeData = (data) => {
     const validEpisodes = [];
+    let episodeAirDate;
+    let todaysDate = new Date();
+
+    const dd = String(todaysDate.getDate()).padStart(2, '0');
+    const mm = String(todaysDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = todaysDate.getFullYear();
+    todaysDate = yyyy + '/' + mm + '/' + dd;
 
     for (let i = 0; i < data.length; i++) {
       validEpisodes.push([]);
       for (let j = 0; j < data[i].episodes.length; j++) {
-        if (data[i].episodes[j].still_path !== null) {
+        episodeAirDate = data[i].episodes[j].air_date.replace(/-/g,'/');
+        if (episodeAirDate < todaysDate) {
           validEpisodes[i].push(data[i].episodes[j]);
         }
       }

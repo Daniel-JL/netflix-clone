@@ -10,7 +10,7 @@ export const Series = (
     setModalProps,
     trendingSeriesData,
     tvGenres,
-  }
+  },
 ) => {
   const [numSlidersLoaded, setNumSlidersLoaded] = useState(0);
   const [genreTypeArr, setGenreTypeArr] = useState('');
@@ -27,10 +27,9 @@ export const Series = (
         },
       );
     }
-    let shuffledArray = shuffleArray(genreTypeArrCopy);
+    const shuffledArray = shuffleArray(genreTypeArrCopy);
     setGenreTypeArr((genreTypeArr) => shuffledArray);
     setGenreTypeArrFilled(true);
-
   };
 
   useEffect(() => {
@@ -44,9 +43,13 @@ export const Series = (
         <InfiniteScroll
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
-          motionBackground={
-            <MotionBackground itemData={trendingSeriesData} />
-            }
+          motionBackground={(
+            <MotionBackground
+              mediaType={trendingSeriesData.mediaType}
+              mediaId={trendingSeriesData.id}
+              isEpsInfoBox={false}
+            />
+          )}
           locoRow={(
             <LocoRow
               setModalProps={setModalProps}

@@ -6,8 +6,6 @@ import {
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { MotionBackground } from '../motion-background';
-import { LocoRow } from '../slider/loco-row';
-import { EpisodesAndInfoBoxContext } from '../context/episodes-and-info-box-context/episodes-and-info-box-context';
 import EpisodesListContainer from './episodes-list-container';
 import MoreLikeThisBoxContainer from './more-like-this-box-container';
 
@@ -38,9 +36,14 @@ export function EpisodesAndInfoBox(props) {
     history.goBack();
     document.body.style.overflow = 'scroll';
   };
+
   return (
     <EpisodesAndInfoBoxContainer ref={ref}>
-      <MotionBackground isEpsInfoBox={true}/>
+      <MotionBackground
+        isEpsInfoBox={true}
+        mediaType={props.mediaType}
+        mediaId={props.mediaId}
+      />
       {props.mediaType === 'tv'
         && (
         <EpisodesListContainer

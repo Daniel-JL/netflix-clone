@@ -28,6 +28,11 @@ export const AccountDropdownMenu = () => {
 };
 
 export const EpisodeDropdownMenu = (props) => {
+  const handleMenuItemClick = (index) => {
+    props.changeSelectedSeason(props.seasonEpisodeData[index].seasonNum)
+    props.resetEpisodeListItemLimit();
+  };
+  
   return (
     <DropdownPanel>
       {
@@ -36,7 +41,7 @@ export const EpisodeDropdownMenu = (props) => {
         ].map((value: undefined, index: number) => (
           <DropdownLinkTextButton 
             key={index}
-            onClick={() => props.changeSelectedSeason(props.seasonEpisodeData[index].seasonNum)}
+            onClick={() => handleMenuItemClick(index)}
           >
             Season {props.seasonEpisodeData[index].seasonNum} ({props.seasonEpisodeData[index].episodeData.length} Episodes)
           </DropdownLinkTextButton>

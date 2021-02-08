@@ -50,8 +50,8 @@ export function EpisodeDropdown(props) {
   }, []);
 
   useEffect(() => {
-    console.log(numOfSeasons);
-    console.log(epsPerSeason);
+    // console.log(numOfSeasons);
+    // console.log(epsPerSeason);
   });
 
   return (
@@ -67,6 +67,7 @@ export function EpisodeDropdown(props) {
             numOfSeasons={numOfSeasons}
             seasonEpisodeData={props.seasonEpisodeData}
             changeSelectedSeason={props.changeSelectedSeason}
+            resetEpisodeListItemLimit={props.resetEpisodeListItemLimit}
           />
         )}
 

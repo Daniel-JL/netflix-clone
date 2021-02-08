@@ -143,7 +143,7 @@ export const RoundEpsAndInfoButton = styled(RoundButton)`
 `;
 
 export const RoundDarkButton = styled(RoundButton)`
-  background-color: transparent;
+  background-color: gray;
   color: white;
 
   &:hover {

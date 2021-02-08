@@ -56,23 +56,9 @@ const InfiniteScroll = ({
     setScrollLimitReached(scrollGroupActive.current);
   }, [scrollGroupActive.current]);
 
-
-  // const setupVideoObserver = () => {
-    
-  //   // let isPaused = false; /* Flag for auto-paused video */
-    
-  // };
-
-
-
   return (
     <div>
       <div>
-        {/* {React.Children.map(motionBackground, (child) => 
-              React.cloneElement(child, {
-                isPaused: isPaused,
-              })
-          )} */}
         {motionBackground}
         {locoRow}
         { 

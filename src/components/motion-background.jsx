@@ -9,6 +9,12 @@ import getVideos from '../helpers/getVideos';
 const BillboardRow = styled.div`
   width: 100%;
   padding-top: 40%;
+
+  // ${({ isEpsInfoBox }) => isEpsInfoBox
+  // && `
+  //   padding-top: 100%;
+  // `
+} 
 `;
 
 const BillboardRowEpsInfo = styled(BillboardRow)`
@@ -45,40 +51,21 @@ const BillboardVideo = styled.div`
 
 const MotionBackgroundMediaContainer = styled.div`
   z-index: 0;
-
-  ${({ isEpsInfoBox }) => !isEpsInfoBox
-  && `
-    position: absolute;
-    width: 100%;
-    padding-top: 56.25%;
-    top:0;
-  `
-  } 
-
-  ${({ isEpsInfoBox }) => isEpsInfoBox
-  && `
-    position: static;
-    width: 100%;
-    padding-top: 56.25%;
-    top:0;
-  `
-  } 
-
-
-`;
-
-const MotionBackgroundMediaContainerEpsInfoBox = styled(MotionBackgroundMediaContainer)`
-  position: static;
-  z-index: 0;
-  // padding-top: 0%;
-
-  
+  position: absolute;
+  width: 100%;
+  padding-top: 56.25%;
+  top:0;
 `;
 
 const MotionBackgroundContainer = styled.div`
   // position: relative;
   width: 100%;
-
+  
+  ${({ isEpsInfoBox }) => isEpsInfoBox
+  && `
+    height: 27.765vw;
+  `
+} 
 `;
 
 const baseURL = 'https://image.tmdb.org/t/p/';
@@ -86,11 +73,13 @@ const baseURL = 'https://image.tmdb.org/t/p/';
 const url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
 
 export const MotionBackground = ({
-  itemData,
+  mediaType,
+  mediaId,
   isEpsInfoBox,
 }) => {
   const [backdropPath, setBackdropPath] = useState();
   const [videoURL, setVideoURL] = useState();
+  const [vidExists, setVidExists] = useState(false);
   const [imgFadeOut, setImgFadeOut] = useState(false);
   const [imgFadeIn, setImgFadeIn] = useState(false);
   const billboardImgRef = useRef();
@@ -101,11 +90,15 @@ export const MotionBackground = ({
   const videoEnded = useRef(false);
 
   const fetchItemData = async () => {
-    let data = await getMediaData(itemData.mediaType, itemData.id);
+    let data = await getMediaData(mediaType, mediaId);
     setBackdropPath((backdropPath) => `${baseURL}original${data.backdrop_path}`);
 
-    data = await getVideos(itemData.mediaType, itemData.id);
-    setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
+    data = await getVideos(mediaType, mediaId);
+    console.log(data);
+    if (data.results.length > 0) {
+      setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
+      setVidExists(true);
+    }
     setDataLoaded(true);
   };
 
@@ -140,11 +133,11 @@ export const MotionBackground = ({
 
   // "http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg"
   return (
-    <MotionBackgroundContainer>
-      <MotionBackgroundMediaContainer 
-       
-      id="media-container"
-      isEpsInfoBox={isEpsInfoBox}
+    <MotionBackgroundContainer isEpsInfoBox={isEpsInfoBox}>
+      <MotionBackgroundMediaContainer
+
+        id="media-container"
+        isEpsInfoBox={isEpsInfoBox}
       >
         {dataLoaded
           && (
@@ -155,38 +148,42 @@ export const MotionBackground = ({
                 fadeOut={imgFadeOut}
                 fadeIn={imgFadeIn}
               />
-              <BillboardVideo>
-                <ReactPlayer
-                  className="videoFrame"
-                  url={videoURL}
-                  playing={isPlaying}
-                  controls={false}
-                  playIcon={false}
-                  muted
-                  onStart={() => handleVideoPlaying()}
-                  onProgress={(played) => {
-                    console.log(played.played);
-                    if (played.played >= 0.94) {
-                      handleVideoEnded();
-                    }
-                  }}
-                  width="100%"
-                  height="100%"
-                  config={{
-                    youtube: {
-                      playerVars: {
-                        cc_load_policy: 3,
-                        iv_load_policy: 3,
-                        rel: 0,
-                        controls: 0,
-                        disablekb: 1,
-                        fs: 0,
-                        modestbranding: 1,
+              {vidExists
+              && (
+                <BillboardVideo>
+                  <ReactPlayer
+                    className="videoFrame"
+                    url={videoURL}
+                    playing={isPlaying}
+                    controls={false}
+                    playIcon={false}
+                    muted
+                    onStart={() => handleVideoPlaying()}
+                    onProgress={(played) => {
+                      console.log(played.played);
+                      if (played.played >= 0.94) {
+                        handleVideoEnded();
+                      }
+                    }}
+                    width="100%"
+                    height="100%"
+                    config={{
+                      youtube: {
+                        playerVars: {
+                          cc_load_policy: 3,
+                          iv_load_policy: 3,
+                          rel: 0,
+                          controls: 0,
+                          disablekb: 1,
+                          fs: 0,
+                          modestbranding: 1,
+                        },
                       },
-                    },
-                  }}
-                />
-              </BillboardVideo>
+                    }}
+                  />
+                </BillboardVideo>
+              )}
+
             </div>
           )
 
@@ -200,25 +197,10 @@ export const MotionBackground = ({
             /> */}
       </MotionBackgroundMediaContainer>
 
-      <BillboardRow ref={setVideoPlayerRef} />
+      <BillboardRow
+        ref={setVideoPlayerRef}
+        isEpsInfoBox={isEpsInfoBox}
+      />
     </MotionBackgroundContainer>
   );
 };
-
-export function MotionBackGroundEpsInfoBox() {
-  return (
-    <MotionBackgroundContainer>
-      <MotionBackgroundMediaContainerEpsInfoBox>
-        <BillboardImage src="http://image.tmdb.org/t/p/original/7nRrq4GGHd2RctkPJOB8u6aq1P0.jpg" />
-        {/* <iframe src='https://www.youtube.com/embed/5794f65592514142a4002ec0'
-        frameborder='0'
-        allow='autoplay; encrypted-media'
-        allowfullscreen
-        title='video'
-            /> */}
-      </MotionBackgroundMediaContainerEpsInfoBox>
-
-      <BillboardRowEpsInfo />
-    </MotionBackgroundContainer>
-  );
-}

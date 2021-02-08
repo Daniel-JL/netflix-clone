@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import EpisodesListItemContainer from './episodes-list-item-container';
 import { EpisodeDropdown } from '../dropdowns';
+import { RoundDarkButton } from '../buttons';
 
 const Container = styled.div`
   width: 100%;
@@ -31,16 +32,43 @@ const EpisodeDropDownContainer = styled.div`
 function EpisodesList(props) {
   const [selectedSeasonChange, setSelectedSeasonChange] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState(1);
+  const [numItemsPerLoad, setNumItemsPerLoad] = useState(10);
+  const [itemLimit, setItemLimit] = useState(10);
   const [episodesListItemData, setEpisodesListItemData] = useState([]);
+  const [allSeasonItemsLoaded, setAllSeasonItemsLoaded] = useState(false);
+
+  const renderEpisodeListItems = () => {
+    if(episodesListItemData.episodeListItems !== undefined) {
+      return episodesListItemData.episodeListItems.slice(0, itemLimit)
+        .map((value:undefined, index:number) => (
+          episodesListItemData.episodeListItems[index]
+        ))
+    }
+  };
+
+  const loadMoreItems = () => {
+    setItemLimit((itemLimit) => itemLimit + numItemsPerLoad);
+  };
+
+  const resetEpisodeListItemLimit = () => {
+    setItemLimit((itemLimit) => 10);
+    setAllSeasonItemsLoaded(false);
+  };
 
   useEffect(() => {
-    // console.log(selectedSeasonChange);
-    // console.log(props.selectedSeason);
-    // console.log(props.episodesListItemData);
     setSelectedSeason((selectedSeason) => props.selectedSeason);
     setEpisodesListItemData((episodesListItemData) => props.episodesListItemData[props.selectedSeason - 1]);
     setSelectedSeasonChange((selectedSeasonChange) => !selectedSeasonChange);
   }, [JSON.stringify(props.episodesListItemData), props.selectedSeason]);
+
+  useEffect(() => {
+    if(episodesListItemData.episodeListItems !== undefined) {
+      if (itemLimit >= episodesListItemData.episodeListItems.length) {
+        setAllSeasonItemsLoaded(true);
+      }
+    }
+    
+  }, [itemLimit]);
 
   useEffect(() => {
     console.log(episodesListItemData);
@@ -57,13 +85,17 @@ function EpisodesList(props) {
               selectedSeason={props.selectedSeason}
               seasonEpisodeData={props.seasonEpisodeData}
               changeSelectedSeason={props.changeSelectedSeason}
+              resetEpisodeListItemLimit={resetEpisodeListItemLimit}
             />
           </EpisodeDropDownContainer>
           {props.isLoading
             ? <div>Test</div>
-            : episodesListItemData.episodeListItems
+            : renderEpisodeListItems()
 
             // :props.episodesListItemData[props.selectedSeason - 1].episodeListItems
+          }
+          {!allSeasonItemsLoaded &&
+            <RoundDarkButton onClick={loadMoreItems}/>
           }
         </ListContainer>
         )}
