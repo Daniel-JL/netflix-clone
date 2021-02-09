@@ -27,23 +27,28 @@ export const AccountDropdownMenu = () => {
   );
 };
 
-export const EpisodeDropdownMenu = (props) => {
+export const EpisodeDropdownMenu = ({
+  numOfSeasons,
+  seasonEpisodeData,
+  changeSelectedSeason,
+  resetEpisodeListItemLimit,
+}) => {
   const handleMenuItemClick = (index) => {
-    props.changeSelectedSeason(props.seasonEpisodeData[index].seasonNum)
-    props.resetEpisodeListItemLimit();
+    changeSelectedSeason(seasonEpisodeData[index].seasonNum)
+    resetEpisodeListItemLimit();
   };
   
   return (
     <DropdownPanel>
       {
         [
-          ...Array(props.numOfSeasons),
+          ...Array(numOfSeasons),
         ].map((value: undefined, index: number) => (
           <DropdownLinkTextButton 
             key={index}
             onClick={() => handleMenuItemClick(index)}
           >
-            Season {props.seasonEpisodeData[index].seasonNum} ({props.seasonEpisodeData[index].episodeData.length} Episodes)
+            Season {seasonEpisodeData[index].seasonNum} ({seasonEpisodeData[index].episodeData.length} Episodes)
           </DropdownLinkTextButton>
           
         ))

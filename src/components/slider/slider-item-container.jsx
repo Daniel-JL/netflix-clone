@@ -5,7 +5,11 @@ import { getMediaData } from '../../helpers/getMediaData';
 import { getAgeRating } from '../../helpers/getAgeRating';
 import { EpisodesAndInfoBoxContext } from '../context/episodes-and-info-box-context/episodes-and-info-box-context';
 
-export function SliderItemContainer(props) {
+export function SliderItemContainer({
+  setModalProps,
+  mediaType,
+  mediaId,
+}) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
@@ -16,27 +20,27 @@ export function SliderItemContainer(props) {
   const ageRating = useRef('');
   const ageRatingUrl = useRef('');
 
-  if (mediaIsMovie(props.mediaType)) {
-    ageRatingUrl.current = `movie/${props.mediaId}/release_dates`;
+  if (mediaIsMovie(mediaType)) {
+    ageRatingUrl.current = `movie/${mediaId}/release_dates`;
   } else {
-    ageRatingUrl.current = `tv/${props.mediaId}/content_ratings`;
+    ageRatingUrl.current = `tv/${mediaId}/content_ratings`;
   }
 
   const fetchItemData = async () => {
-    const data = await getMediaData(props.mediaType, props.mediaId);
+    const data = await getMediaData(mediaType, mediaId);
     // console.log(data);
     posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
     genres.current = [
       ...Array(data.genres.length),
     ].map((undefined, index) => data.genres[index].name);
 
-    if (mediaIsMovie(props.mediaType)) {
+    if (mediaIsMovie(mediaType)) {
       runtimeOrNumberOfSeasons.current = `${data.runtime}m`;
     } else {
       runtimeOrNumberOfSeasons.current = data.number_of_seasons;
     }
 
-    ageRating.current = await getAgeRating(ageRatingUrl.current, props.mediaType);
+    ageRating.current = await getAgeRating(mediaId, mediaType);
     setDataLoaded(true);
 
   };
@@ -60,9 +64,9 @@ export function SliderItemContainer(props) {
   };
 
   const handleEpsAndInfoButtonClick = () => {
-    props.setModalProps(
-      props.mediaId,
-      props.mediaType,
+    setModalProps(
+      mediaId,
+      mediaType,
       posterPath.current,
       runtimeOrNumberOfSeasons.current,
       genres.current,

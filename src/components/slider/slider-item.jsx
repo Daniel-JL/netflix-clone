@@ -25,15 +25,17 @@ const ISliderItemProps = {
 
 const ItemContainer = styled.div`
   position: relative;
-  height: 139px;
-  width: 250px;
+  // height: 139px;
+  width: 100%
   border: 1px solid black;
-  transition: width 0.2s, height 0.2s;
+  // transition: width 0.2s, height 0.2s;
 
   ${({ active }) => active && `
-    width: 400px;
-    height: 222px;
-    z-index: 2;
+    transition: all .2s ease-in-out;
+    transform: scale(1.6);
+    // width: 400px;
+    // height: 222px;
+    z-index: 10;
   `}
 `;
 
@@ -43,7 +45,7 @@ const SliderItemImage = styled.img`
 `;
 
 const ItemDetails = styled.div`
-  visibility: hidden;
+  // visibility: hidden;
   background-color: gray;
 
   ${({ active }) => active && `
@@ -51,30 +53,76 @@ const ItemDetails = styled.div`
   `}
 `;
 
-export function SliderItem(props) {
+export function SliderItem({
+  ageRating,
+  genres,
+  imgLoadedSuccess,
+  imgLoadingErr,
+  dataLoaded,
+  posterPath,
+  runtimeOrNumberOfSeasons,
+  itemHoverActive,
+  handleMouseOver,
+  handleMouseOut,
+  setImgLoadingErr,
+  setImgLoadSuccess,
+  handleEpsAndInfoButtonClick,
+}) {
   const location = useLocation();
 
   return (
     <ItemContainer
-      onMouseOver={() => props.handleMouseOver()}
-      onMouseOut={() => props.handleMouseOut()}
-      active={props.itemHoverActive}
+      onMouseOver={() => handleMouseOver()}
+      onMouseOut={() => handleMouseOut()}
+      active={itemHoverActive}
     >
 
-      {props.dataLoaded && !props.imgLoadingErr
+      {dataLoaded && !imgLoadingErr
       && (
         <SliderItemImage
           alt="Slider image"
-          src={props.posterPath}
-          onError={() => props.setImgLoadingErr()}
-          onLoad={() => props.setImgLoadSuccess()}
+          src={posterPath}
+          onError={() => setImgLoadingErr()}
+          onLoad={() => setImgLoadSuccess()}
         />
       )}
 
-      {props.imgLoadedSuccess
+      {imgLoadedSuccess
       && <div id="imgSuccess" data-testid="imgSuccess" />}
 
-      <ItemDetails active={props.itemHoverActive}>
+      {itemHoverActive
+      && (
+      <ItemDetails >
+        <div id="buttons">
+          <RoundPlayButton />
+          <Link
+            key={1}
+            to={{
+              pathname: '/browse/epsinfobox',
+              state: { background: location },
+            }}
+          >
+            <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
+              v
+            </RoundEpsAndInfoButton>
+          </Link>
+        </div>
+        <div id="media-info">
+          {ageRating}
+          {' '}
+          {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
+          {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
+        </div>
+        <div id="genres">
+          {genres[0]}
+          {' '}
+          *
+          {' '}
+          {genres[1]}
+        </div>
+      </ItemDetails>
+      )}
+      {/* <ItemDetails active={itemHoverActive}>
         <div id="buttons">
           <RoundPlayButton />
           <RoundPlusButton />
@@ -87,25 +135,25 @@ export function SliderItem(props) {
               state: { background: location },
             }}
           >
-            <RoundEpsAndInfoButton onClick={props.handleEpsAndInfoButtonClick}>
-              {'v'}
+            <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
+              v
             </RoundEpsAndInfoButton>
           </Link>
         </div>
         <div id="media-info">
-          {props.ageRating}
+          {ageRating}
           {' '}
-          {props.runtimeOrNumberOfSeasons > 1 && props.runtimeOrNumberOfSeasons + ' Seasons'}
-          {props.runtimeOrNumberOfSeasons === 1 && props.runtimeOrNumberOfSeasons+' Season'}
+          {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
+          {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
         </div>
         <div id="genres">
-          {props.genres[0]}
+          {genres[0]}
           {' '}
           *
           {' '}
-          {props.genres[1]}
+          {genres[1]}
         </div>
-      </ItemDetails>
+      </ItemDetails> */}
     </ItemContainer>
 
   );

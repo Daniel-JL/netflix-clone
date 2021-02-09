@@ -65,7 +65,7 @@ export function MediaSlider(
             slidesToScroll={6}
             slidesToShow={6} 
             className={'slides'}
-            centerMode={false}
+            centerMode={true}
             variableWidth={false}
             useTransform={true}
             lazyLoad={'ondemand'}
@@ -89,13 +89,13 @@ export function MediaSlider(
                 // ...Array(maxIdsNeeded),
                 ...Array(maxIdsNeeded),
               ].map((value: undefined, index: number) => (
-                <div data-index={index} key={index} >
-                  <SliderItemContainer 
-                    setModalProps={setModalProps}
-                    mediaType={movieTvShowType[index]} 
-                    mediaId={movieTvShowIds[index]} 
-                  />
-                </div>
+                <SliderItemContainer 
+                  data-index={index} 
+                  key={index}
+                  setModalProps={setModalProps}
+                  mediaType={movieTvShowType[index]} 
+                  mediaId={movieTvShowIds[index]} 
+                />
               ))
             }
           </Slider>

@@ -24,7 +24,7 @@ const ModalContainer = styled.div`
   `}
 `;
 
-export const Modal = (props) => {
+export const Modal = ({epsAndInfoBoxProps}) => {
   const [scrollActive, setScrollActive] = useState(true);
 
   const setScrollHidden = () => {
@@ -34,13 +34,12 @@ export const Modal = (props) => {
     <ModalContainer scrollActive={scrollActive}>
       <EpisodesAndInfoBox
         setScrollHidden={setScrollHidden}
-        mediaId={props.epsAndInfoBoxProps.mediaId}
-        mediaType={props.epsAndInfoBoxProps.mediaType}
-        posterPath={props.epsAndInfoBoxProps.posterPath}
-        runtimeOrNumberOfSeasons={props.epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
-        genres={props.epsAndInfoBoxProps.genres}
-        ageRating={props.epsAndInfoBoxProps.ageRating}
-        epsAndInfoBoxProps={props.epsAndInfoBoxProps}
+        mediaId={epsAndInfoBoxProps.mediaId}
+        mediaType={epsAndInfoBoxProps.mediaType}
+        posterPath={epsAndInfoBoxProps.posterPath}
+        runtimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
+        genres={epsAndInfoBoxProps.genres}
+        ageRating={epsAndInfoBoxProps.ageRating}
       />
     </ModalContainer>,
     document.getElementById("modal-root"),

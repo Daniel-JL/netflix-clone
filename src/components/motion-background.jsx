@@ -5,20 +5,18 @@ import ReactPlayer from 'react-player';
 import { useFetch } from '../hooks/useFetch';
 import { getMediaData } from '../helpers/getMediaData';
 import getVideos from '../helpers/getVideos';
+import { RoundMuteButton } from './buttons';
 
 const BillboardRow = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   padding-top: 40%;
+  z-index: 2;
+  color: white;
 
-  // ${({ isEpsInfoBox }) => isEpsInfoBox
-  // && `
-  //   padding-top: 100%;
-  // `
-} 
-`;
-
-const BillboardRowEpsInfo = styled(BillboardRow)`
-  padding-top: 1%;
 `;
 
 const BillboardImage = styled.img`
@@ -68,6 +66,25 @@ const MotionBackgroundContainer = styled.div`
 } 
 `;
 
+const MediaTitleAndTagline = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 3vw;
+
+`;
+
+const MediaTitle = styled.div`
+  font-size: 180%;
+`;
+
+const Tagline = styled.div`
+
+`;
+
+const AgeRatingAndControl = styled.div`
+
+`;
+
 const baseURL = 'https://image.tmdb.org/t/p/';
 
 const url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
@@ -75,6 +92,7 @@ const url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_A
 export const MotionBackground = ({
   mediaType,
   mediaId,
+  ageRating,
   isEpsInfoBox,
 }) => {
   const [backdropPath, setBackdropPath] = useState();
@@ -86,15 +104,22 @@ export const MotionBackground = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [videoPlayerRef, setVideoPlayerRef] = useState(null);
   const [isPlaying, setIsPlaying] = useState(true);
-  // const [videoEnded, setVideoEnded] = useState(false);
+  const [mediaTitle, setMediaTitle] = useState('');
+  const [mediaTagline, setMediaTagline] = useState('');
   const videoEnded = useRef(false);
 
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
     setBackdropPath((backdropPath) => `${baseURL}original${data.backdrop_path}`);
+    if (data.title) {
+      setMediaTitle((mediaTitle) => data.title);
+    } else if (data.name) {
+      setMediaTitle((mediaTitle) => data.name);
+    }
+    setMediaTagline((mediaTagline) => data.tagline);
+    console.log(data);
 
     data = await getVideos(mediaType, mediaId);
-    console.log(data);
     if (data.results.length > 0) {
       setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
       setVidExists(true);
@@ -187,20 +212,27 @@ export const MotionBackground = ({
             </div>
           )
 
-          // <BillboardImage src={backdropPath} />
         }
-        {/* <iframe src='https://www.youtube.com/embed/5794f65592514142a4002ec0'
-        frameborder='0'
-        allow='autoplay; encrypted-media'
-        allowfullscreen
-        title='video'
-            /> */}
       </MotionBackgroundMediaContainer>
-
       <BillboardRow
         ref={setVideoPlayerRef}
+        id="billboard-row"
         isEpsInfoBox={isEpsInfoBox}
-      />
+      >
+        <MediaTitleAndTagline>
+          <MediaTitle>
+            {mediaTitle}
+          </MediaTitle>
+          <Tagline>
+            {mediaTagline}
+          </Tagline>
+        </MediaTitleAndTagline>
+        <AgeRatingAndControl>
+          <RoundMuteButton />
+          {ageRating}
+        </AgeRatingAndControl>
+
+      </BillboardRow>
     </MotionBackgroundContainer>
   );
 };

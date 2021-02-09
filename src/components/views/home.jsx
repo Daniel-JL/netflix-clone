@@ -56,6 +56,7 @@ export const Home = ({
             <MotionBackground
               mediaType={trendingItemData.mediaType}
               mediaId={trendingItemData.id}
+              ageRating={trendingItemData.ageRating}
               isEpsInfoBox={false}
             />
           )}

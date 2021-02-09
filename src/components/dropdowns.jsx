@@ -25,7 +25,12 @@ export function AccountDropdown() {
   );
 }
 
-export function EpisodeDropdown(props) {
+export function EpisodeDropdown({
+  selectedSeason,
+  seasonEpisodeData,
+  changeSelectedSeason,
+  resetEpisodeListItemLimit,
+}) {
   const [dropdownActive, setDropdownActive] = useState(false);
   const [numOfSeasons, setNumOfSeasons] = useState();
   const [epsPerSeason, setEpsPerSeason] = useState([]);
@@ -39,9 +44,9 @@ export function EpisodeDropdown(props) {
   };
 
   const handleSeasonEpisodeData = () => {
-    setNumOfSeasons((numOfSeasons) => props.seasonEpisodeData.length);
-    // for (let i = 0; i < props.seasonEpisodeData.length; i++) {
-    //   setEpsPerSeason((epsPerSeason) => [...epsPerSeason, props.seasonEpisodeData[i].length]);
+    setNumOfSeasons((numOfSeasons) => seasonEpisodeData.length);
+    // for (let i = 0; i < seasonEpisodeData.length; i++) {
+    //   setEpsPerSeason((epsPerSeason) => [...epsPerSeason, seasonEpisodeData[i].length]);
     // }
   };
 
@@ -65,9 +70,9 @@ export function EpisodeDropdown(props) {
         && (
           <EpisodeDropdownMenu
             numOfSeasons={numOfSeasons}
-            seasonEpisodeData={props.seasonEpisodeData}
-            changeSelectedSeason={props.changeSelectedSeason}
-            resetEpisodeListItemLimit={props.resetEpisodeListItemLimit}
+            seasonEpisodeData={seasonEpisodeData}
+            changeSelectedSeason={changeSelectedSeason}
+            resetEpisodeListItemLimit={resetEpisodeListItemLimit}
           />
         )}
 

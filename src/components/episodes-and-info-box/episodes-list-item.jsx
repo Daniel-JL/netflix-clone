@@ -37,20 +37,29 @@ const EpisodeDescriptionContainer = styled.div`
   font-size: 70%;
 `;
 
-function EpisodesListItem(props) {
+function EpisodesListItem({
+  episodeNumber,
+  episodeName,
+  episodeDescription,
+  imagePath,
+  imgLoadedSuccess,
+  imgLoadingErr,
+  handleImgLoadingErr,
+  handleImgLoadedSuccess,
+}) {
 
   return (
     <ItemContainer id="episodes-list-item">
-      {props.episodeNumber}
-      {!props.imgLoadingErr
+      {episodeNumber}
+      {!imgLoadingErr
       && (
         <ImgContainer>
           <EpisodeImage
             alt="Slider image"
-            src={props.imagePath}
-            onError={() => props.handleImgLoadingErr()}
+            src={imagePath}
+            onError={() => handleImgLoadingErr()}
             onLoad={
-              () => props.handleImgLoadedSuccess()
+              () => handleImgLoadedSuccess()
             }
           />
         </ImgContainer>
@@ -58,14 +67,14 @@ function EpisodesListItem(props) {
       <EpisodeDetailsContainer>
         <EpisodeTitleRuntimeContainer>
           <div>
-            {props.episodeName}
+            {episodeName}
           </div>
           <div>
             23m
           </div>
         </EpisodeTitleRuntimeContainer>
         <EpisodeDescriptionContainer>
-          {props.episodeDescription}
+          {episodeDescription}
         </EpisodeDescriptionContainer>
       </EpisodeDetailsContainer>
     </ItemContainer>

@@ -24,17 +24,20 @@ const ItemDetails = styled.div`
   font-size: 70%;
 `;
 
-function MoreLikeThisItem(props) {
+function MoreLikeThisItem({
+  imgSrc,
+  mediaDetails,
+}) {
   return (
     <Container>
-      <ItemImage src={props.imgSrc} />
+      <ItemImage src={imgSrc} />
 
       <ItemDetails>
         <div>
-          {props.mediaDetails.name}
+          {mediaDetails.name}
         </div>
         <div>
-          {props.mediaDetails.overview}
+          {mediaDetails.overview}
         </div>
       </ItemDetails>
     </Container>

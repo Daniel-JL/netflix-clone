@@ -7,7 +7,12 @@ const Container = styled.div`
   width: 100%;
 `;
 
-function EpisodesListItemContainer(props) {
+function EpisodesListItemContainer({
+  mediaId,
+  episodeNum,
+  seasonNum,
+  episodeData,
+}) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [episodeName, setEpisodeName] = useState();
   const [episodeDescription, setEpisodeDescription] = useState();
@@ -18,10 +23,10 @@ function EpisodesListItemContainer(props) {
   const [runtime, setRuntime] = useState('');
 
   const fetchEpisodeData = async () => {
-    setEpisodeName((episodeName) => props.episodeData.name);
-    setEpisodeDescription((episodeDescription) => props.episodeData.overview);
-    setEpisodeNumber((episodeNumber) => props.episodeData.episode_number);
-    setImagePath((imagePath) => `http://image.tmdb.org/t/p/w780${props.episodeData.still_path}`);
+    setEpisodeName((episodeName) => episodeData.name);
+    setEpisodeDescription((episodeDescription) => episodeData.overview);
+    setEpisodeNumber((episodeNumber) => episodeData.episode_number);
+    setImagePath((imagePath) => `http://image.tmdb.org/t/p/w780${episodeData.still_path}`);
     setDataLoaded(true);
   };
 
@@ -33,7 +38,6 @@ function EpisodesListItemContainer(props) {
   const handleImgLoadedSuccess = () => {
     console.log('imgloadsuccess-EpListItem');
     setImgLoadedSuccess(true);
-    // props.handleImgLoaded();
   };
 
   useEffect(() => {

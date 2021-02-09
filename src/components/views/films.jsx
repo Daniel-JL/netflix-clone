@@ -45,6 +45,7 @@ export const Films = ({
             <MotionBackground
               mediaType={trendingMovieData.mediaType}
               mediaId={trendingMovieData.id}
+              ageRating={trendingMovieData.ageRating}
               isEpsInfoBox={false}
             />
           )}

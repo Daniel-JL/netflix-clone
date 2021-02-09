@@ -25,14 +25,21 @@ const EpisodesAndInfoBoxContainer = styled.div`
 
 `;
 
-export function EpisodesAndInfoBox(props) {
+export function EpisodesAndInfoBox({
+  mediaId,
+  mediaType,
+  posterPath,
+  runtimeOrNumberOfSeasons,
+  genres,
+  ageRating,
+  setScrollHidden,
+}) {
   const history = useHistory();
   const ref = useRef();
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
-  console.log(props);
   const back = () => {
-    props.setScrollHidden();
+    setScrollHidden();
     history.goBack();
     document.body.style.overflow = 'scroll';
   };
@@ -41,19 +48,19 @@ export function EpisodesAndInfoBox(props) {
     <EpisodesAndInfoBoxContainer ref={ref}>
       <MotionBackground
         isEpsInfoBox={true}
-        mediaType={props.mediaType}
-        mediaId={props.mediaId}
+        mediaType={mediaType}
+        mediaId={mediaId}
       />
-      {props.mediaType === 'tv'
+      {mediaType === 'tv'
         && (
         <EpisodesListContainer
-          mediaId={props.mediaId}
-          numSeasons={props.runtimeOrNumberOfSeasons}
+          mediaId={mediaId}
+          numSeasons={runtimeOrNumberOfSeasons}
         />
         )}
       <MoreLikeThisBoxContainer
-        mediaId={props.mediaId}
-        mediaType={props.mediaType}
+        mediaId={mediaId}
+        mediaType={mediaType}
       />
 
     </EpisodesAndInfoBoxContainer>

@@ -29,19 +29,27 @@ const EpisodeDropDownContainer = styled.div`
 
 `;
 
-function EpisodesList(props) {
+function EpisodesList({
+  mediaId,
+  seasonEpisodeData,
+  episodesListItemData,
+  selectedSeason,
+  changeSelectedSeason,
+  dataLoaded,
+  isLoading,
+}) {
   const [selectedSeasonChange, setSelectedSeasonChange] = useState(false);
-  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [currentSelectedSeason, setCurrentSelectedSeason] = useState(1);
   const [numItemsPerLoad, setNumItemsPerLoad] = useState(10);
   const [itemLimit, setItemLimit] = useState(10);
-  const [episodesListItemData, setEpisodesListItemData] = useState([]);
+  const [seasonItemData, setSeasonItemData] = useState([]);
   const [allSeasonItemsLoaded, setAllSeasonItemsLoaded] = useState(false);
 
   const renderEpisodeListItems = () => {
-    if(episodesListItemData.episodeListItems !== undefined) {
-      return episodesListItemData.episodeListItems.slice(0, itemLimit)
+    if(seasonItemData.episodeListItems !== undefined) {
+      return seasonItemData.episodeListItems.slice(0, itemLimit)
         .map((value:undefined, index:number) => (
-          episodesListItemData.episodeListItems[index]
+          seasonItemData.episodeListItems[index]
         ))
     }
   };
@@ -56,10 +64,10 @@ function EpisodesList(props) {
   };
 
   useEffect(() => {
-    setSelectedSeason((selectedSeason) => props.selectedSeason);
-    setEpisodesListItemData((episodesListItemData) => props.episodesListItemData[props.selectedSeason - 1]);
+    setCurrentSelectedSeason((currentSelectedSeason) => selectedSeason);
+    setSeasonItemData((seasonItemData) => episodesListItemData[selectedSeason - 1]);
     setSelectedSeasonChange((selectedSeasonChange) => !selectedSeasonChange);
-  }, [JSON.stringify(props.episodesListItemData), props.selectedSeason]);
+  }, [JSON.stringify(episodesListItemData), selectedSeason]);
 
   useEffect(() => {
     if(episodesListItemData.episodeListItems !== undefined) {
@@ -76,23 +84,21 @@ function EpisodesList(props) {
 
   return (
     <Container>
-      {props.dataLoaded
+      {dataLoaded
         && (
         <ListContainer>
           <EpisodeDropDownContainer>
             Episodes
             <EpisodeDropdown
-              selectedSeason={props.selectedSeason}
-              seasonEpisodeData={props.seasonEpisodeData}
-              changeSelectedSeason={props.changeSelectedSeason}
+              selectedSeason={currentSelectedSeason}
+              seasonEpisodeData={seasonEpisodeData}
+              changeSelectedSeason={changeSelectedSeason}
               resetEpisodeListItemLimit={resetEpisodeListItemLimit}
             />
           </EpisodeDropDownContainer>
-          {props.isLoading
+          {isLoading
             ? <div>Test</div>
             : renderEpisodeListItems()
-
-            // :props.episodesListItemData[props.selectedSeason - 1].episodeListItems
           }
           {!allSeasonItemsLoaded &&
             <RoundDarkButton onClick={loadMoreItems}/>

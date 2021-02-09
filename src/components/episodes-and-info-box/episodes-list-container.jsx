@@ -13,7 +13,10 @@ const Container = styled.div`
   padding-top: 1vh;
 `;
 
-function EpisodesListContainer(props) {
+function EpisodesListContainer({
+  mediaId,
+  numSeasons,
+}) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [seasonEpisodeData, setSeasonEpisodeData] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState(1);
@@ -23,7 +26,7 @@ function EpisodesListContainer(props) {
   const [srcArray, setSrcArray] = useState([]);
 
   const fetchAllSeasonData = async () => {
-    const data = await getSeasonData(props.mediaId, props.numSeasons);
+    const data = await getSeasonData(mediaId, numSeasons);
     console.log(data);
 
     setIsLoading((isLoading) => true);
@@ -103,7 +106,7 @@ function EpisodesListContainer(props) {
     ].map((undefined, index) => (
       <EpisodesListItemContainer
         key={index}
-        mediaId={props.mediaId}
+        mediaId={mediaId}
         episodeNum={index + 1}
         seasonNum={selectedSeason}
         episodeData={seasonEpisodeData[selectedSeason - 1].episodeData[index]}
@@ -124,7 +127,7 @@ function EpisodesListContainer(props) {
       ].map((undefined, index) => (
         <EpisodesListItemContainer
           key={index}
-          mediaId={props.mediaId}
+          mediaId={mediaId}
           episodeNum={index + 1}
           seasonNum={season}
           episodeData={seasonEpisodeData[season - 1].episodeData[index]}
@@ -194,7 +197,7 @@ function EpisodesListContainer(props) {
       {dataLoaded
       && (
         <EpisodesList
-          mediaId={props.mediaId}
+          mediaId={mediaId}
           seasonEpisodeData={seasonEpisodeData}
           episodesListItemData={episodesListItemData}
           selectedSeason={selectedSeason}

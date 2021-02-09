@@ -13,7 +13,10 @@ const Container = styled.div`
   padding-top: 1vh;
 `;
 
-function MoreLikeThisBoxContainer(props) {
+function MoreLikeThisBoxContainer({
+  mediaId,
+  mediaType,
+}) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [mediaDetails, setMediaDetails] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState(1);
@@ -23,7 +26,7 @@ function MoreLikeThisBoxContainer(props) {
   const [imgSrcArray, setImgSrcArray] = useState([]);
 
   const fetchSimilarContentData = async () => {
-    const data = await getSimilar(props.mediaType, props.mediaId);
+    const data = await getSimilar(mediaType, mediaId);
     console.log(data);
     setIsLoading((isLoading) => true);
 

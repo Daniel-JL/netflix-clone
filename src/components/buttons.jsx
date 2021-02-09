@@ -21,8 +21,8 @@ const RoundButton = styled.button`
   font-weight: normal;
   cursor: pointer;
   transition: transform 0.3s ease;
-  height: 50px;
-  width: 50px;
+  height: 3vw;
+  width: 3vw;
   font-size: 15px;
   border-radius: 50%;
   border: 1px solid white;
@@ -97,6 +97,16 @@ export const RoundPlayButton = styled(RoundButton)`
   background-color: white;
   font-size: 25px;
   
+  &:hover {
+    background-color: rgba(255,255,255, 0.8);
+  };
+`;
+
+export const RoundMuteButton = styled(RoundButton)`
+  background-color: transparent;
+  font-size: 25px;
+  border: 1px solid white;
+
   &:hover {
     background-color: rgba(255,255,255, 0.8);
   };

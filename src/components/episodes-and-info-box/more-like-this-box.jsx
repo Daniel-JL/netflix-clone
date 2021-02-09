@@ -20,19 +20,23 @@ const GridItem = styled.div`
   align-self: center;
 `;
 
-function MoreLikeThisBox(props) {
+function MoreLikeThisBox({
+  isLoading,
+  imgSrcArray,
+  mediaDetails,
+}) {
   return (
     <GridContainer>
-      {props.isLoading
+      {isLoading
         ? <div>Loading</div>
         : 
             [
-              ...Array(props.imgSrcArray.length),
+              ...Array(imgSrcArray.length),
             ].map((value: undefined, index: number) => (
               <GridItem data-index={index} key={index}>
                 <MoreLikeThisItem 
-                  imgSrc={props.imgSrcArray[index]} 
-                  mediaDetails={props.mediaDetails[index]}
+                  imgSrc={imgSrcArray[index]} 
+                  mediaDetails={mediaDetails[index]}
                 />
               </GridItem>
                

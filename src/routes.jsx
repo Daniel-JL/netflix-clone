@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import getTrendingMediaIdsAndTypes from './helpers/getTrendingMediaIdsAndTypes';
 import getGenres from './helpers/getGenres';
+import { getAgeRating } from './helpers/getAgeRating';
 import processIdsAndTypes from './helpers/processIdsAndTypes';
 import { Header } from './components/header';
 import { Footer } from './components/footer';
@@ -30,6 +31,7 @@ export const Routes = () => {
   const [trendingMovieData, setTrendingMovieData] = useState();
   const [trendingSeriesData, setTrendingSeriesData] = useState();
   const [trendingItemData, setTrendingItemData] = useState();
+  const [trendingItemAgeRating, setTrendingItemAgeRating] = useState();
   const [movieGenres, setMovieGenres] = useState();
   const [tvGenres, setTvGenres] = useState();
 
@@ -58,8 +60,10 @@ export const Routes = () => {
       id: data.ids[0],
       mediaType: 'movie',
     };
+    let ageRating = await getAgeRating(trendingMovieDataCopy.id, trendingMovieDataCopy.mediaType);
+    trendingMovieDataCopy.ageRating = ageRating;
+
     setTrendingMovieData((trendingMovieData) => trendingMovieDataCopy);
-    
 
     data = await getTrendingMediaIdsAndTypes(1, 0, 'tv');
     data = processIdsAndTypes(data);
@@ -67,9 +71,13 @@ export const Routes = () => {
       id: data.ids[0],
       mediaType: 'tv',
     };
+    ageRating = await getAgeRating(trendingSeriesDataCopy.id, trendingSeriesDataCopy.mediaType);
+    trendingSeriesDataCopy.ageRating = ageRating;
+
     setTrendingSeriesData((trendingSeriesData) => trendingSeriesDataCopy);
 
-    setTrendingItemData((trendingItemData) => (Math.random() < 0.5 ? trendingMovieDataCopy : trendingSeriesDataCopy));
+    const trendingItem = Math.random() < 0.5 ? trendingMovieDataCopy : trendingSeriesDataCopy;
+    setTrendingItemData((trendingItemData) => (trendingItem));
 
     data = await getGenres('movie');
     setMovieGenres((movieGenres) => data.genres);
