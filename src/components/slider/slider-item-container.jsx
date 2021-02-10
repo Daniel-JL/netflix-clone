@@ -9,11 +9,13 @@ export function SliderItemContainer({
   setModalProps,
   mediaType,
   mediaId,
+  changeRowZIndex,
 }) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
+  const [itemDimensions, setItemDimensions] = useState({});
   const posterPath = useRef('');
   const runtimeOrNumberOfSeasons = useRef('');
   const genres = useRef([]);
@@ -45,14 +47,24 @@ export function SliderItemContainer({
 
   };
 
-  const handleMouseOver = () => {
+  const handleMouseOver = (itemContainerRef) => {
     if (imgLoadedSuccess) {
+      let rect = itemContainerRef.getBoundingClientRect();
+      console.log(rect);
+      setItemDimensions((itemDimensions) => ({
+        left: rect.x,
+        top: rect.y + window.scrollY,
+        width: rect.right - rect.left,
+      }));
+
       setItemHoverActive(true);
+      changeRowZIndex(true);
     }
   };
 
   const handleMouseOut = () => {
     setItemHoverActive(false);
+    changeRowZIndex(false);
   };
 
   const handleImgLoadingErr = () => {
@@ -95,6 +107,7 @@ export function SliderItemContainer({
       setImgLoadingErr={handleImgLoadingErr}
       setImgLoadSuccess={handleImgLoadedSuccess}
       handleEpsAndInfoButtonClick={handleEpsAndInfoButtonClick}
+      itemDimensions={itemDimensions}
     />
   );
 }

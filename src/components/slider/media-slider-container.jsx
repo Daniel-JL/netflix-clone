@@ -7,6 +7,8 @@ import getMediaListByGenre from '../../helpers/getMediaListByGenre';
 import processIdsAndTypes from '../../helpers/processIdsAndTypes';
 
 const Container = styled.div`
+  position: relative;
+  z-index: 2;
   width: 100%;
 `;
 
@@ -17,6 +19,7 @@ export function MediaSliderContainer(
     mediaType,
     genreName,
     genreId,
+    changeRowZIndex,
   },
 ) {
   const [paginationPage, setPaginationPage] = useState(0);
@@ -56,6 +59,7 @@ export function MediaSliderContainer(
           maxIdsNeeded={maxIdsNeeded}
           movieTvShowType={mediaIdsAndTypes.current.types}
           movieTvShowIds={mediaIdsAndTypes.current.ids}
+          changeRowZIndex={changeRowZIndex}
         />
         )}
 

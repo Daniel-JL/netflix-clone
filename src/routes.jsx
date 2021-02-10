@@ -22,6 +22,7 @@ import { Kids } from './components/views/kids';
 import { VideoPlayer } from './components/views/video-player';
 import { NoMatch } from './components/views/no-match';
 import { Modal } from './components/modal';
+import { EpisodesAndInfoBox } from './components/episodes-and-info-box/episodes-and-info-box';
 
 export const Routes = () => {
   const [epsAndInfoBoxProps, setEpsAndInfoBoxProps] = useState({});
@@ -148,7 +149,17 @@ export const Routes = () => {
         <Route
           path="/browse/epsinfobox"
           render={() => (
-            <Modal epsAndInfoBoxProps={epsAndInfoBoxProps} />
+            <Modal id="modal-root">
+              <EpisodesAndInfoBox
+                // setScrollHidden={setScrollHidden}
+                mediaId={epsAndInfoBoxProps.mediaId}
+                mediaType={epsAndInfoBoxProps.mediaType}
+                posterPath={epsAndInfoBoxProps.posterPath}
+                runtimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
+                genres={epsAndInfoBoxProps.genres}
+                ageRating={epsAndInfoBoxProps.ageRating}
+              />
+            </Modal>
           )}
         />
         )}

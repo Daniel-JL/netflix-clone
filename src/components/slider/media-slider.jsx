@@ -8,6 +8,8 @@ import "slick-carousel/slick/slick-theme.css";
 import './media-slider.css';
 
 const SliderContainer = styled.div`
+  position: relative;
+  z-index: 2;
   max-width: 100%;
   width: 100%;
 `;
@@ -34,6 +36,7 @@ export function MediaSlider(
     maxIdsNeeded,
     movieTvShowType,
     movieTvShowIds,
+    changeRowZIndex,
   }
 ) {
 
@@ -95,6 +98,7 @@ export function MediaSlider(
                   setModalProps={setModalProps}
                   mediaType={movieTvShowType[index]} 
                   mediaId={movieTvShowIds[index]} 
+                  changeRowZIndex={changeRowZIndex}
                 />
               ))
             }

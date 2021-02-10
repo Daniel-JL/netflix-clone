@@ -6,7 +6,8 @@ import { EpisodesAndInfoBox } from './episodes-and-info-box/episodes-and-info-bo
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 
 const ModalContainer = styled.div`
-  position: fixed;
+  // position: fixed;
+  position: absolute;
   display: flex;
   justify-content: center;
   margin: auto;
@@ -16,32 +17,31 @@ const ModalContainer = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
-  overflow: scroll;
-  z-index: 2;
+  // overflow: scroll;
+  z-index: 10;
 
   ${({ scrollActive }) => !scrollActive && `
     overflow: hidden;
   `}
 `;
 
-export const Modal = ({epsAndInfoBoxProps}) => {
+export const Modal = ({ children, id }) => {
   const [scrollActive, setScrollActive] = useState(true);
 
   const setScrollHidden = () => {
     setScrollActive(false);
   };
+
   return createPortal(
     <ModalContainer scrollActive={scrollActive}>
-      <EpisodesAndInfoBox
-        setScrollHidden={setScrollHidden}
-        mediaId={epsAndInfoBoxProps.mediaId}
-        mediaType={epsAndInfoBoxProps.mediaType}
-        posterPath={epsAndInfoBoxProps.posterPath}
-        runtimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
-        genres={epsAndInfoBoxProps.genres}
-        ageRating={epsAndInfoBoxProps.ageRating}
-      />
+      {
+        React.Children.map(children, (child) => React.cloneElement(child, {
+          setScrollHidden,
+        }))
+      }
+
+      {/* {children} */}
     </ModalContainer>,
-    document.getElementById("modal-root"),
+    document.getElementById(id),
   );
 };

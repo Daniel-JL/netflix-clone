@@ -1,41 +1,41 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Link,
   useLocation,
   Route,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import ReactCSSTransitionGroup from 'react-transition-group';
 import {
   RoundPlayButton,
-  RoundPlusButton,
-  RoundThumbsUpButton,
-  RoundThumbsDownButton,
   RoundEpsAndInfoButton,
 } from '../buttons';
 import { EpisodesAndInfoBox } from '../episodes-and-info-box/episodes-and-info-box';
 import { Modal } from '../modal';
 
-const ISliderItemProps = {
-  mediaName: 'name',
-  imageID: 1,
-  maturityRating: 'rating',
-  numOfSeasons: 1,
-};
-
 const ItemContainer = styled.div`
   position: relative;
   // height: 139px;
-  width: 100%
+  width: ${({ itemWidth }) => itemWidth}px;
   border: 1px solid black;
-  // transition: width 0.2s, height 0.2s;
+  transition: width 0.8s, height 0.8s;
+  z-index: 2;
+
 
   ${({ active }) => active && `
     transition: all .2s ease-in-out;
-    transform: scale(1.6);
+    transform: scale(1.2);
+    // position: absolute;
+
+  
     // width: 400px;
     // height: 222px;
-    z-index: 10;
+    // width: 120%;
+    // margin-left: -50%;
+    // margin-top: -50%;
+    // height: 400px;
+    z-index: 20;
   `}
 `;
 
@@ -45,12 +45,27 @@ const SliderItemImage = styled.img`
 `;
 
 const ItemDetails = styled.div`
-  // visibility: hidden;
+  // position: relative;
+
+  // visibility: visible;
   background-color: gray;
 
-  ${({ active }) => active && `
-    visibility: visible;
-  `}
+  // ${({ active }) => active && `
+  //   visibility: visible;
+  // `}
+`;
+
+const ModalItem = styled.div`
+  position: absolute;
+  display:flex;
+  flex-direction:column;
+  
+  left: ${({ coordsLeft }) => coordsLeft}px;
+  top: ${({ coordsTop }) => coordsTop}px;
+  width: ${({ itemWidth }) => itemWidth}px;
+  // border: 1px solid black;
+  transition: all 1.5s ease-in-out;
+  transform: scale(1.5);
 `;
 
 export function SliderItem({
@@ -67,13 +82,16 @@ export function SliderItem({
   setImgLoadingErr,
   setImgLoadSuccess,
   handleEpsAndInfoButtonClick,
+  itemDimensions,
 }) {
   const location = useLocation();
-
+  const [itemContainerRef, setItemContainerRef] = useState();
+  console.log(itemDimensions);
   return (
     <ItemContainer
-      onMouseOver={() => handleMouseOver()}
-      onMouseOut={() => handleMouseOut()}
+      ref={setItemContainerRef}
+      onMouseEnter={() => handleMouseOver(itemContainerRef)}
+      onMouseLeave={() => handleMouseOut()}
       active={itemHoverActive}
     >
 
@@ -91,8 +109,57 @@ export function SliderItem({
       && <div id="imgSuccess" data-testid="imgSuccess" />}
 
       {itemHoverActive
+        && (
+        <Modal id="slider-item-modal">
+          <ModalItem
+            id="modal-item"
+            coordsLeft={itemDimensions.left}
+            coordsTop={itemDimensions.top}
+            itemWidth={itemDimensions.width}
+            onMouseLeave={() => handleMouseOut()}
+          >
+            <SliderItemImage
+              alt="Slider image"
+              src={posterPath}
+              onError={() => setImgLoadingErr()}
+              onLoad={() => setImgLoadSuccess()}
+            />
+            <ItemDetails>
+              <div id="buttons">
+                <RoundPlayButton />
+                <Link
+                  key={1}
+                  to={{
+                    pathname: '/browse/epsinfobox',
+                    state: { background: location },
+                  }}
+                >
+                  <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
+                    v
+                  </RoundEpsAndInfoButton>
+                </Link>
+              </div>
+              <div id="media-info">
+                {ageRating}
+                {' '}
+                {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
+                {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
+              </div>
+              <div id="genres">
+                {genres[0]}
+                {' '}
+                *
+                {' '}
+                {genres[1]}
+              </div>
+            </ItemDetails>
+          </ModalItem>
+
+        </Modal>
+        )}
+      {/* {itemHoverActive
       && (
-      <ItemDetails >
+      <ItemDetails>
         <div id="buttons">
           <RoundPlayButton />
           <Link
@@ -121,13 +188,10 @@ export function SliderItem({
           {genres[1]}
         </div>
       </ItemDetails>
-      )}
+      )} */}
       {/* <ItemDetails active={itemHoverActive}>
         <div id="buttons">
           <RoundPlayButton />
-          <RoundPlusButton />
-          <RoundThumbsUpButton />
-          <RoundThumbsDownButton />
           <Link
             key={1}
             to={{

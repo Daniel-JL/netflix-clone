@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
+import React, { useState } from 'react';
+
 import {
   NavLink,
 } from 'react-router-dom';
@@ -7,7 +8,10 @@ import styled from 'styled-components';
 import { MediaSliderContainer } from './media-slider-container';
 
 const RowContainer = styled.div`
-  z-index: 4;
+`;
+
+const PortalContainer = styled.div`
+  z-index: 3;
 `;
 
 const RowPadding = styled.div`
@@ -23,8 +27,15 @@ const RowHeader = styled.header`
 `;
 
 const Row = styled.div`
+  position: relative;
+  z-index: 0;
   height: 140px;
   width: 100%;
+
+  ${({ active }) => active && `
+    z-index: 1;
+
+  `}
 `;
 
 export function LocoRow(
@@ -36,17 +47,25 @@ export function LocoRow(
     genreId,
   },
 ) {
+  const [active, setActive] = useState(false);
+
+  const changeRowZIndex = (isActive) => {
+    setActive((active) => isActive);
+  };
+
   return (
     <RowContainer>
+      <PortalContainer id="slider-item-modal" />
       <RowPadding />
       <RowHeader />
-      <Row>
+      <Row active={active}>
         <MediaSliderContainer
           setModalProps={setModalProps}
           numSlidersLoaded={numSlidersLoaded}
           mediaType={mediaType}
           genreName={genreName}
           genreId={genreId}
+          changeRowZIndex={changeRowZIndex}
         />
       </Row>
       <RowPadding />
