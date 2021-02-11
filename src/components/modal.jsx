@@ -6,7 +6,6 @@ import { EpisodesAndInfoBox } from './episodes-and-info-box/episodes-and-info-bo
 import { EpisodesAndInfoBoxContext } from './context/episodes-and-info-box-context/episodes-and-info-box-context';
 
 const ModalContainer = styled.div`
-  // position: fixed;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -17,15 +16,20 @@ const ModalContainer = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
-  // overflow: scroll;
   z-index: 10;
+
+  ${({ isEpsInfoBox }) => isEpsInfoBox && `
+    position: fixed;
+    overflow: scroll;
+
+  `}
 
   ${({ scrollActive }) => !scrollActive && `
     overflow: hidden;
   `}
 `;
 
-export const Modal = ({ children, id }) => {
+export const Modal = ({ children, id, isEpsInfoBox}) => {
   const [scrollActive, setScrollActive] = useState(true);
 
   const setScrollHidden = () => {
@@ -33,7 +37,10 @@ export const Modal = ({ children, id }) => {
   };
 
   return createPortal(
-    <ModalContainer scrollActive={scrollActive}>
+    <ModalContainer
+      isEpsInfoBox={isEpsInfoBox}
+      scrollActive={scrollActive}
+    >
       {
         React.Children.map(children, (child) => React.cloneElement(child, {
           setScrollHidden,

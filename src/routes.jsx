@@ -113,6 +113,9 @@ export const Routes = () => {
           <Route exact path="/">
             <Redirect to="/browse" />
           </Route>
+          <Route exact path="/browse/">
+            <Redirect to="/browse" />
+          </Route>
           <Route
             exact
             path="/browse/genre/83"
@@ -124,6 +127,9 @@ export const Routes = () => {
               />
           )}
           />
+          <Route exact path="/browse/genre/83/">
+            <Redirect to="/browse/genre/83" />
+          </Route>
           <Route
             exact
             path="/browse/genre/34399"
@@ -135,6 +141,9 @@ export const Routes = () => {
               />
           )}
           />
+          <Route exact path="/browse/genre/34399/">
+            <Redirect to="/browse/genre/34399" />
+          </Route>
           <Route exact path="/latest" children={<Latest setModalProps={setModalProps} />} />
           <Route exact path="/browse/my-list" children={<MyList />} />
           <Route exact path="/search" children={<Search setModalProps={setModalProps} />} />
@@ -147,17 +156,20 @@ export const Routes = () => {
       {background
         && (
         <Route
-          path="/browse/epsinfobox"
+          path={[
+            "/browse/epsinfobox",
+            "/browse/genre/34399/epsinfobox",
+            "/browse/genre/83/epsinfobox",
+          ]}
           render={() => (
-            <Modal id="modal-root">
+            <Modal id="modal-root" isEpsInfoBox={true}>
               <EpisodesAndInfoBox
-                // setScrollHidden={setScrollHidden}
-                mediaId={epsAndInfoBoxProps.mediaId}
-                mediaType={epsAndInfoBoxProps.mediaType}
-                posterPath={epsAndInfoBoxProps.posterPath}
-                runtimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
-                genres={epsAndInfoBoxProps.genres}
-                ageRating={epsAndInfoBoxProps.ageRating}
+                sliderItemMediaId={epsAndInfoBoxProps.mediaId}
+                sliderItemMediaType={epsAndInfoBoxProps.mediaType}
+                sliderItemPosterPath={epsAndInfoBoxProps.posterPath}
+                sliderItemRuntimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
+                sliderItemGenres={epsAndInfoBoxProps.genres}
+                sliderItemAgeRating={epsAndInfoBoxProps.ageRating}
               />
             </Modal>
           )}

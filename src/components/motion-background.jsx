@@ -5,7 +5,11 @@ import ReactPlayer from 'react-player';
 import { useFetch } from '../hooks/useFetch';
 import { getMediaData } from '../helpers/getMediaData';
 import getVideos from '../helpers/getVideos';
-import { RoundMuteButton } from './buttons';
+import { 
+  RectPlayButton, 
+  RectInfoButton, 
+  RoundMuteButton 
+} from './buttons';
 
 const BillboardRow = styled.div`
   position: relative;
@@ -16,7 +20,6 @@ const BillboardRow = styled.div`
   padding-top: 40%;
   z-index: 2;
   color: white;
-
 `;
 
 const BillboardImage = styled.img`
@@ -34,8 +37,6 @@ const BillboardImage = styled.img`
     && `opacity: 1;
     transition: opacity 0.5s ease-in-out;`
 } 
-
-  // height: 100%;
 `;
 
 const BillboardVideo = styled.div`
@@ -43,7 +44,6 @@ const BillboardVideo = styled.div`
   width: 100%;
   top:0;
   z-index: 0;
-
   height: 100%;
 `;
 
@@ -56,7 +56,6 @@ const MotionBackgroundMediaContainer = styled.div`
 `;
 
 const MotionBackgroundContainer = styled.div`
-  // position: relative;
   width: 100%;
   
   ${({ isEpsInfoBox }) => isEpsInfoBox
@@ -70,11 +69,15 @@ const MediaTitleAndTagline = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 3vw;
-
 `;
 
 const MediaTitle = styled.div`
   font-size: 180%;
+`;
+
+const PlayAndInfoButtonsContainer = styled.div`
+  display: flex;
+  padding: 1vw;
 `;
 
 const Tagline = styled.div`
@@ -84,10 +87,6 @@ const Tagline = styled.div`
 const AgeRatingAndControl = styled.div`
 
 `;
-
-const baseURL = 'https://image.tmdb.org/t/p/';
-
-const url = ''.concat(baseURL, 'trending/all/week?api_key=', process.env.REACT_APP_MOVIE_DB_API_KEY);
 
 export const MotionBackground = ({
   mediaType,
@@ -104,13 +103,15 @@ export const MotionBackground = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [videoPlayerRef, setVideoPlayerRef] = useState(null);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [muteActive, setMuteActive] = useState(true);
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');
+  const [player, setPlayer] = useState();
   const videoEnded = useRef(false);
 
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
-    setBackdropPath((backdropPath) => `${baseURL}original${data.backdrop_path}`);
+    setBackdropPath((backdropPath) => `https://image.tmdb.org/t/p/original${data.backdrop_path}`);
     if (data.title) {
       setMediaTitle((mediaTitle) => data.title);
     } else if (data.name) {
@@ -135,6 +136,18 @@ export const MotionBackground = ({
     setImgFadeOut((imgFadeOut) => false);
     setImgFadeIn((imgFadeIn) => true);
     videoEnded.current = true;
+  };
+
+  const handleMuteReplayButtonClick = () => {
+    if (videoEnded.current === false) {
+      setMuteActive((muteActive) => !muteActive);
+    } else {
+      videoEnded.current = false;
+      player.seekTo(0);
+      setImgFadeOut((imgFadeOut) => true);
+      setImgFadeIn((imgFadeIn) => false);
+      setIsPlaying((isPlaying) => true);
+    }
   };
 
   useEffect(() => {
@@ -177,12 +190,13 @@ export const MotionBackground = ({
               && (
                 <BillboardVideo>
                   <ReactPlayer
+                    ref={setPlayer}
                     className="videoFrame"
                     url={videoURL}
                     playing={isPlaying}
                     controls={false}
                     playIcon={false}
-                    muted
+                    muted={muteActive}
                     onStart={() => handleVideoPlaying()}
                     onProgress={(played) => {
                       console.log(played.played);
@@ -211,7 +225,6 @@ export const MotionBackground = ({
 
             </div>
           )
-
         }
       </MotionBackgroundMediaContainer>
       <BillboardRow
@@ -226,9 +239,17 @@ export const MotionBackground = ({
           <Tagline>
             {mediaTagline}
           </Tagline>
+          <PlayAndInfoButtonsContainer>
+            <RectPlayButton>
+              |> Play
+            </RectPlayButton>
+            <RectInfoButton>
+              i More info
+            </RectInfoButton>
+          </PlayAndInfoButtonsContainer>
         </MediaTitleAndTagline>
         <AgeRatingAndControl>
-          <RoundMuteButton />
+          <RoundMuteButton onClick={handleMuteReplayButtonClick} />
           {ageRating}
         </AgeRatingAndControl>
 

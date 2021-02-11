@@ -6,7 +6,7 @@ import {
   Route,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import ReactCSSTransitionGroup from 'react-transition-group';
+import { Transition } from 'react-transition-group';
 import {
   RoundPlayButton,
   RoundEpsAndInfoButton,
@@ -16,27 +16,9 @@ import { Modal } from '../modal';
 
 const ItemContainer = styled.div`
   position: relative;
-  // height: 139px;
   width: ${({ itemWidth }) => itemWidth}px;
   border: 1px solid black;
-  transition: width 0.8s, height 0.8s;
   z-index: 2;
-
-
-  ${({ active }) => active && `
-    transition: all .2s ease-in-out;
-    transform: scale(1.2);
-    // position: absolute;
-
-  
-    // width: 400px;
-    // height: 222px;
-    // width: 120%;
-    // margin-left: -50%;
-    // margin-top: -50%;
-    // height: 400px;
-    z-index: 20;
-  `}
 `;
 
 const SliderItemImage = styled.img`
@@ -45,30 +27,36 @@ const SliderItemImage = styled.img`
 `;
 
 const ItemDetails = styled.div`
-  // position: relative;
-
-  // visibility: visible;
   background-color: gray;
-
-  // ${({ active }) => active && `
-  //   visibility: visible;
-  // `}
 `;
 
 const ModalItem = styled.div`
   position: absolute;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   
   left: ${({ coordsLeft }) => coordsLeft}px;
   top: ${({ coordsTop }) => coordsTop}px;
   width: ${({ itemWidth }) => itemWidth}px;
-  // border: 1px solid black;
-  transition: all 1.5s ease-in-out;
-  transform: scale(1.5);
+
+`;
+
+const ImgTitleContainer = styled.div`
+  position: relative;
+`;
+
+const MediaTitle = styled.div`
+  position: absolute;
+  color: white;
+  bottom: 10%;
+  left: 2%;
+  font-size: 1.3vw;
 `;
 
 export function SliderItem({
+  mediaTitle,
+  mediaId,
+  mediaType,
   ageRating,
   genres,
   imgLoadedSuccess,
@@ -77,8 +65,10 @@ export function SliderItem({
   posterPath,
   runtimeOrNumberOfSeasons,
   itemHoverActive,
+  itemHoverTransition,
   handleMouseOver,
   handleMouseOut,
+  handleModalDismount,
   setImgLoadingErr,
   setImgLoadSuccess,
   handleEpsAndInfoButtonClick,
@@ -86,7 +76,31 @@ export function SliderItem({
 }) {
   const location = useLocation();
   const [itemContainerRef, setItemContainerRef] = useState();
-  console.log(itemDimensions);
+
+  const duration = 200;
+
+  const defaultStyle = {
+    transition: `all ${duration}ms ease-in-out`,
+    opacity: 1,
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+
+    left: `${itemDimensions.left}px`,
+    top: `${itemDimensions.top}px`,
+    width: `${itemDimensions.width}px`,
+  };
+
+  const transitionStyles = {
+    entering: {},
+    entered: {
+      opacity: 1,
+      transform: 'scale(1.5)',
+    },
+    exiting: {},
+    exited: {transform:'scale(0.5)'},
+  };
+
   return (
     <ItemContainer
       ref={setItemContainerRef}
@@ -97,12 +111,17 @@ export function SliderItem({
 
       {dataLoaded && !imgLoadingErr
       && (
-        <SliderItemImage
-          alt="Slider image"
-          src={posterPath}
-          onError={() => setImgLoadingErr()}
-          onLoad={() => setImgLoadSuccess()}
-        />
+        <ImgTitleContainer>
+          <MediaTitle>
+            {mediaTitle}
+          </MediaTitle>
+          <SliderItemImage
+            alt="Slider image"
+            src={posterPath}
+            onError={() => setImgLoadingErr()}
+            onLoad={() => setImgLoadSuccess()}
+          />
+        </ImgTitleContainer>
       )}
 
       {imgLoadedSuccess
@@ -111,113 +130,71 @@ export function SliderItem({
       {itemHoverActive
         && (
         <Modal id="slider-item-modal">
-          <ModalItem
-            id="modal-item"
-            coordsLeft={itemDimensions.left}
-            coordsTop={itemDimensions.top}
-            itemWidth={itemDimensions.width}
-            onMouseLeave={() => handleMouseOut()}
+          <Transition
+            appear
+            in={itemHoverTransition}
+            timeout={300}
+            onExited={() => handleModalDismount()}
           >
-            <SliderItemImage
-              alt="Slider image"
-              src={posterPath}
-              onError={() => setImgLoadingErr()}
-              onLoad={() => setImgLoadSuccess()}
-            />
-            <ItemDetails>
-              <div id="buttons">
-                <RoundPlayButton />
-                <Link
-                  key={1}
-                  to={{
-                    pathname: '/browse/epsinfobox',
-                    state: { background: location },
-                  }}
-                >
-                  <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
-                    v
-                  </RoundEpsAndInfoButton>
-                </Link>
-              </div>
-              <div id="media-info">
-                {ageRating}
-                {' '}
-                {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
-                {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
-              </div>
-              <div id="genres">
-                {genres[0]}
-                {' '}
-                *
-                {' '}
-                {genres[1]}
-              </div>
-            </ItemDetails>
-          </ModalItem>
+            {(state) => (
+              <ModalItem
+                style={{
+                  ...defaultStyle,
+                  ...transitionStyles[state],
+                }}
+                id="modal-item"
+                coordsLeft={itemDimensions.left}
+                coordsTop={itemDimensions.top}
+                itemWidth={itemDimensions.width}
+                onMouseLeave={() => handleMouseOut()}
+              >
+                <ImgTitleContainer>
+                  <MediaTitle>
+                    {mediaTitle}
+                  </MediaTitle>
+                  <SliderItemImage
+                    alt="Slider image"
+                    src={posterPath}
+                    onError={() => setImgLoadingErr()}
+                    onLoad={() => setImgLoadSuccess()}
+                  />
+                </ImgTitleContainer>
+                <ItemDetails>
+                  <div id="buttons">
+                    <RoundPlayButton />
+                    <Link
+                      key={1}
+                      to={{
+                        pathname: `${location.pathname}/epsinfobox/${mediaType}/${mediaId}`,
+                        state: { background: location },
+                      }}
+                    >
+                      <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
+                        v
+                      </RoundEpsAndInfoButton>
+                    </Link>
+                  </div>
+                  <div id="media-info">
+                    {ageRating}
+                    {' '}
+                    {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
+                    {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
+                  </div>
+                  <div id="genres">
+                    {genres[0]}
+                    {' '}
+                    *
+                    {' '}
+                    {genres[1]}
+                  </div>
+                </ItemDetails>
+              </ModalItem>
 
+            )}
+
+          </Transition>
         </Modal>
         )}
-      {/* {itemHoverActive
-      && (
-      <ItemDetails>
-        <div id="buttons">
-          <RoundPlayButton />
-          <Link
-            key={1}
-            to={{
-              pathname: '/browse/epsinfobox',
-              state: { background: location },
-            }}
-          >
-            <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
-              v
-            </RoundEpsAndInfoButton>
-          </Link>
-        </div>
-        <div id="media-info">
-          {ageRating}
-          {' '}
-          {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
-          {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
-        </div>
-        <div id="genres">
-          {genres[0]}
-          {' '}
-          *
-          {' '}
-          {genres[1]}
-        </div>
-      </ItemDetails>
-      )} */}
-      {/* <ItemDetails active={itemHoverActive}>
-        <div id="buttons">
-          <RoundPlayButton />
-          <Link
-            key={1}
-            to={{
-              pathname: '/browse/epsinfobox',
-              state: { background: location },
-            }}
-          >
-            <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
-              v
-            </RoundEpsAndInfoButton>
-          </Link>
-        </div>
-        <div id="media-info">
-          {ageRating}
-          {' '}
-          {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
-          {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
-        </div>
-        <div id="genres">
-          {genres[0]}
-          {' '}
-          *
-          {' '}
-          {genres[1]}
-        </div>
-      </ItemDetails> */}
     </ItemContainer>
 
   );

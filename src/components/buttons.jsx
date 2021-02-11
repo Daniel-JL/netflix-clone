@@ -9,10 +9,11 @@ const RectButton = styled.button`
   font-weight: 100;
   cursor: pointer;
   transition: transform 0.3s ease;
-  height: 50px;
-  width: 65px;
-  font-size: 11px;
+  height: 3vw;
+  // width: 65px;
+  font-size: 1vw;
   border: 1px solid black;
+  margin: 0.3vw;
 `;
 
 const RoundButton = styled.button`
@@ -31,18 +32,18 @@ const RoundButton = styled.button`
 
 export const RectPlayButton = styled(RectButton)`
   color: black;
-
+  background-color: rgba(255, 255, 255, 0.9);
   &:hover {
-    opacity: 0.7;
+    background-color: rgba(255, 255, 255, 0.7);
   }
 `;
 
 export const RectInfoButton = styled(RectButton)`
-  color: gray;
-  opacity: 0.7;
+  color: white;
+  background-color: rgba(128,128,128, 0.7);
 
   &:hover {
-    opacity: 0.4;
+    background-color: rgba(128,128,128, 0.4);
   };
 `;
 

@@ -58,8 +58,6 @@ export function MediaSlider(
         && (
         <SliderContainer>
           <Slider 
-            // nextArrow={<Arrow type="next" onClick={() => handleArrowClick}/>}
-            // prevArrow={<Arrow type="prev" onClick={handleArrowClick}/>}
             arrows={true}
             draggable={false}
             dots={false}
@@ -68,7 +66,7 @@ export function MediaSlider(
             slidesToScroll={6}
             slidesToShow={6} 
             className={'slides'}
-            centerMode={true}
+            centerMode={false}
             variableWidth={false}
             useTransform={true}
             lazyLoad={'ondemand'}
@@ -89,7 +87,6 @@ export function MediaSlider(
         } */}
             {
               [
-                // ...Array(maxIdsNeeded),
                 ...Array(maxIdsNeeded),
               ].map((value: undefined, index: number) => (
                 <SliderItemContainer 

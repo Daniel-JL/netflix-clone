@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, createContext } from 'react';
 import { SliderItem } from './slider-item';
 import { getMediaData } from '../../helpers/getMediaData';
 import { getAgeRating } from '../../helpers/getAgeRating';
+import mediaIsMovie from '../../helpers/mediaIsMovie';
 import { EpisodesAndInfoBoxContext } from '../context/episodes-and-info-box-context/episodes-and-info-box-context';
 
 export function SliderItemContainer({
@@ -15,7 +16,9 @@ export function SliderItemContainer({
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [itemHoverActive, setItemHoverActive] = useState(false);
+  const [itemHoverTransition, setItemHoverTransition] = useState(true);
   const [itemDimensions, setItemDimensions] = useState({});
+  const [mediaTitle, setMediaTitle] = useState();
   const posterPath = useRef('');
   const runtimeOrNumberOfSeasons = useRef('');
   const genres = useRef([]);
@@ -30,7 +33,12 @@ export function SliderItemContainer({
 
   const fetchItemData = async () => {
     const data = await getMediaData(mediaType, mediaId);
-    // console.log(data);
+    console.log(data);
+    if (data.title) {
+      setMediaTitle((mediaTitle) => data.title);
+    } else if (data.name) {
+      setMediaTitle((mediaTitle) => data.name);
+    }
     posterPath.current = `http://image.tmdb.org/t/p/w780${data.backdrop_path}`;
     genres.current = [
       ...Array(data.genres.length),
@@ -56,13 +64,18 @@ export function SliderItemContainer({
         top: rect.y + window.scrollY,
         width: rect.right - rect.left,
       }));
-
+      setItemHoverTransition(true);
       setItemHoverActive(true);
       changeRowZIndex(true);
     }
   };
 
   const handleMouseOut = () => {
+    console.log('mouse out');
+    setItemHoverTransition(false);
+  };
+
+  const handleModalDismount = () => {
     setItemHoverActive(false);
     changeRowZIndex(false);
   };
@@ -94,6 +107,9 @@ export function SliderItemContainer({
 
   return (
     <SliderItem
+      mediaTitle={mediaTitle}
+      mediaId={mediaId}
+      mediaType={mediaType}
       ageRating={ageRating.current}
       genres={genres.current}
       imgLoadedSuccess={imgLoadedSuccess}
@@ -102,8 +118,10 @@ export function SliderItemContainer({
       posterPath={posterPath.current}
       runtimeOrNumberOfSeasons={runtimeOrNumberOfSeasons.current}
       itemHoverActive={itemHoverActive}
+      itemHoverTransition={itemHoverTransition}
       handleMouseOver={handleMouseOver}
       handleMouseOut={handleMouseOut}
+      handleModalDismount={handleModalDismount}
       setImgLoadingErr={handleImgLoadingErr}
       setImgLoadSuccess={handleImgLoadedSuccess}
       handleEpsAndInfoButtonClick={handleEpsAndInfoButtonClick}
@@ -111,7 +129,5 @@ export function SliderItemContainer({
     />
   );
 }
-
-const mediaIsMovie = (mediaType) => mediaType === 'movie';
 
 const moreThanOneSeason = (numberOfSeasons) => numberOfSeasons > 1;
