@@ -33,7 +33,6 @@ export function SliderItemContainer({
 
   const fetchItemData = async () => {
     const data = await getMediaData(mediaType, mediaId);
-    console.log(data);
     if (data.title) {
       setMediaTitle((mediaTitle) => data.title);
     } else if (data.name) {
@@ -58,7 +57,6 @@ export function SliderItemContainer({
   const handleMouseOver = (itemContainerRef) => {
     if (imgLoadedSuccess) {
       let rect = itemContainerRef.getBoundingClientRect();
-      console.log(rect);
       setItemDimensions((itemDimensions) => ({
         left: rect.x,
         top: rect.y + window.scrollY,
@@ -71,7 +69,6 @@ export function SliderItemContainer({
   };
 
   const handleMouseOut = () => {
-    console.log('mouse out');
     setItemHoverTransition(false);
   };
 
@@ -129,5 +126,3 @@ export function SliderItemContainer({
     />
   );
 }
-
-const moreThanOneSeason = (numberOfSeasons) => numberOfSeasons > 1;

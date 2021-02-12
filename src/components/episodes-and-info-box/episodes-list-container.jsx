@@ -28,6 +28,9 @@ function EpisodesListContainer({
   const fetchAllSeasonData = async () => {
     const data = await getSeasonData(mediaId, numSeasons);
     console.log(data);
+    console.log(mediaId);
+    console.log(numSeasons);
+
 
     setIsLoading((isLoading) => true);
 

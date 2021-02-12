@@ -38,9 +38,8 @@ export function MediaSliderContainer(
       const data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded, mediaType);
     }
-    if (mediaIdsAndTypes.current.ids.length >= maxIdsNeeded) {
-      setDataLoaded(true);
-    }
+
+    setDataLoaded(true);
   };
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export function MediaSliderContainer(
         <MediaSlider
           setModalProps={setModalProps}
           dataLoaded={dataLoaded}
-          maxIdsNeeded={maxIdsNeeded}
+          numOfItems={mediaIdsAndTypes.current.ids.length}
           movieTvShowType={mediaIdsAndTypes.current.types}
           movieTvShowIds={mediaIdsAndTypes.current.ids}
           changeRowZIndex={changeRowZIndex}

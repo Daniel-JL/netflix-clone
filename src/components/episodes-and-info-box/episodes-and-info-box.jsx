@@ -8,7 +8,7 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { getMediaData } from '../../helpers/getMediaData';
 import { getAgeRating } from '../../helpers/getAgeRating';
 import mediaIsMovie from '../../helpers/mediaIsMovie';
-import { MotionBackground } from '../motion-background';
+import { MotionBackground } from '../motion-background/motion-background';
 import EpisodesListContainer from './episodes-list-container';
 import MoreLikeThisBoxContainer from './more-like-this-box-container';
 
@@ -59,9 +59,19 @@ export function EpisodesAndInfoBox({
   };
 
   const fetchMediaData = async () => {
+    let mediaIdUrl;
+    let mediaTypeUrl
     const currentUrl = history.location.pathname;
-    const mediaIdUrl = currentUrl.slice(25);
-    const mediaTypeUrl = currentUrl.slice(19, 24);
+    if (currentUrl.slice(8, 16) === 'genre/83') {
+      mediaIdUrl = currentUrl.slice(31);
+      mediaTypeUrl = currentUrl.slice(28, 30);
+    } else if (currentUrl.slice(8, 19) === 'genre/34399') {
+      mediaIdUrl = currentUrl.slice(37);
+      mediaTypeUrl = currentUrl.slice(31, 36);
+    } else {
+      mediaIdUrl = currentUrl.slice(25);
+      mediaTypeUrl = currentUrl.slice(19, 24);
+    }
 
     setMediaId((mediaId) => mediaIdUrl);
     setMediaType((mediaType) => mediaTypeUrl);
@@ -80,15 +90,16 @@ export function EpisodesAndInfoBox({
     const ageRatingData = await getAgeRating(mediaIdUrl, mediaTypeUrl);
 
     setAgeRating((ageRating) => ageRatingData);
+
     setDataLoaded(true);
   };
 
   useEffect(() => {
-    console.log(mediaId);
     if (mediaId === undefined) {
       fetchMediaData();
+    } else {
+      setDataLoaded(true);
     }
-    setDataLoaded(true);
   }, []);
 
   return (

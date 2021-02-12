@@ -33,7 +33,7 @@ export function MediaSlider(
   {
     setModalProps,
     dataLoaded,
-    maxIdsNeeded,
+    numOfItems,
     movieTvShowType,
     movieTvShowIds,
     changeRowZIndex,
@@ -87,7 +87,7 @@ export function MediaSlider(
         } */}
             {
               [
-                ...Array(maxIdsNeeded),
+                ...Array(numOfItems),
               ].map((value: undefined, index: number) => (
                 <SliderItemContainer 
                   data-index={index} 

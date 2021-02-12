@@ -12,7 +12,8 @@ const InfiniteScroll = ({
   const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
   const [element, setElement] = useState(null);
   // const [motionBackgroundRef, motionBackgroundRef] = useState(null);
-  const maxNumScrollLoads = genreTypeArr.length;
+  const numItemsPerScroll = 5;
+  const maxNumScrollLoads = Math.floor(genreTypeArr.length / numItemsPerScroll);
 
   let videoDiv = document.querySelector('#motion-background');
   const prevY = useRef(0);
@@ -63,17 +64,22 @@ const InfiniteScroll = ({
         {locoRow}
         { 
           [
-            ...Array(maxNumScrollLoads - 1),
+            ...Array(maxNumScrollLoads),
           ].map((value: undefined, index: number) => (
             scrollLimitReached + 1 > index && 
-            React.Children.map(locoRow, (child) => 
-              React.cloneElement(child, {
-                genreName:genreTypeArr[index].genre.name,
-                genreId:genreTypeArr[index].genre.id,
-                mediaType:genreTypeArr[index].mediaType,
-                numSlidersLoaded:index + 1,
-              })
-          )))
+            [
+              ...Array(numItemsPerScroll),
+            ].map((value: undefined, innerIndex) => (
+              React.Children.map(locoRow, (child) => 
+                React.cloneElement(child, {
+                  genreName:genreTypeArr[innerIndex + numItemsPerScroll*index].genre.name,
+                  genreId:genreTypeArr[innerIndex + numItemsPerScroll*index].genre.id,
+                  mediaType:genreTypeArr[innerIndex + numItemsPerScroll*index].mediaType,
+                  numSlidersLoaded:innerIndex + numItemsPerScroll*index + 1,
+                })
+              ) 
+            )
+            )))
         }
       </div>
       <div id="scrollPoint" ref={setElement} />

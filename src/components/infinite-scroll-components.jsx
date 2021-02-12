@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import getGenres from '../helpers/getGenres';
 import getMediaListByGenre from '../helpers/getMediaListByGenre';
 import shuffleArray from '../helpers/shuffleArray';
-import { MotionBackground } from './motion-background';
+import { MotionBackground } from './motion-background/motion-background';
 import { LocoRow } from './slider/loco-row';
 import { LolomoBigRow } from './slider/lolomo-big-row';
 

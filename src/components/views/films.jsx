@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import shuffleArray from '../../helpers/shuffleArray';
-import { MotionBackground } from '../motion-background';
+import { MotionBackground } from '../motion-background/motion-background';
 import { LocoRow } from '../slider/loco-row';
 import InfiniteScroll from '../infinite-scroll';
 
