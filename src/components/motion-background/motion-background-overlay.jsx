@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Link,
+  NavLink,
   useLocation,
 } from 'react-router-dom';
 import ReactPlayer from 'react-player';
@@ -21,8 +21,8 @@ const BillboardRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  padding-top: 40%;
-  z-index: 2;
+  padding-top: 30%;
+  z-index: 3;
   color: white;
 `;
 
@@ -76,12 +76,18 @@ const MotionBackgroundOverlay = ({
             {mediaTagline}
           </Tagline>
           <PlayAndInfoButtonsContainer>
-            <RectPlayButton>
+            <NavLink
+              key={1}
+              to="/watch"
+            >
+              <RectPlayButton>
               |> Play
-            </RectPlayButton>
+              </RectPlayButton>
+            </NavLink>
+            
             {!isEpsInfoBox && 
-              <Link
-                key={1}
+              <NavLink
+                key={2}
                 to={{
                   pathname: `${location.pathname}/epsinfobox/${mediaType}/${mediaId}`,
                   state: { background: location },
@@ -90,7 +96,7 @@ const MotionBackgroundOverlay = ({
                 <RectInfoButton onClick={handleInfoButtonClick}>
                   i More info
                 </RectInfoButton>
-              </Link>
+              </NavLink>
             }
             
           </PlayAndInfoButtonsContainer>

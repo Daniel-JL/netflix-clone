@@ -20,6 +20,7 @@ export function MediaSliderContainer(
     genreName,
     genreId,
     changeRowZIndex,
+    setImagesLoaded,
   },
 ) {
   const [paginationPage, setPaginationPage] = useState(0);
@@ -59,6 +60,9 @@ export function MediaSliderContainer(
           movieTvShowType={mediaIdsAndTypes.current.types}
           movieTvShowIds={mediaIdsAndTypes.current.ids}
           changeRowZIndex={changeRowZIndex}
+          setImagesLoaded={setImagesLoaded}
+          genreName={genreName}
+
         />
         )}
 

@@ -19,7 +19,7 @@ import { Latest } from './components/views/latest';
 import { MyList } from './components/views/my-list';
 import { Search } from './components/views/search';
 import { Kids } from './components/views/kids';
-import { VideoPlayer } from './components/views/video-player';
+import VideoPlayer from './components/views/video-player';
 import { NoMatch } from './components/views/no-match';
 import { Modal } from './components/modal';
 import { EpisodesAndInfoBox } from './components/episodes-and-info-box/episodes-and-info-box';
@@ -148,7 +148,7 @@ export const Routes = () => {
           <Route exact path="/browse/my-list" children={<MyList />} />
           <Route exact path="/search" children={<Search setModalProps={setModalProps} />} />
           <Route exact path="/Kids" children={<Kids />} />
-          <Route exact path="/watch/:videoId" children={<VideoPlayer />} />
+          <Route exact path="/watch" children={<VideoPlayer />} />
           <Route children={<NoMatch />} />
         </Switch>
         )}

@@ -1,16 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import ReactPlayer from 'react-player';
-import { useFetch } from '../../hooks/useFetch';
 import { getMediaData } from '../../helpers/getMediaData';
 import getVideos from '../../helpers/getVideos';
+import LoadingSkeleton from '../loading-skeleton';
 import MotionBackgroundMedia from './motion-background-media';
 import MotionBackgroundOverlay from './motion-background-overlay';
-import { 
-  RectPlayButton, 
-  RectInfoButton, 
-  RoundMuteButton 
+import {
+  RectPlayButton,
+  RectInfoButton,
+  RoundMuteButton,
 } from '../buttons';
 
 const MotionBackgroundContainer = styled.div`
@@ -97,7 +96,6 @@ export const MotionBackground = ({
 
   const handleInfoButtonClick = () => {
     setIsPlaying((isPlaying) => false);
-
   };
 
   const checkIfModalActive = () => {
@@ -140,31 +138,38 @@ export const MotionBackground = ({
 
   return (
     <MotionBackgroundContainer isEpsInfoBox={isEpsInfoBox}>
-      <MotionBackgroundMedia
-        isEpsInfoBox={isEpsInfoBox}
-        dataLoaded={dataLoaded}
-        backdropPath={backdropPath}
-        videoURL={videoURL}
-        vidExists={vidExists}
-        isPlaying={isPlaying}
-        muteActive={muteActive}
-        imgFadeOut={imgFadeOut}
-        imgFadeIn={imgFadeIn}
-        setPlayer={setPlayer}
-        handleVideoPlaying={handleVideoPlaying}
-        handleVideoEnded={handleVideoEnded}
-      />
-      <MotionBackgroundOverlay
-        mediaId={mediaId}
-        mediaType={mediaType}
-        mediaTitle={mediaTitle}
-        mediaTagline={mediaTagline}
-        ageRating={ageRating}
-        isEpsInfoBox={isEpsInfoBox}
-        handleMuteReplayButtonClick={handleMuteReplayButtonClick}
-        handleInfoButtonClick={handleInfoButtonClick}
-        setPausePoint={setPausePoint}
-      />
+      {!dataLoaded && !isEpsInfoBox
+        ? <LoadingSkeleton />
+        : (
+          <div>
+            <MotionBackgroundMedia
+              isEpsInfoBox={isEpsInfoBox}
+              dataLoaded={dataLoaded}
+              backdropPath={backdropPath}
+              videoURL={videoURL}
+              vidExists={vidExists}
+              isPlaying={isPlaying}
+              muteActive={muteActive}
+              imgFadeOut={imgFadeOut}
+              imgFadeIn={imgFadeIn}
+              setPlayer={setPlayer}
+              handleVideoPlaying={handleVideoPlaying}
+              handleVideoEnded={handleVideoEnded}
+            />
+            <MotionBackgroundOverlay
+              mediaId={mediaId}
+              mediaType={mediaType}
+              mediaTitle={mediaTitle}
+              mediaTagline={mediaTagline}
+              ageRating={ageRating}
+              isEpsInfoBox={isEpsInfoBox}
+              handleMuteReplayButtonClick={handleMuteReplayButtonClick}
+              handleInfoButtonClick={handleInfoButtonClick}
+              setPausePoint={setPausePoint}
+            />
+          </div>
+        )}
+
       <SpacingRow />
     </MotionBackgroundContainer>
   );

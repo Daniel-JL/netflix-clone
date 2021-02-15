@@ -12,6 +12,7 @@ const SliderContainer = styled.div`
   z-index: 2;
   max-width: 100%;
   width: 100%;
+  color: white;
 `;
 
 const ArrowButtonContainer = styled.div`
@@ -32,14 +33,16 @@ function Arrow({className, style, onClick}) {
 export function MediaSlider(
   {
     setModalProps,
+    genreName,
     dataLoaded,
     numOfItems,
     movieTvShowType,
     movieTvShowIds,
     changeRowZIndex,
+    setImagesLoaded,
   }
 ) {
-
+  const numItemsLoaded = useRef(0);
   const handleArrowClick = (direction) => {
     console.log('direction');
   }
@@ -50,6 +53,13 @@ export function MediaSlider(
 
   const previous = () => {
     this.slider.slickPrev();
+  };
+
+  const handleImageLoaded = () => {
+    numItemsLoaded.current += 1;
+    if (numItemsLoaded.current === 6) {
+      setImagesLoaded(true);
+    }
   };
 
   return (
@@ -70,6 +80,48 @@ export function MediaSlider(
             variableWidth={false}
             useTransform={true}
             lazyLoad={'ondemand'}
+            responsive={[
+              {
+                breakpoint: 1200,
+                settings: {
+                  slidesToShow: 5,
+                  slidesToScroll: 5,
+                  infinite: true,
+                  dots: true
+                }
+              },
+              {
+                breakpoint: 1000,
+                settings: {
+                  slidesToShow: 4,
+                  slidesToScroll: 4,
+                  initialSlide: 2
+                }
+              },
+              {
+                breakpoint: 800,
+                settings: {
+                  slidesToShow: 3,
+                  slidesToScroll: 3,
+                  initialSlide: 3
+                }
+              },
+              {
+                breakpoint: 600,
+                settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 2,
+                  initialSlide: 2
+                }
+              },
+              {
+                breakpoint: 400,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1
+                }
+              }
+            ]}
           >
             {/* { 
           [
@@ -96,6 +148,7 @@ export function MediaSlider(
                   mediaType={movieTvShowType[index]} 
                   mediaId={movieTvShowIds[index]} 
                   changeRowZIndex={changeRowZIndex}
+                  handleImageLoaded={handleImageLoaded}
                 />
               ))
             }

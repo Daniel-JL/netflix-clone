@@ -22,7 +22,7 @@ const Nav = styled.div`
   top: 0;
   width: 100%;
   padding-top: 10px;
-  z-index: 3;
+  z-index: 4;
 `;
 
 const NavLeft = styled.div`

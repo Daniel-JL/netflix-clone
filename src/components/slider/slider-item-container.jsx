@@ -11,6 +11,7 @@ export function SliderItemContainer({
   mediaType,
   mediaId,
   changeRowZIndex,
+  handleImageLoaded,
 }) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
@@ -83,6 +84,7 @@ export function SliderItemContainer({
 
   const handleImgLoadedSuccess = () => {
     setImgLoadedSuccess(true);
+    handleImageLoaded();
   };
 
   const handleEpsAndInfoButtonClick = () => {
