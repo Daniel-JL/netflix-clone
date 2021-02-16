@@ -63,12 +63,10 @@ export const InfiniteScrollComponents = (props) => {
     data = await getGenres('tv');
     setTvGenres((tvGenres) => data.genres);
 
-    console.log(data);
   };
 
   useEffect(() => {
     setScrollLimitReached(props.scrollLimitReached);
-    console.log(scrollLimitReached);
   }, [props.scrollLimitReached]);
   
   useEffect(() => {

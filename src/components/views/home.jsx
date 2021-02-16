@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import shuffleArray from '../../helpers/shuffleArray';
 import { MotionBackground } from '../motion-background/motion-background';
 import { LocoRow } from '../slider/loco-row';
+import LocoRowGroup from '../slider/loco-row-group';
 import InfiniteScroll from '../infinite-scroll';
 
 export const Home = ({
@@ -11,7 +12,6 @@ export const Home = ({
   movieGenres,
   tvGenres,
 }) => {
-  const [numSlidersLoaded, setNumSlidersLoaded] = useState(0);
   const [genreTypeArr, setGenreTypeArr] = useState('');
   const [genreTypeArrFilled, setGenreTypeArrFilled] = useState(false);
   // const motionBackgroundRef = useRef();
@@ -20,6 +20,9 @@ export const Home = ({
   const fillGenreTypeArr = () => {
     const genreTypeArrCopy = [];
     const longestArrLength = movieGenres.length > tvGenres.length ? movieGenres.length : tvGenres.length;
+
+    
+
     for (let i = 0; i < longestArrLength; i++) {
       genreTypeArrCopy.push(
         {
@@ -37,6 +40,15 @@ export const Home = ({
       }
     }
     const shuffledArray = shuffleArray(genreTypeArrCopy);
+    shuffledArray.unshift(
+      {
+        mediaType: trendingItemData.mediaType,
+        genre: {
+          id: trendingItemData.id,
+          name:'trending',
+        },
+      },
+    );
     setGenreTypeArr((genreTypeArr) => shuffledArray);
     setGenreTypeArrFilled(true);
   };
@@ -60,13 +72,9 @@ export const Home = ({
               isEpsInfoBox={false}
             />
           )}
-          locoRow={(
-            <LocoRow
+          locoRowGroup={(
+            <LocoRowGroup 
               setModalProps={setModalProps}
-              numSlidersLoaded={numSlidersLoaded}
-              mediaType="all"
-              genreName="trending"
-              genreId=""
             />
           )}
         />

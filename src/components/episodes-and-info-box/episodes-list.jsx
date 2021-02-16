@@ -10,6 +10,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   align-self: center;
+  justify-self: center;
 
 `;
 
@@ -19,6 +20,9 @@ const ListContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-self: center;
+  justify-self: center;
+
 `;
 
 const EpisodeDropDownContainer = styled.div`
@@ -79,14 +83,14 @@ function EpisodesList({
   }, [itemLimit]);
 
   useEffect(() => {
-    console.log(episodesListItemData);
+    // console.log(episodesListItemData);
   });
 
   return (
-    <Container>
+    <Container id="epslist-container">
       {dataLoaded
         && (
-        <ListContainer>
+        <ListContainer id="list-container">
           <EpisodeDropDownContainer>
             Episodes
             <EpisodeDropdown

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { RoundPlayButton } from '../buttons';
 
 const Container = styled.div`
   display: flex;
@@ -15,6 +16,45 @@ const ItemImage = styled.img`
   height: 100%;
 `;
 
+const ImageButtonContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const fadeIn = keyframes`
+  from {
+    // transform: scale(.25);
+    opacity: 0;
+  }
+
+  to {
+    // transform: scale(1);
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    // transform: scale(1);
+    opacity: 0;
+  }
+
+  to {
+    // transform: scale(.25);
+    opacity: 1;
+  }
+`;
+
+const PlayButton = styled(RoundPlayButton)`
+  // visibility: hidden;
+  background-color: black;
+  visibility: ${mouseOver => !mouseOver ? 'hidden' : 'visible'};
+  animation: ${mouseOver => mouseOver ? fadeOut : fadeIn} 1s linear;
+  transition: visibility 1s linear;
+  z-index: 2;
+
+`;
+
 const ItemDetails = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,9 +68,29 @@ function MoreLikeThisItem({
   imgSrc,
   mediaDetails,
 }) {
+  const [mouseOver, setMouseOver] = useState(false);
+
+  const handleMouseOver = () => {
+    console.log('mouseOver');
+    setMouseOver(true);
+  };
+
+  const handleMouseOut = () => {
+    console.log('mouseOut');
+
+    setMouseOver(false)
+  };
+
   return (
-    <Container>
-      <ItemImage src={imgSrc} />
+    <Container 
+      onMouseEnter={handleMouseOver}
+      onMouseLeave={handleMouseOut}
+
+    >
+      <ImageButtonContainer>
+        <ItemImage src={imgSrc} />
+        <PlayButton mouseOver={mouseOver} />
+      </ImageButtonContainer>
 
       <ItemDetails>
         <div>

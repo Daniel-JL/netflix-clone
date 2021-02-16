@@ -10,7 +10,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   align-self: center;
-  padding-top: 1vh;
+  justify-self: center;
+  padding-top: 0.6vw;
+  margin: auto;
+  
 `;
 
 function EpisodesListContainer({
@@ -196,7 +199,7 @@ function EpisodesListContainer({
   }, [alreadyLoaded]);
 
   return (
-    <Container>
+    <Container id="epslistcontainer">
       {dataLoaded
       && (
         <EpisodesList

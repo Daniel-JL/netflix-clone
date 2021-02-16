@@ -46,7 +46,7 @@ export const MotionBackground = ({
   const [imgFadeIn, setImgFadeIn] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [pausePoint, setPausePoint] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [muteActive, setMuteActive] = useState(true);
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');
@@ -100,6 +100,7 @@ export const MotionBackground = ({
 
   const checkIfModalActive = () => {
     const modalNode = document.getElementById('modal-root');
+    console.log(modalNode);
     setModal((modal) => modalNode);
   };
 
@@ -110,15 +111,20 @@ export const MotionBackground = ({
     fetchItemData();
   }, []);
 
-  useEffect(() => {
-    if (modal !== undefined) {
-      if (modal.hasChildNodes()) {
-        setIsPlaying((isPlaying) => false);
-      } else {
-        setIsPlaying((isPlaying) => true);
-      }
-    }
-  }, [modal]);
+  // useEffect(() => {
+  //   console.log('modal activated');
+  //   console.log(isEpsInfoBox);
+  //   console.log(modal);
+
+  //   if (modal !== undefined) {
+  //     console.log(modal);
+  //     if (modal.hasChildNodes()) {
+  //       setIsPlaying((isPlaying) => false);
+  //     } else {
+  //       setIsPlaying((isPlaying) => true);
+  //     }
+  //   }
+  // }, [modal]);
 
   useEffect(() => {
     if (pausePoint !== null) {

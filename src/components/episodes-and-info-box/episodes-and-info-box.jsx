@@ -18,6 +18,7 @@ const EpisodesAndInfoBoxContainer = styled.div`
   flex-direction: column;
   // align-self: center;
   // justify-content: center;
+  // align-content: center;
   // align-items: center;
   // margin: auto;
   width: 50%;
@@ -46,8 +47,6 @@ export function EpisodesAndInfoBox({
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const history = useHistory();
-  console.log(history);
-
   const ref = useRef();
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
@@ -60,7 +59,7 @@ export function EpisodesAndInfoBox({
 
   const fetchMediaData = async () => {
     let mediaIdUrl;
-    let mediaTypeUrl
+    let mediaTypeUrl;
     const currentUrl = history.location.pathname;
     if (currentUrl.slice(8, 16) === 'genre/83') {
       mediaIdUrl = currentUrl.slice(31);
@@ -68,15 +67,19 @@ export function EpisodesAndInfoBox({
     } else if (currentUrl.slice(8, 19) === 'genre/34399') {
       mediaIdUrl = currentUrl.slice(37);
       mediaTypeUrl = currentUrl.slice(31, 36);
-    } else {
+    } else if (currentUrl.slice(19, 24) === 'movie') {
       mediaIdUrl = currentUrl.slice(25);
       mediaTypeUrl = currentUrl.slice(19, 24);
+    } else {
+      mediaIdUrl = currentUrl.slice(22);
+      mediaTypeUrl = currentUrl.slice(19, 21);
     }
 
     setMediaId((mediaId) => mediaIdUrl);
     setMediaType((mediaType) => mediaTypeUrl);
 
     const data = await getMediaData(mediaTypeUrl, mediaIdUrl);
+
     setPosterPath((posterPath) => `http://image.tmdb.org/t/p/w780${data.backdrop_path}`);
     setGenres((genres) => [
       ...Array(data.genres.length),

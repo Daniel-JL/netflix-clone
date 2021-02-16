@@ -4,13 +4,14 @@ import { InfiniteScrollComponents } from './infinite-scroll-components';
 
 const InfiniteScroll = ({
   motionBackground,
-  locoRow,
+  locoRowGroup,
   genreTypeArr,
 }) => {
   const scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
   const [element, setElement] = useState(null);
+  const scrollPointRef = useRef();
   // const [motionBackgroundRef, motionBackgroundRef] = useState(null);
   const numItemsPerScroll = 5;
   const maxNumScrollLoads = Math.floor(genreTypeArr.length / numItemsPerScroll);
@@ -29,7 +30,7 @@ const InfiniteScroll = ({
 
         prevY.current = y;
       },
-      { threshold: 0.5 },
+      { threshold: 0.4 },
     ),
   );
 
@@ -61,28 +62,32 @@ const InfiniteScroll = ({
     <div>
       <div>
         {motionBackground}
-        {locoRow}
-        { 
-          [
-            ...Array(maxNumScrollLoads),
-          ].map((value: undefined, index: number) => (
-            scrollLimitReached + 1 > index && 
+          { 
             [
-              ...Array(numItemsPerScroll),
-            ].map((value: undefined, innerIndex) => (
-              React.Children.map(locoRow, (child) => 
-                React.cloneElement(child, {
-                  genreName:genreTypeArr[innerIndex + numItemsPerScroll*index].genre.name,
-                  genreId:genreTypeArr[innerIndex + numItemsPerScroll*index].genre.id,
-                  mediaType:genreTypeArr[innerIndex + numItemsPerScroll*index].mediaType,
-                  numSlidersLoaded:innerIndex + numItemsPerScroll*index + 1,
-                })
-              ) 
-            )
-            )))
-        }
+              ...Array(maxNumScrollLoads),
+            ].map((value: undefined, index: number) => (
+              scrollLimitReached + 1 > index && (
+                <div ref={setElement}>
+                  {
+                     React.Children.map(locoRowGroup, (child) => 
+                      React.cloneElement(child, {
+                        key: index,
+                        genreTypeArr: genreTypeArr.slice(index*numItemsPerScroll, index*numItemsPerScroll + numItemsPerScroll),
+                        numItems: numItemsPerScroll,
+                        numSlidersLoaded: numItemsPerScroll*index + 1,
+                      })
+                    ) 
+                  }
+                 
+              </div>
+              )
+              
+              ))
+          }
+        
       </div>
-      <div id="scrollPoint" ref={setElement} />
+      {/* <div id="scrollPoint" ref={scrollPointRef} /> */}
+
     </div>
   );
 };

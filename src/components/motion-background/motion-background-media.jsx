@@ -58,7 +58,6 @@ const MotionBackgroundMedia = ({
   handleVideoPlaying,
   handleVideoEnded,
 }) => {
-  console.log(isPlaying);
   return (
     <MotionBackgroundMediaContainer
       id="media-container"
@@ -77,7 +76,7 @@ const MotionBackgroundMedia = ({
                 <BillboardVideo>
                   <ReactPlayer
                     ref={setPlayer}
-                    className="videoFrame"
+                    // className="videoFrame"
                     url={videoURL}
                     playing={isPlaying}
                     controls={false}
@@ -85,6 +84,10 @@ const MotionBackgroundMedia = ({
                     muted={muteActive}
                     onStart={() => handleVideoPlaying()}
                     onProgress={(played) => {
+                      if (imgFadeOut !== true) {
+                        handleVideoPlaying();
+                      }
+
                       if (played.played >= 0.94) {
                         handleVideoEnded();
                       }

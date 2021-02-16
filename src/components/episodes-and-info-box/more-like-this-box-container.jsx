@@ -11,6 +11,7 @@ const Container = styled.div`
   align-items: center;
   align-self: center;
   padding-top: 1vh;
+  margin: auto;
 `;
 
 function MoreLikeThisBoxContainer({
@@ -27,7 +28,6 @@ function MoreLikeThisBoxContainer({
 
   const fetchSimilarContentData = async () => {
     const data = await getSimilar(mediaType, mediaId);
-    console.log(data);
     setIsLoading((isLoading) => true);
 
     handleMediaDetails(data);
