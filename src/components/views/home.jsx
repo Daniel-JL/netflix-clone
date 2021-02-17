@@ -1,12 +1,16 @@
-/* eslint-disable import/prefer-default-export */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import shuffleArray from '../../helpers/shuffleArray';
 import { MotionBackground } from '../motion-background/motion-background';
-import { LocoRow } from '../slider/loco-row';
 import LocoRowGroup from '../slider/loco-row-group';
 import InfiniteScroll from '../infinite-scroll';
 
-export const Home = ({
+const HomeContainer = styled.div`
+  background-color: black;
+  z-index: -2;
+`;
+
+const Home = ({
   setModalProps,
   trendingItemData,
   movieGenres,
@@ -14,14 +18,11 @@ export const Home = ({
 }) => {
   const [genreTypeArr, setGenreTypeArr] = useState('');
   const [genreTypeArrFilled, setGenreTypeArrFilled] = useState(false);
-  // const motionBackgroundRef = useRef();
   const maxNumScrollLoads = 5;
 
   const fillGenreTypeArr = () => {
     const genreTypeArrCopy = [];
     const longestArrLength = movieGenres.length > tvGenres.length ? movieGenres.length : tvGenres.length;
-
-    
 
     for (let i = 0; i < longestArrLength; i++) {
       genreTypeArrCopy.push(
@@ -40,6 +41,8 @@ export const Home = ({
       }
     }
     const shuffledArray = shuffleArray(genreTypeArrCopy);
+
+    //Always have trending items slider as first to load
     shuffledArray.unshift(
       {
         mediaType: trendingItemData.mediaType,
@@ -58,7 +61,7 @@ export const Home = ({
   }, []);
 
   return (
-    <div style={{ backgroundColor: 'black', zIndex: -2 }}>
+    <HomeContainer>
       {genreTypeArrFilled
         && (
         <InfiniteScroll
@@ -73,12 +76,14 @@ export const Home = ({
             />
           )}
           locoRowGroup={(
-            <LocoRowGroup 
+            <LocoRowGroup
               setModalProps={setModalProps}
             />
           )}
         />
         )}
-    </div>
+    </HomeContainer>
   );
 };
+
+export default Home;

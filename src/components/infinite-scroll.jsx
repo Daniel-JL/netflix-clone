@@ -1,6 +1,4 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
-import { InfiniteScrollComponents } from './infinite-scroll-components';
 
 const InfiniteScroll = ({
   motionBackground,
@@ -10,13 +8,10 @@ const InfiniteScroll = ({
   const scrollGroupActive = useRef(0);
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
-  const [element, setElement] = useState(null);
-  const scrollPointRef = useRef();
-  // const [motionBackgroundRef, motionBackgroundRef] = useState(null);
+  const [infiniteScrollLoadPoint, setInfiniteScrollLoadPoint] = useState(null);
   const numItemsPerScroll = 5;
   const maxNumScrollLoads = Math.floor(genreTypeArr.length / numItemsPerScroll);
 
-  let videoDiv = document.querySelector('#motion-background');
   const prevY = useRef(0);
   const observer = useRef(
     new IntersectionObserver(
@@ -40,7 +35,7 @@ const InfiniteScroll = ({
   };
 
   useEffect(() => {
-    const currentElement = element;
+    const currentElement = infiniteScrollLoadPoint;
     const currentObserver = observer.current;
 
     if (currentElement) {
@@ -52,7 +47,7 @@ const InfiniteScroll = ({
         currentObserver.unobserve(currentElement);
       }
     };
-  }, [element]);
+  }, [infiniteScrollLoadPoint]);
 
   useEffect(() => {
     setScrollLimitReached(scrollGroupActive.current);
@@ -60,34 +55,27 @@ const InfiniteScroll = ({
 
   return (
     <div>
-      <div>
-        {motionBackground}
-          { 
-            [
-              ...Array(maxNumScrollLoads),
-            ].map((value: undefined, index: number) => (
-              scrollLimitReached + 1 > index && (
-                <div ref={setElement}>
-                  {
-                     React.Children.map(locoRowGroup, (child) => 
-                      React.cloneElement(child, {
-                        key: index,
-                        genreTypeArr: genreTypeArr.slice(index*numItemsPerScroll, index*numItemsPerScroll + numItemsPerScroll),
-                        numItems: numItemsPerScroll,
-                        numSlidersLoaded: numItemsPerScroll*index + 1,
-                      })
-                    ) 
-                  }
-                 
-              </div>
-              )
-              
-              ))
-          }
-        
-      </div>
-      {/* <div id="scrollPoint" ref={scrollPointRef} /> */}
-
+      {motionBackground}
+        { 
+          [
+            ...Array(maxNumScrollLoads),
+          ].map((value: undefined, index: number) => (
+            scrollLimitReached + 1 > index && (
+              <div ref={setInfiniteScrollLoadPoint}>
+                {
+                    React.Children.map(locoRowGroup, (child) => 
+                    React.cloneElement(child, {
+                      key: index,
+                      genreTypeArr: genreTypeArr.slice(index*numItemsPerScroll, index*numItemsPerScroll + numItemsPerScroll),
+                      numItems: numItemsPerScroll,
+                      numSlidersLoaded: numItemsPerScroll*index + 1,
+                    })
+                  ) 
+                }
+            </div>
+            )
+          ))
+        }
     </div>
   );
 };

@@ -74,10 +74,15 @@ export function SliderItem({
   handleEpsAndInfoButtonClick,
   itemDimensions,
 }) {
+  const divRef = useRef();
   const location = useLocation();
   const [itemContainerRef, setItemContainerRef] = useState();
 
   const duration = 200;
+
+  if (itemHoverActive && divRef.current && divRef.current.matches(':hover') === false) {
+    handleMouseOut();
+  }
 
   const defaultStyle = {
     transition: `all ${duration}ms ease-in-out`,
@@ -85,9 +90,8 @@ export function SliderItem({
     position: 'absolute',
     display: 'flex',
     flexDirection: 'column',
-
-    left: `${itemDimensions.left}px`,
-    top: `${itemDimensions.top}px`,
+    left: '0px',
+    top: '0px',
     width: `${itemDimensions.width}px`,
   };
 
@@ -129,7 +133,15 @@ export function SliderItem({
 
       {itemHoverActive
         && (
-        <Modal id="slider-item-modal">
+        <Modal 
+          id="slider-item-modal"
+          height={itemDimensions.height}
+          width={itemDimensions.width}
+          left={itemDimensions.left}
+          top={itemDimensions.top}
+          bottom={itemDimensions.bottom}
+          right={itemDimensions.right}
+        >
           <Transition
             appear
             in={itemHoverTransition}
@@ -147,6 +159,7 @@ export function SliderItem({
                 coordsTop={itemDimensions.top}
                 itemWidth={itemDimensions.width}
                 onMouseLeave={() => handleMouseOut()}
+                ref={divRef}
               >
                 <ImgTitleContainer>
                   <MediaTitle>

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import {
+  Link,
+} from 'react-router-dom';
 
 const ItemContainer = styled.div`
   width: 100%;
@@ -49,35 +52,42 @@ function EpisodesListItem({
 }) {
 
   return (
-    <ItemContainer id="episodes-list-item">
-      {episodeNumber}
-      {!imgLoadingErr
-      && (
-        <ImgContainer>
-          <EpisodeImage
-            alt="Slider image"
-            src={imagePath}
-            onError={() => handleImgLoadingErr()}
-            onLoad={
-              () => handleImgLoadedSuccess()
-            }
-          />
-        </ImgContainer>
-      )}
-      <EpisodeDetailsContainer>
-        <EpisodeTitleRuntimeContainer>
-          <div>
-            {episodeName}
-          </div>
-          <div>
-            23m
-          </div>
-        </EpisodeTitleRuntimeContainer>
-        <EpisodeDescriptionContainer>
-          {episodeDescription}
-        </EpisodeDescriptionContainer>
-      </EpisodeDetailsContainer>
-    </ItemContainer>
+    <Link
+      key={1}
+      to="/watch"
+      style={{ color: 'inherit', textDecoration: 'inherit'}}
+    >
+      <ItemContainer id="episodes-list-item">
+        {episodeNumber}
+        {!imgLoadingErr
+        && (
+          <ImgContainer>
+            <EpisodeImage
+              alt="Slider image"
+              src={imagePath}
+              onError={() => handleImgLoadingErr()}
+              onLoad={
+                () => handleImgLoadedSuccess()
+              }
+            />
+          </ImgContainer>
+        )}
+        <EpisodeDetailsContainer>
+          <EpisodeTitleRuntimeContainer>
+            <div>
+              {episodeName}
+            </div>
+            <div>
+              23m
+            </div>
+          </EpisodeTitleRuntimeContainer>
+          <EpisodeDescriptionContainer>
+            {episodeDescription}
+          </EpisodeDescriptionContainer>
+        </EpisodeDetailsContainer>
+      </ItemContainer>
+    </Link>
+    
   );
 }
 

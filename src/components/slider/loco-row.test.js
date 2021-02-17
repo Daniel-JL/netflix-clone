@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import { LocoRow } from './loco-row';
+import LocoRow from './loco-row';
 
 describe('Loco row component', () => {
   it('renders correctly', () => {

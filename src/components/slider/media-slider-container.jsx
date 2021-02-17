@@ -23,9 +23,6 @@ export function MediaSliderContainer(
     setImagesLoaded,
   },
 ) {
-  const [paginationPage, setPaginationPage] = useState(0);
-  const [buttonHasBeenPressed, setButtonHasBeenPressed] = useState(false);
-  const [numOfVisibleSliderItems, setNumOfVisibleSliderItems] = useState(6);
   const [dataLoaded, setDataLoaded] = useState(false);
   const maxIdsNeeded = 42;
   const mediaIdsAndTypes = useRef({});
@@ -36,7 +33,7 @@ export function MediaSliderContainer(
       data = await getTrendingMediaIdsAndTypes(maxIdsNeeded, numSlidersLoaded, mediaType);
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded);
     } else {
-      const data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
+      data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded, mediaType);
     }
 
@@ -62,7 +59,6 @@ export function MediaSliderContainer(
           changeRowZIndex={changeRowZIndex}
           setImagesLoaded={setImagesLoaded}
           genreName={genreName}
-
         />
         )}
 

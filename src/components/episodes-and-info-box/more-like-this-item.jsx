@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
+import {
+  Link,
+} from 'react-router-dom';
+import { Transition } from 'react-transition-group';
 import { RoundPlayButton } from '../buttons';
 
 const Container = styled.div`
+  // position: static;
   display: flex;
   width: 90%;
+  height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -13,55 +19,46 @@ const Container = styled.div`
 
 const ItemImage = styled.img`
   width: 100%;
+  // height: 100%;
+  // position: absolute;
+  
+`;
+
+const ImageContainer = styled.div`
+  width: 100%;
   height: 100%;
+  // position: absolute;
 `;
 
 const ImageButtonContainer = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
 `;
 
-const fadeIn = keyframes`
-  from {
-    // transform: scale(.25);
-    opacity: 0;
-  }
-
-  to {
-    // transform: scale(1);
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  from {
-    // transform: scale(1);
-    opacity: 0;
-  }
-
-  to {
-    // transform: scale(.25);
-    opacity: 1;
-  }
-`;
-
 const PlayButton = styled(RoundPlayButton)`
+  position: absolute;
   // visibility: hidden;
-  background-color: black;
-  visibility: ${mouseOver => !mouseOver ? 'hidden' : 'visible'};
-  animation: ${mouseOver => mouseOver ? fadeOut : fadeIn} 1s linear;
-  transition: visibility 1s linear;
-  z-index: 2;
-
+  background:rgba(255,255,255, 0.3);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ItemDetails = styled.div`
   display: flex;
+  display: relative;
   flex-direction: column;
   background-color: gray;
-  display: flex;
-  flex-direction: column;
   font-size: 70%;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+
+  &:focus, &:hover, &:visited, &:link, &:active {
+      text-decoration: none;
+  }
 `;
 
 function MoreLikeThisItem({
@@ -70,37 +67,76 @@ function MoreLikeThisItem({
 }) {
   const [mouseOver, setMouseOver] = useState(false);
 
+  const duration = 300;
+
+  const defaultStyle = {
+    transition: `all ${duration}ms ease-in-out`,
+    opacity: 0,
+    // position: 'absolute',
+
+  };
+
+  const transitionStyles = {
+    entering: {},
+    entered: {
+      opacity: 1,
+    },
+    exiting: {},
+    exited: {},
+  };
+
   const handleMouseOver = () => {
-    console.log('mouseOver');
     setMouseOver(true);
   };
 
   const handleMouseOut = () => {
-    console.log('mouseOut');
-
-    setMouseOver(false)
+    setMouseOver(false);
   };
 
   return (
-    <Container 
-      onMouseEnter={handleMouseOver}
-      onMouseLeave={handleMouseOut}
-
+    <Link
+      key={1}
+      to="/watch"
+      style={{ color: 'inherit', textDecoration: 'inherit'}}
     >
-      <ImageButtonContainer>
-        <ItemImage src={imgSrc} />
-        <PlayButton mouseOver={mouseOver} />
-      </ImageButtonContainer>
+      <Container
+        onMouseEnter={handleMouseOver}
+        onMouseLeave={handleMouseOut}
 
-      <ItemDetails>
-        <div>
-          {mediaDetails.name}
-        </div>
-        <div>
-          {mediaDetails.overview}
-        </div>
-      </ItemDetails>
-    </Container>
+      >
+        <ImageButtonContainer id="ImgButtonContainer">
+          <Transition
+            appear
+            in={mouseOver}
+            timeout={100}
+          >
+            {(state) => (
+              <PlayButton
+                style={{
+                  ...defaultStyle,
+                  ...transitionStyles[state],
+                }}
+              >
+                |>
+              </PlayButton>
+            )}
+          </Transition>
+          <ImageContainer>
+            <ItemImage src={imgSrc} />
+          </ImageContainer>
+        </ImageButtonContainer>
+        <ItemDetails>
+          <div>
+            {mediaDetails.name}
+          </div>
+          <div  >
+            {mediaDetails.overview}
+          </div>
+        </ItemDetails>
+
+      </Container>      
+    </Link>
+    
   );
 }
 

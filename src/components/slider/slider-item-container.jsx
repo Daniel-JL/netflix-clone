@@ -56,12 +56,16 @@ export function SliderItemContainer({
   };
 
   const handleMouseOver = (itemContainerRef) => {
+    console.log('mouseOver');
     if (imgLoadedSuccess) {
       let rect = itemContainerRef.getBoundingClientRect();
       setItemDimensions((itemDimensions) => ({
         left: rect.x,
         top: rect.y + window.scrollY,
+        bottom: rect.bottom,
+        right: rect.right,
         width: rect.right - rect.left,
+        height: rect.bottom - rect.top,
       }));
       setItemHoverTransition(true);
       setItemHoverActive(true);
@@ -70,7 +74,11 @@ export function SliderItemContainer({
   };
 
   const handleMouseOut = () => {
+    // const body = document.getElementById('react-root');
+    // body.focus();
+    console.log('mouseOut')
     setItemHoverTransition(false);
+
   };
 
   const handleModalDismount = () => {

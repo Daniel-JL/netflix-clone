@@ -2,14 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
-import { useFetch } from '../../hooks/useFetch';
-import { getMediaData } from '../../helpers/getMediaData';
-import getVideos from '../../helpers/getVideos';
-import {
-  RectPlayButton,
-  RectInfoButton,
-  RoundMuteButton,
-} from '../buttons';
 
 const BillboardImage = styled.img`
   position: absolute;
@@ -58,6 +50,8 @@ const MotionBackgroundMedia = ({
   handleVideoPlaying,
   handleVideoEnded,
 }) => {
+  console.log(isPlaying);
+
   return (
     <MotionBackgroundMediaContainer
       id="media-container"
@@ -76,7 +70,6 @@ const MotionBackgroundMedia = ({
                 <BillboardVideo>
                   <ReactPlayer
                     ref={setPlayer}
-                    // className="videoFrame"
                     url={videoURL}
                     playing={isPlaying}
                     controls={false}
@@ -110,7 +103,6 @@ const MotionBackgroundMedia = ({
                   />
                 </BillboardVideo>
               )}
-
             </div>
           )}
     </MotionBackgroundMediaContainer>

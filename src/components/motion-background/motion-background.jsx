@@ -6,11 +6,6 @@ import getVideos from '../../helpers/getVideos';
 import LoadingSkeleton from '../loading-skeleton';
 import MotionBackgroundMedia from './motion-background-media';
 import MotionBackgroundOverlay from './motion-background-overlay';
-import {
-  RectPlayButton,
-  RectInfoButton,
-  RoundMuteButton,
-} from '../buttons';
 
 const MotionBackgroundContainer = styled.div`
   width: 100%;
@@ -33,6 +28,22 @@ const SpacingRow = styled.div`
   color: white;
 `;
 
+const videosAvailable = (numVideos) => {
+  return numVideos > 0;
+};
+
+const videoHasEnded = (videoEnded) => {
+  return videoEnded === false;
+};
+
+const pausePointExists = (pausePoint) => {
+  return pausePoint !== null;
+};
+
+const videoIsOffScreen = (intersectionRatio, intersectionThreshold) => {
+  return intersectionRatio <= intersectionThreshold;
+};
+
 export const MotionBackground = ({
   mediaType,
   mediaId,
@@ -46,26 +57,25 @@ export const MotionBackground = ({
   const [imgFadeIn, setImgFadeIn] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [pausePoint, setPausePoint] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState();
   const [muteActive, setMuteActive] = useState(true);
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');
   const [player, setPlayer] = useState();
   const [modal, setModal] = useState();
   const videoEnded = useRef(false);
+  const intersectionThreshold = 0.2;
 
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
+
     setBackdropPath((backdropPath) => `https://image.tmdb.org/t/p/original${data.backdrop_path}`);
-    if (data.title) {
-      setMediaTitle((mediaTitle) => data.title);
-    } else if (data.name) {
-      setMediaTitle((mediaTitle) => data.name);
-    }
+    setMediaTitle((mediaTitle) => (data.title ? data.title : data.name));
     setMediaTagline((mediaTagline) => data.tagline);
 
     data = await getVideos(mediaType, mediaId);
-    if (data.results.length > 0) {
+
+    if (videosAvailable(data.results.length)) {
       setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
       setVidExists(true);
     }
@@ -83,7 +93,7 @@ export const MotionBackground = ({
   };
 
   const handleMuteReplayButtonClick = () => {
-    if (videoEnded.current === false) {
+    if (videoHasEnded(videoEnded.current)) {
       setMuteActive((muteActive) => !muteActive);
     } else {
       videoEnded.current = false;
@@ -100,7 +110,6 @@ export const MotionBackground = ({
 
   const checkIfModalActive = () => {
     const modalNode = document.getElementById('modal-root');
-    console.log(modalNode);
     setModal((modal) => modalNode);
   };
 
@@ -111,33 +120,27 @@ export const MotionBackground = ({
     fetchItemData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log('modal activated');
-  //   console.log(isEpsInfoBox);
-  //   console.log(modal);
-
-  //   if (modal !== undefined) {
-  //     console.log(modal);
-  //     if (modal.hasChildNodes()) {
-  //       setIsPlaying((isPlaying) => false);
-  //     } else {
-  //       setIsPlaying((isPlaying) => true);
-  //     }
-  //   }
-  // }, [modal]);
+  useEffect(() => {
+    if (modal !== undefined) {
+      if (modal.hasChildNodes()) {
+        setIsPlaying((isPlaying) => false);
+      } else {
+        setIsPlaying((isPlaying) => true);
+      }
+    }
+  }, [modal]);
 
   useEffect(() => {
-    if (pausePoint !== null) {
+    if (pausePointExists(pausePoint)) {
       const videoObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
-          console.log(entry.intersectionRatio);
-          if (entry.intersectionRatio <= 0.2 && isPlaying) {
+          if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying) {
             setIsPlaying(false);
-          } else if (entry.intersectionRatio > 0.2 && !videoEnded.current && (modal === undefined || !modal.hasChildNodes())) {
+          } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && (modal === undefined || !modal.hasChildNodes())) {
             setIsPlaying(true);
           }
         });
-      }, { threshold: 0.2 });
+      }, { threshold: intersectionThreshold });
       videoObserver.observe(pausePoint);
     }
   }, [pausePoint]);

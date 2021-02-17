@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
-import { LocoRow } from '../slider/loco-row';
+import LocoRow from '../slider/loco-row';
 import InfiniteScroll from '../infinite-scroll';
 
 export const Search = (props) => {

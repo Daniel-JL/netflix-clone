@@ -5,10 +5,6 @@ import {
   NavLink,
   useLocation,
 } from 'react-router-dom';
-import ReactPlayer from 'react-player';
-import { useFetch } from '../../hooks/useFetch';
-import { getMediaData } from '../../helpers/getMediaData';
-import getVideos from '../../helpers/getVideos';
 import { 
   RectPlayButton, 
   RectInfoButton, 
@@ -26,7 +22,7 @@ const BillboardRow = styled.div`
   color: white;
 `;
 
-const MediaTitleAndTagline = styled.div`
+const InfoAndButtons = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 3vw;
@@ -68,7 +64,7 @@ const MotionBackgroundOverlay = ({
         isEpsInfoBox={isEpsInfoBox}
         ref={setPausePoint}
       >
-        <MediaTitleAndTagline>
+        <InfoAndButtons>
           <MediaTitle>
             {mediaTitle}
           </MediaTitle>
@@ -98,14 +94,12 @@ const MotionBackgroundOverlay = ({
                 </RectInfoButton>
               </NavLink>
             }
-            
           </PlayAndInfoButtonsContainer>
-        </MediaTitleAndTagline>
+        </InfoAndButtons>
         <AgeRatingAndControl>
           <RoundMuteButton onClick={handleMuteReplayButtonClick} />
           {ageRating}
         </AgeRatingAndControl>
-
       </BillboardRow>
   );
 };

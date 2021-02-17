@@ -1,5 +1,5 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import {
   Route,
   Switch,
@@ -12,7 +12,7 @@ import { getAgeRating } from './helpers/getAgeRating';
 import processIdsAndTypes from './helpers/processIdsAndTypes';
 import { Header } from './components/header';
 import { Footer } from './components/footer';
-import { Home } from './components/views/home';
+import Home from './components/views/home';
 import { Series } from './components/views/series';
 import { Films } from './components/views/films';
 import { Latest } from './components/views/latest';
@@ -24,7 +24,11 @@ import { NoMatch } from './components/views/no-match';
 import { Modal } from './components/modal';
 import { EpisodesAndInfoBox } from './components/episodes-and-info-box/episodes-and-info-box';
 
-export const Routes = () => {
+const PortalContainer = styled.div`
+  z-index: 3;
+`;
+
+const Routes = () => {
   const [epsAndInfoBoxProps, setEpsAndInfoBoxProps] = useState({});
   const location = useLocation();
   const background = location.state && location.state.background;
@@ -32,7 +36,6 @@ export const Routes = () => {
   const [trendingMovieData, setTrendingMovieData] = useState();
   const [trendingSeriesData, setTrendingSeriesData] = useState();
   const [trendingItemData, setTrendingItemData] = useState();
-  const [trendingItemAgeRating, setTrendingItemAgeRating] = useState();
   const [movieGenres, setMovieGenres] = useState();
   const [tvGenres, setTvGenres] = useState();
 
@@ -54,33 +57,8 @@ export const Routes = () => {
     }));
   };
 
-  const fetchTrendingItemsAndGenreData = async () => {
-    let data = await getTrendingMediaIdsAndTypes(1, 0, 'movie');
-    data = processIdsAndTypes(data);
-    const trendingMovieDataCopy = {
-      id: data.ids[0],
-      mediaType: 'movie',
-    };
-    let ageRating = await getAgeRating(trendingMovieDataCopy.id, trendingMovieDataCopy.mediaType);
-    trendingMovieDataCopy.ageRating = ageRating;
-
-    setTrendingMovieData((trendingMovieData) => trendingMovieDataCopy);
-
-    data = await getTrendingMediaIdsAndTypes(1, 0, 'tv');
-    data = processIdsAndTypes(data);
-    const trendingSeriesDataCopy = {
-      id: data.ids[0],
-      mediaType: 'tv',
-    };
-    ageRating = await getAgeRating(trendingSeriesDataCopy.id, trendingSeriesDataCopy.mediaType);
-    trendingSeriesDataCopy.ageRating = ageRating;
-
-    setTrendingSeriesData((trendingSeriesData) => trendingSeriesDataCopy);
-
-    const trendingItem = Math.random() < 0.5 ? trendingMovieDataCopy : trendingSeriesDataCopy;
-    setTrendingItemData((trendingItemData) => (trendingItem));
-
-    data = await getGenres('movie');
+  const fetchGenreData = async () => {
+    let data = await getGenres('movie');
     setMovieGenres((movieGenres) => data.genres);
 
     data = await getGenres('tv');
@@ -88,8 +66,38 @@ export const Routes = () => {
     setDataLoaded(true);
   };
 
+  const processTrendingMediaData = async (mediaType) => {
+    const numIdsNeeded = 1;
+    const startingPage = 0;
+
+    let data = await getTrendingMediaIdsAndTypes(numIdsNeeded, startingPage, mediaType);
+    data = processIdsAndTypes(data);
+
+    const trendingMediaData = {
+      id: data.ids[0],
+      mediaType,
+    };
+    const ageRating = await getAgeRating(trendingMediaData.id, trendingMediaData.mediaType);
+    trendingMediaData.ageRating = ageRating;
+
+    return trendingMediaData;
+  };
+
+  const fetchData = async () => {
+    const movieData = await processTrendingMediaData('movie');
+    setTrendingMovieData((trendingMovieData) => movieData);
+
+    const seriesData = await processTrendingMediaData('tv');
+    setTrendingSeriesData((trendingSeriesData) => seriesData);
+
+    const trendingItem = Math.random() < 0.5 ? movieData : seriesData;
+    setTrendingItemData((trendingItemData) => (trendingItem));
+
+    fetchGenreData();
+  };
+
   useEffect(() => {
-    fetchTrendingItemsAndGenreData();
+    fetchData();
   }, []);
 
   return (
@@ -101,15 +109,14 @@ export const Routes = () => {
           <Route
             exact
             path="/browse"
-            children={(
-              <Home
-                setModalProps={setModalProps}
-                trendingItemData={trendingItemData}
-                movieGenres={movieGenres}
-                tvGenres={tvGenres}
-              />
-            )}
-          />
+          >
+            <Home
+              setModalProps={setModalProps}
+              trendingItemData={trendingItemData}
+              movieGenres={movieGenres}
+              tvGenres={tvGenres}
+            />
+          </Route>
           <Route exact path="/">
             <Redirect to="/browse" />
           </Route>
@@ -119,37 +126,35 @@ export const Routes = () => {
           <Route
             exact
             path="/browse/genre/83"
-            children={(
-              <Series
-                setModalProps={setModalProps}
-                trendingSeriesData={trendingSeriesData}
-                tvGenres={tvGenres}
-              />
-          )}
-          />
+          >
+            <Series
+              setModalProps={setModalProps}
+              trendingSeriesData={trendingSeriesData}
+              tvGenres={tvGenres}
+            />
+          </Route>
           <Route exact path="/browse/genre/83/">
             <Redirect to="/browse/genre/83" />
           </Route>
           <Route
             exact
             path="/browse/genre/34399"
-            children={(
-              <Films
-                setModalProps={setModalProps}
-                movieGenres={movieGenres}
-                trendingMovieData={trendingMovieData}
-              />
-          )}
-          />
+          >
+            <Films
+              setModalProps={setModalProps}
+              movieGenres={movieGenres}
+              trendingMovieData={trendingMovieData}
+            />
+          </Route>
           <Route exact path="/browse/genre/34399/">
             <Redirect to="/browse/genre/34399" />
           </Route>
-          <Route exact path="/latest" children={<Latest setModalProps={setModalProps} />} />
-          <Route exact path="/browse/my-list" children={<MyList />} />
-          <Route exact path="/search" children={<Search setModalProps={setModalProps} />} />
-          <Route exact path="/Kids" children={<Kids />} />
-          <Route exact path="/watch" children={<VideoPlayer />} />
-          <Route children={<NoMatch />} />
+          <Route exact path="/latest"><Latest setModalProps={setModalProps} /></Route>
+          <Route exact path="/browse/my-list"><MyList /></Route>
+          <Route exact path="/search"><Search setModalProps={setModalProps} /></Route>
+          <Route exact path="/Kids"><Kids /></Route>
+          <Route exact path="/watch"><VideoPlayer /></Route>
+          <Route><NoMatch /></Route>
         </Switch>
         )}
 
@@ -157,12 +162,21 @@ export const Routes = () => {
         && (
         <Route
           path={[
-            "/browse/epsinfobox",
-            "/browse/genre/34399/epsinfobox",
-            "/browse/genre/83/epsinfobox",
+            '/browse/epsinfobox',
+            '/browse/genre/34399/epsinfobox',
+            '/browse/genre/83/epsinfobox',
           ]}
           render={() => (
-            <Modal id="modal-root" isEpsInfoBox={true}>
+            <Modal
+              id="modal-root"
+              isEpsInfoBox
+              height="100%"
+              width="100%"
+              left="0"
+              top="0"
+              bottom="0"
+              right="0"
+            >
               <EpisodesAndInfoBox
                 sliderItemMediaId={epsAndInfoBoxProps.mediaId}
                 sliderItemMediaType={epsAndInfoBoxProps.mediaType}
@@ -175,8 +189,11 @@ export const Routes = () => {
           )}
         />
         )}
-
+      <PortalContainer id="slider-item-modal" />
+      
       <Footer />
     </div>
   );
 };
+
+export default Routes;

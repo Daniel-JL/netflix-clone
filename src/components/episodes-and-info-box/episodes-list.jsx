@@ -74,8 +74,9 @@ function EpisodesList({
   }, [JSON.stringify(episodesListItemData), selectedSeason]);
 
   useEffect(() => {
-    if(episodesListItemData.episodeListItems !== undefined) {
-      if (itemLimit >= episodesListItemData.episodeListItems.length) {
+    if(episodesListItemData[0].episodeListItems !== undefined) {
+
+      if (itemLimit >= episodesListItemData[0].episodeListItems.length) {
         setAllSeasonItemsLoaded(true);
       }
     }

@@ -9,11 +9,12 @@ const ModalContainer = styled.div`
   position: absolute;
   display: flex;
   justify-content: center;
-  margin: auto;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
+  height: ${(height) => height};
+  width: ${(width) => width};
+  left: ${(left) => left};
+  top: ${(top) => top};
+  bottom: ${(bottom) => bottom};
+  right: ${(right) => right};
   bottom: 0;
   right: 0;
   z-index: 10;
@@ -29,9 +30,24 @@ const ModalContainer = styled.div`
   `}
 `;
 
-export const Modal = ({ children, id, isEpsInfoBox}) => {
+export const Modal = ({ 
+  children,
+  id,
+  isEpsInfoBox,
+  height,
+  width,
+  left,
+  top,
+  bottom,
+  right
+}) => {
   const [scrollActive, setScrollActive] = useState(true);
-
+  console.log(height);
+  console.log(width);
+  console.log(left);
+  console.log(top);
+  console.log(bottom);
+  console.log(right);
   const setScrollHidden = () => {
     setScrollActive(false);
   };
@@ -40,14 +56,19 @@ export const Modal = ({ children, id, isEpsInfoBox}) => {
     <ModalContainer
       isEpsInfoBox={isEpsInfoBox}
       scrollActive={scrollActive}
+      id="modalContainer"
+      height={height}
+      width={width}
+      left={left}
+      top={top}
+      bottom={bottom}
+      right={right}
     >
       {
         React.Children.map(children, (child) => React.cloneElement(child, {
           setScrollHidden,
         }))
       }
-
-      {/* {children} */}
     </ModalContainer>,
     document.getElementById(id),
   );

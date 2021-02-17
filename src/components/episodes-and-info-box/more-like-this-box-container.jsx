@@ -55,7 +55,6 @@ function MoreLikeThisBoxContainer({
         overview: truncate(data.results[index].overview, 120),
       }
     ));
-    console.log(mediaDetailsCopy);
 
     setMediaDetails((mediaDetails) => mediaDetailsCopy);
   };
