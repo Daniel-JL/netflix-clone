@@ -1,17 +1,11 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useState } from 'react';
-import {
-  NavLink,
-} from 'react-router-dom';
 import styled from 'styled-components';
 import LoadingSkeleton from '../loading-skeleton';
-import { MediaSliderContainer } from './media-slider-container';
+import MediaSliderContainer from './media-slider-container';
 
 const RowContainer = styled.div`
 
 `;
-
-
 
 const RowPadding = styled.div`
   width: 100%;
@@ -34,9 +28,6 @@ const Row = styled.div`
   z-index: 0;
   height: 10vw;
   width: 100%;
-  ${({ active }) => active && `
-    z-index: 1;
-  `}
 `;
 
 const SliderContainer = styled.div`
@@ -56,12 +47,7 @@ const LocoRow = (
     genreId,
   },
 ) => {
-  const [active, setActive] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
-
-  const changeRowZIndex = (isActive) => {
-    setActive((active) => isActive);
-  };
 
   return (
     <RowContainer>
@@ -69,7 +55,7 @@ const LocoRow = (
       <RowHeader>
         {genreName}
       </RowHeader>
-      <Row active={active}>
+      <Row>
         {!imagesLoaded &&
           <LoadingSkeleton />
         }
@@ -81,7 +67,6 @@ const LocoRow = (
             mediaType={mediaType}
             genreName={genreName}
             genreId={genreId}
-            changeRowZIndex={changeRowZIndex}
             setImagesLoaded={setImagesLoaded}
           />
         </SliderContainer>

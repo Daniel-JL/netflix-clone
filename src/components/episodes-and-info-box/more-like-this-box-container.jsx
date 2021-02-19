@@ -20,10 +20,7 @@ function MoreLikeThisBoxContainer({
 }) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [mediaDetails, setMediaDetails] = useState([]);
-  const [selectedSeason, setSelectedSeason] = useState(1);
-  const [episodesListItemData, setEpisodesListItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [alreadyLoaded, setAlreadyLoaded] = useState(false);
   const [imgSrcArray, setImgSrcArray] = useState([]);
 
   const fetchSimilarContentData = async () => {
@@ -34,7 +31,6 @@ function MoreLikeThisBoxContainer({
 
     handleSrcArray(data);
 
-    // handleSeasonEpisodeData(data);
     setDataLoaded(true);
   };
 
@@ -59,30 +55,6 @@ function MoreLikeThisBoxContainer({
     setMediaDetails((mediaDetails) => mediaDetailsCopy);
   };
 
-  // const handleSrcArray = (season) => {
-  //   const srcArrayCopy = seasonEpisodeData[season - 1].episodeData.map((undefined, index) => (
-  //     `http://image.tmdb.org/t/p/w780${seasonEpisodeData[season - 1].episodeData[index].still_path}`
-
-  //   ));
-
-  //   setSrcArray((srcArray) => srcArrayCopy);
-  // };
-
-  const cacheImages = async () => {
-    const promises = await imgSrcArray.map((src) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-
-        img.src = src;
-        img.onload = resolve();
-        img.onerror = reject();
-      });
-    });
-    await Promise.all(promises);
-
-    setIsLoading((isLoading) => false);
-  };
-
   useEffect(() => {
     if (!dataLoaded) {
       fetchSimilarContentData();
@@ -90,13 +62,8 @@ function MoreLikeThisBoxContainer({
   }, []);
 
   useEffect(() => {
-    cacheImages();
+    setIsLoading((isLoading) => false);
   }, [imgSrcArray]);
-
-  // useEffect(() => {
-  //   setAlreadyLoaded((alreadyLoaded) => false);
-  //   setIsLoading((isLoading) => false);
-  // }, [alreadyLoaded]);
 
   return (
     <Container>

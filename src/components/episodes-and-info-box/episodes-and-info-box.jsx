@@ -16,18 +16,16 @@ const EpisodesAndInfoBoxContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  // align-self: center;
-  // justify-content: center;
-  // align-content: center;
-  // align-items: center;
-  // margin: auto;
   width: 50%;
   background: #fff;
   border: 2px solid #444;
   color: black;
   top: 20px;
-
 `;
+
+const epsInfoBoxLoadedFromSliderItem = (mediaId) => {
+  return mediaId === undefined;
+};
 
 export function EpisodesAndInfoBox({
   sliderItemMediaId,
@@ -40,10 +38,7 @@ export function EpisodesAndInfoBox({
 }) {
   const [mediaId, setMediaId] = useState(sliderItemMediaId);
   const [mediaType, setMediaType] = useState(sliderItemMediaType);
-  const [posterPath, setPosterPath] = useState(sliderItemPosterPath);
   const [runtimeOrNumberOfSeasons, setRuntimeOrNumberOfSeasons] = useState(sliderItemRuntimeOrNumberOfSeasons);
-  const [genres, setGenres] = useState(sliderItemGenres);
-  const [ageRating, setAgeRating] = useState(sliderItemAgeRating);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const history = useHistory();
@@ -80,25 +75,13 @@ export function EpisodesAndInfoBox({
 
     const data = await getMediaData(mediaTypeUrl, mediaIdUrl);
 
-    setPosterPath((posterPath) => `http://image.tmdb.org/t/p/w780${data.backdrop_path}`);
-    setGenres((genres) => [
-      ...Array(data.genres.length),
-    ].map((undefined, index) => data.genres[index].name));
-
-    if (mediaIsMovie(mediaTypeUrl)) {
-      setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => `${data.runtime}m`);
-    } else {
-      setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => data.number_of_seasons);
-    }
-    const ageRatingData = await getAgeRating(mediaIdUrl, mediaTypeUrl);
-
-    setAgeRating((ageRating) => ageRatingData);
+    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType) ? `${data.runtime}m` : data.number_of_seasons));
 
     setDataLoaded(true);
   };
 
   useEffect(() => {
-    if (mediaId === undefined) {
+    if (epsInfoBoxLoadedFromSliderItem(mediaId)) {
       fetchMediaData();
     } else {
       setDataLoaded(true);

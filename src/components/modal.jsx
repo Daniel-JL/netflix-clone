@@ -42,12 +42,6 @@ export const Modal = ({
   right
 }) => {
   const [scrollActive, setScrollActive] = useState(true);
-  console.log(height);
-  console.log(width);
-  console.log(left);
-  console.log(top);
-  console.log(bottom);
-  console.log(right);
   const setScrollHidden = () => {
     setScrollActive(false);
   };

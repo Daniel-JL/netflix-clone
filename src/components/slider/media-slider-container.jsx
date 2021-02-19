@@ -1,7 +1,7 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { MediaSlider } from './media-slider';
+import MediaSlider from './media-slider';
+import SliderItemContainer from './slider-item-container';
 import getTrendingMediaIdsAndTypes from '../../helpers/getTrendingMediaIdsAndTypes';
 import getMediaListByGenre from '../../helpers/getMediaListByGenre';
 import processIdsAndTypes from '../../helpers/processIdsAndTypes';
@@ -12,20 +12,21 @@ const Container = styled.div`
   width: 100%;
 `;
 
-export function MediaSliderContainer(
+const MediaSliderContainer = (
   {
     setModalProps,
     numSlidersLoaded,
     mediaType,
     genreName,
     genreId,
-    changeRowZIndex,
     setImagesLoaded,
   },
-) {
+) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const maxIdsNeeded = 42;
   const mediaIdsAndTypes = useRef({});
+  const numItemsLoaded = useRef(0);
+
 
   const fetchNow = async () => {
     let data;
@@ -40,6 +41,13 @@ export function MediaSliderContainer(
     setDataLoaded(true);
   };
 
+  const handleImageLoaded = () => {
+    numItemsLoaded.current += 1;
+    if (numItemsLoaded.current === 6) {
+      setImagesLoaded(true);
+    }
+  };
+
   useEffect(() => {
     if (!dataLoaded) {
       fetchNow();
@@ -51,17 +59,26 @@ export function MediaSliderContainer(
       {dataLoaded
         && (
         <MediaSlider
-          setModalProps={setModalProps}
           dataLoaded={dataLoaded}
-          numOfItems={mediaIdsAndTypes.current.ids.length}
-          movieTvShowType={mediaIdsAndTypes.current.types}
-          movieTvShowIds={mediaIdsAndTypes.current.ids}
-          changeRowZIndex={changeRowZIndex}
-          setImagesLoaded={setImagesLoaded}
-          genreName={genreName}
-        />
+        >
+          {
+              [
+                ...Array(mediaIdsAndTypes.current.ids.length),
+              ].map((value: undefined, index: number) => (
+                <SliderItemContainer 
+                  data-index={index} 
+                  key={index}
+                  setModalProps={setModalProps}
+                  mediaType={mediaIdsAndTypes.current.types[index]} 
+                  mediaId={mediaIdsAndTypes.current.ids[index]} 
+                  handleImageLoaded={handleImageLoaded}
+                />
+              ))
+            }
+        </MediaSlider>
         )}
-
     </Container>
   );
 }
+
+export default MediaSliderContainer;

@@ -16,8 +16,10 @@ const GridContainer = styled.div`
 const GridItem = styled.div`
   display: flex;
   justify-content: center;
+  width: 100%;
   align-items: center;
   align-self: center;
+  margin: 1vw;
 `;
 
 function MoreLikeThisBox({

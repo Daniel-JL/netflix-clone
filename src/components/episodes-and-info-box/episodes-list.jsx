@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import EpisodesListItemContainer from './episodes-list-item-container';
 import { EpisodeDropdown } from '../dropdowns';
 import { RoundDarkButton } from '../buttons';
 
@@ -11,7 +10,6 @@ const Container = styled.div`
   align-items: center;
   align-self: center;
   justify-self: center;
-
 `;
 
 const ListContainer = styled.div`
@@ -22,7 +20,6 @@ const ListContainer = styled.div`
   align-items: center;
   align-self: center;
   justify-self: center;
-
 `;
 
 const EpisodeDropDownContainer = styled.div`
@@ -30,7 +27,6 @@ const EpisodeDropDownContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: space-between;
-
 `;
 
 function EpisodesList({
@@ -82,10 +78,6 @@ function EpisodesList({
     }
     
   }, [itemLimit]);
-
-  useEffect(() => {
-    // console.log(episodesListItemData);
-  });
 
   return (
     <Container id="epslist-container">

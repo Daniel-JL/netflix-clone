@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react';
 import {
   Link,
   useLocation,
-  Route,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { Transition } from 'react-transition-group';
@@ -11,7 +10,6 @@ import {
   RoundPlayButton,
   RoundEpsAndInfoButton,
 } from '../buttons';
-import { EpisodesAndInfoBox } from '../episodes-and-info-box/episodes-and-info-box';
 import { Modal } from '../modal';
 
 const ItemContainer = styled.div`
@@ -38,7 +36,6 @@ const ModalItem = styled.div`
   left: ${({ coordsLeft }) => coordsLeft}px;
   top: ${({ coordsTop }) => coordsTop}px;
   width: ${({ itemWidth }) => itemWidth}px;
-
 `;
 
 const ImgTitleContainer = styled.div`
@@ -133,7 +130,7 @@ export function SliderItem({
 
       {itemHoverActive
         && (
-        <Modal 
+        <Modal
           id="slider-item-modal"
           height={itemDimensions.height}
           width={itemDimensions.width}
@@ -202,13 +199,10 @@ export function SliderItem({
                   </div>
                 </ItemDetails>
               </ModalItem>
-
             )}
-
           </Transition>
         </Modal>
         )}
     </ItemContainer>
-
   );
 }

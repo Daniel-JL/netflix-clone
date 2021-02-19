@@ -1,6 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-import { React } from 'react';
-
 const getSeasonData = async (mediaId, numSeasons) => {
   const seasonDataArr = new Array(numSeasons);
   let data;

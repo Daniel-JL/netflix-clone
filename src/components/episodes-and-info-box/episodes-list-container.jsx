@@ -13,7 +13,6 @@ const Container = styled.div`
   justify-self: center;
   padding-top: 0.6vw;
   margin: auto;
-  
 `;
 
 function EpisodesListContainer({
@@ -23,17 +22,14 @@ function EpisodesListContainer({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [seasonEpisodeData, setSeasonEpisodeData] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState(1);
+  const [seasonDataNeedsLoading, setSeasonDataNeedsLoading] = useState(false);
   const [episodesListItemData, setEpisodesListItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [alreadyLoaded, setAlreadyLoaded] = useState(false);
-  const [srcArray, setSrcArray] = useState([]);
 
   const fetchAllSeasonData = async () => {
     const data = await getSeasonData(mediaId, numSeasons);
-
     setIsLoading((isLoading) => true);
-
-    handleInitialSrcArray(data);
 
     handleSeasonEpisodeData(data);
     setDataLoaded(true);
@@ -51,10 +47,12 @@ function EpisodesListContainer({
 
     for (let i = 0; i < data.length; i++) {
       validEpisodes.push([]);
-      for (let j = 0; j < data[i].episodes.length; j++) {
-        episodeAirDate = data[i].episodes[j].air_date.replace(/-/g,'/');
-        if (episodeAirDate < todaysDate) {
-          validEpisodes[i].push(data[i].episodes[j]);
+      if (data[i].episodes) {
+        for (let j = 0; j < data[i].episodes.length; j++) {
+          episodeAirDate = data[i].episodes[j].air_date.replace(/-/g,'/');
+          if (episodeAirDate < todaysDate) {
+            validEpisodes[i].push(data[i].episodes[j]);
+          }
         }
       }
     }
@@ -66,33 +64,6 @@ function EpisodesListContainer({
       }));
 
     setSeasonEpisodeData((seasonEpisodeData) => seasonEpisodeDataCopy);
-  };
-
-  const handleInitialSrcArray = (data) => {
-    const srcArrayCopy = data[selectedSeason - 1].episodes.map((undefined, index) => (
-      `http://image.tmdb.org/t/p/w780${data[selectedSeason - 1].episodes[index].still_path}`
-
-    ));
-
-    setSrcArray((srcArray) => srcArrayCopy);
-  };
-
-  const handleSrcArray = (season) => {
-    const srcArrayCopy = seasonEpisodeData[season - 1].episodeData.map((undefined, index) => (
-      seasonEpisodeData[season - 1].episodeData[index].still_path
-        ? `http://image.tmdb.org/t/p/w780${seasonEpisodeData[season - 1].episodeData[index].still_path}`
-        : ''
-
-    ));
-
-    for (let i = 0; i < srcArrayCopy.length; i++) {
-      if (srcArrayCopy[i] === '') {
-        srcArrayCopy.splice(i, 1);
-        i -= 1;
-      }
-    }
-
-    setSrcArray((srcArray) => srcArrayCopy);
   };
 
   const initialiseEpisodesListItemData = () => {
@@ -123,6 +94,7 @@ function EpisodesListContainer({
       setIsLoading((isLoading) => true);
 
       const episodesListItemDataCopy = episodesListItemData;
+      console.log(episodesListItemDataCopy);
 
       episodesListItemDataCopy[season - 1].episodeListItems = [
         ...Array(seasonEpisodeData[season - 1].episodeData.length),
@@ -133,13 +105,13 @@ function EpisodesListContainer({
           episodeNum={index + 1}
           seasonNum={season}
           episodeData={seasonEpisodeData[season - 1].episodeData[index]}
-          // handleImgLoaded={handleImgLoaded}
         />
       ));
 
       setEpisodesListItemData((episodesListItemData) => episodesListItemDataCopy);
     }
     setIsLoading((isLoading) => false);
+    setSeasonDataNeedsLoading(false);
   };
 
   const changeSelectedSeason = (newSelectedSeason) => {
@@ -148,22 +120,10 @@ function EpisodesListContainer({
     setSelectedSeason((selectedSeason) => newSelectedSeason);
 
     if (episodesListItemData[newSelectedSeason - 1].episodeListItems.length === 0) {
-      handleSrcArray(newSelectedSeason);
+      setSeasonDataNeedsLoading(true);
     } else {
       setAlreadyLoaded(true);
     }
-  };
-
-  const cacheImages = async (srcArray) => {
-    const promises = await srcArray.map((src) => new Promise((resolve, reject) => {
-      const img = new Image();
-
-      img.src = src;
-      img.onload = resolve();
-      img.onerror = reject();
-    }));
-
-    await Promise.all(promises);
   };
 
   useEffect(() => {
@@ -174,24 +134,19 @@ function EpisodesListContainer({
 
   useEffect(() => {
     if (seasonEpisodeData.length > 0) {
-      cacheImages(srcArray);
       initialiseEpisodesListItemData();
     }
   }, [seasonEpisodeData]);
 
   useEffect(() => {
-    if (seasonEpisodeData.length > 0) {
-      const cacheTheImages = async () => {
-        await cacheImages(srcArray);
-      };
-      cacheTheImages();
+    if (seasonEpisodeData.length > 0 && seasonDataNeedsLoading === true) {
       loadEpisodeListItemData(selectedSeason);
     }
-  }, [srcArray]);
+  }, [seasonDataNeedsLoading]);
 
   useEffect(() => {
-    setAlreadyLoaded((alreadyLoaded) => false);
     setIsLoading((isLoading) => false);
+    setAlreadyLoaded(false);
   }, [alreadyLoaded]);
 
   return (

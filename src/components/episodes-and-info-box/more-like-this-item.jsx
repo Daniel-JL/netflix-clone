@@ -9,7 +9,7 @@ import { RoundPlayButton } from '../buttons';
 const Container = styled.div`
   // position: static;
   display: flex;
-  width: 90%;
+  width: 100%;
   height: 100%;
   flex-direction: column;
   justify-content: center;
@@ -19,15 +19,11 @@ const Container = styled.div`
 
 const ItemImage = styled.img`
   width: 100%;
-  // height: 100%;
-  // position: absolute;
-  
 `;
 
 const ImageContainer = styled.div`
   width: 100%;
   height: 100%;
-  // position: absolute;
 `;
 
 const ImageButtonContainer = styled.div`
@@ -38,7 +34,6 @@ const ImageButtonContainer = styled.div`
 
 const PlayButton = styled(RoundPlayButton)`
   position: absolute;
-  // visibility: hidden;
   background:rgba(255,255,255, 0.3);
   top: 50%;
   left: 50%;
@@ -53,14 +48,6 @@ const ItemDetails = styled.div`
   font-size: 70%;
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-
-  &:focus, &:hover, &:visited, &:link, &:active {
-      text-decoration: none;
-  }
-`;
-
 function MoreLikeThisItem({
   imgSrc,
   mediaDetails,
@@ -72,8 +59,6 @@ function MoreLikeThisItem({
   const defaultStyle = {
     transition: `all ${duration}ms ease-in-out`,
     opacity: 0,
-    // position: 'absolute',
-
   };
 
   const transitionStyles = {

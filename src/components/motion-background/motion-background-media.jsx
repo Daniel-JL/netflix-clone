@@ -50,8 +50,6 @@ const MotionBackgroundMedia = ({
   handleVideoPlaying,
   handleVideoEnded,
 }) => {
-  console.log(isPlaying);
-
   return (
     <MotionBackgroundMediaContainer
       id="media-container"

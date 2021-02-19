@@ -31,10 +31,12 @@ function EpisodesListItemContainer({
   };
 
   const handleImgLoadingErr = () => {
+    console.log('imgLoadError');
     setImgLoadingErr(true);
   };
 
   const handleImgLoadedSuccess = () => {
+    console.log('imgLoadSuccess');
     setImgLoadedSuccess(true);
   };
 
