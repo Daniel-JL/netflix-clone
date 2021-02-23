@@ -14,13 +14,16 @@ const RowPadding = styled.div`
 
 const RowHeader = styled.header`
   width: 100%;
-  margin-left: 4.5vw;
   font-size: 2vw;
   font-weight: bold;
   height: 2vw;
   color: white;
   z-index: 4;
 
+`;
+
+const HeaderText = styled.div`
+  padding-left: 4.5vw;
 `;
 
 const Row = styled.div`
@@ -53,7 +56,9 @@ const LocoRow = (
     <RowContainer>
       <RowPadding />
       <RowHeader>
-        {genreName}
+        <HeaderText>
+          {genreName}
+        </HeaderText>
       </RowHeader>
       <Row>
         {!imagesLoaded &&

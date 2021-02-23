@@ -4,15 +4,15 @@ import {
   Link,
 } from 'react-router-dom';
 import EpisodesListItemLoadingSkeleton from './episodes-list-item-loading-skeleton';
+import ImageWithOverlay from './image-with-overlay';
+import { PlayButton } from '../buttons';
 
 const ItemContainer = styled.div`
   width: 100%;
-  height: 7vw;
   border: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
-  
 `;
 
 const ItemInfoContainer = styled.div`
@@ -36,12 +36,17 @@ const EpisodeImage = styled.img`
   width: 100%;
 `;
 
+const ImageButtonContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
 const EpisodeDetailsContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
   margin: 5px;
-  
 `;
 
 const EpisodeTitleRuntimeContainer = styled.div`
@@ -51,13 +56,11 @@ const EpisodeTitleRuntimeContainer = styled.div`
 `;
 
 const EpisodeDescriptionContainer = styled.div`
+  display: inline-block;
   font-size: 80%;
   width: 100%;
   height: 70%;
-  // overflow-wrap: break-word;
-  // white-space: nowrap; 
-  overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 100%;
 `;
 
 function EpisodesListItem({
@@ -69,16 +72,21 @@ function EpisodesListItem({
   imgLoadingErr,
   handleImgLoadingErr,
   handleImgLoadedSuccess,
+  mouseOver,
+  handleMouseOver,
+  handleMouseOut,
 }) {
-
   return (
     <Link
       key={1}
       to="/watch"
       style={{ color: 'inherit', textDecoration: 'inherit'}}
     >
-      
-      <ItemContainer id="episodes-list-item" >
+      <ItemContainer 
+        id="episodes-list-item" 
+        onMouseEnter={handleMouseOver}
+        onMouseLeave={handleMouseOut}
+      >
         {!imgLoadedSuccess && !imgLoadingErr && 
           <EpisodesListItemLoadingSkeleton />
         }
@@ -87,13 +95,17 @@ function EpisodesListItem({
           {!imgLoadingErr
           && (
             <ImgContainer>
-              <EpisodeImage
-                alt="Slider image"
-                src={imagePath}
-                onError={() => handleImgLoadingErr()}
-                onLoad={
-                  () => handleImgLoadedSuccess()
-                }
+              <ImageWithOverlay 
+                image={<EpisodeImage
+                  alt="Slider image"
+                  src={imagePath}
+                  onError={() => handleImgLoadingErr()}
+                  onLoad={
+                    () => handleImgLoadedSuccess()
+                  }
+                />}
+                overlayItem={<PlayButton>|></PlayButton>}
+                fadeIn={mouseOver}
               />
             </ImgContainer>
           )}

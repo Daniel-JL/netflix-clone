@@ -5,12 +5,11 @@ import EpisodesListItem from './episodes-list-item';
 
 const Container = styled.div`
   width: 100%;
+  background-color: rgb(64,64,64)
+
 `;
 
 function EpisodesListItemContainer({
-  mediaId,
-  episodeNum,
-  seasonNum,
   episodeData,
 }) {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -20,6 +19,7 @@ function EpisodesListItemContainer({
   const [imagePath, setImagePath] = useState();
   const [imgLoadingErr, setImgLoadingErr] = useState(false);
   const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
+  const [mouseOver, setMouseOver] = useState(false);
   const [runtime, setRuntime] = useState('');
 
   const fetchEpisodeData = async () => {
@@ -38,6 +38,14 @@ function EpisodesListItemContainer({
   const handleImgLoadedSuccess = () => {
     console.log('imgLoadSuccess');
     setImgLoadedSuccess(true);
+  };
+
+  const handleMouseOver = () => {
+    setMouseOver(true);
+  };
+
+  const handleMouseOut = () => {
+    setMouseOver(false);
   };
 
   useEffect(() => {
@@ -59,6 +67,9 @@ function EpisodesListItemContainer({
         imgLoadingErr={imgLoadingErr}
         handleImgLoadingErr={handleImgLoadingErr}
         handleImgLoadedSuccess={handleImgLoadedSuccess}
+        mouseOver={mouseOver}
+        handleMouseOver={handleMouseOver}
+        handleMouseOut={handleMouseOut}
       />
       )}
     </Container>

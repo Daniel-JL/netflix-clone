@@ -1,51 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import {
   Link,
 } from 'react-router-dom';
 import { Transition } from 'react-transition-group';
-import { RoundPlayButton } from '../buttons';
+import ImageWithOverlay from './image-with-overlay';
+import { PlayButton } from '../buttons';
 
 const Container = styled.div`
-  // position: static;
   display: flex;
   width: 100%;
   height: 100%;
+  min-height: 200px;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   align-self: center;
+  background-color: rgb(64,64,64);
 `;
 
 const ItemImage = styled.img`
   width: 100%;
 `;
 
-const ImageContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const ImageButtonContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
-
-const PlayButton = styled(RoundPlayButton)`
-  position: absolute;
-  background:rgba(255,255,255, 0.3);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
 const ItemDetails = styled.div`
   display: flex;
   display: relative;
   flex-direction: column;
-  background-color: gray;
-  font-size: 70%;
+
+  font-size: 80%;
+`;
+
+const MediaTitle = styled.div`
+  font-size: 105%;
+  font-weight: bold;
 `;
 
 function MoreLikeThisItem({
@@ -53,22 +39,6 @@ function MoreLikeThisItem({
   mediaDetails,
 }) {
   const [mouseOver, setMouseOver] = useState(false);
-
-  const duration = 300;
-
-  const defaultStyle = {
-    transition: `all ${duration}ms ease-in-out`,
-    opacity: 0,
-  };
-
-  const transitionStyles = {
-    entering: {},
-    entered: {
-      opacity: 1,
-    },
-    exiting: {},
-    exited: {},
-  };
 
   const handleMouseOver = () => {
     setMouseOver(true);
@@ -87,34 +57,17 @@ function MoreLikeThisItem({
       <Container
         onMouseEnter={handleMouseOver}
         onMouseLeave={handleMouseOut}
-
       >
-        <ImageButtonContainer id="ImgButtonContainer">
-          <Transition
-            appear
-            in={mouseOver}
-            timeout={100}
-          >
-            {(state) => (
-              <PlayButton
-                style={{
-                  ...defaultStyle,
-                  ...transitionStyles[state],
-                }}
-              >
-                |>
-              </PlayButton>
-            )}
-          </Transition>
-          <ImageContainer>
-            <ItemImage src={imgSrc} />
-          </ImageContainer>
-        </ImageButtonContainer>
+        <ImageWithOverlay 
+          image={<ItemImage src={imgSrc} />}
+          overlayItem={<PlayButton>|></PlayButton>}
+          fadeIn={mouseOver}
+        />
         <ItemDetails>
-          <div>
+          <MediaTitle>
             {mediaDetails.name}
-          </div>
-          <div  >
+          </MediaTitle>
+          <div>
             {mediaDetails.overview}
           </div>
         </ItemDetails>

@@ -74,15 +74,17 @@ export const MotionBackground = ({
     setMediaTagline((mediaTagline) => data.tagline);
 
     data = await getVideos(mediaType, mediaId);
-
     if (videosAvailable(data.results.length)) {
-      setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
+      // setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
+      setVideoURL((videoURL) => data.results[0].key);
       setVidExists(true);
     }
     setDataLoaded(true);
   };
 
-  const handleVideoPlaying = () => {
+  const handleVideoPlaying = (e) => {
+    console.log('isplaying');
+    // e.target.playVideo();
     setImgFadeOut((imgFadeOut) => true);
   };
 

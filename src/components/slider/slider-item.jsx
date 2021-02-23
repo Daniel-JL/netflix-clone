@@ -13,6 +13,7 @@ import {
 import { Modal } from '../modal';
 
 const ItemContainer = styled.div`
+
   position: relative;
   width: ${({ itemWidth }) => itemWidth}px;
   border: 1px solid black;
@@ -25,13 +26,15 @@ const SliderItemImage = styled.img`
 `;
 
 const ItemDetails = styled.div`
-  background-color: gray;
+  
 `;
 
 const ModalItem = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
+  background-color: rgb(40,40,40);
+  color: white;
   
   left: ${({ coordsLeft }) => coordsLeft}px;
   top: ${({ coordsTop }) => coordsTop}px;
@@ -45,6 +48,7 @@ const ImgTitleContainer = styled.div`
 const MediaTitle = styled.div`
   position: absolute;
   color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   bottom: 10%;
   left: 2%;
   font-size: 1.3vw;
@@ -142,7 +146,7 @@ export function SliderItem({
           <Transition
             appear
             in={itemHoverTransition}
-            timeout={300}
+            timeout={duration}
             onExited={() => handleModalDismount()}
           >
             {(state) => (
@@ -171,7 +175,14 @@ export function SliderItem({
                 </ImgTitleContainer>
                 <ItemDetails>
                   <div id="buttons">
-                    <RoundPlayButton />
+                    <Link
+                      key={1}
+                      to="/watch"
+                    >
+                      <RoundPlayButton>
+                        |>
+                      </RoundPlayButton>
+                    </Link>
                     <Link
                       key={1}
                       to={{
@@ -192,10 +203,9 @@ export function SliderItem({
                   </div>
                   <div id="genres">
                     {genres[0]}
-                    {' '}
-                    *
-                    {' '}
-                    {genres[1]}
+                    {/* {'  '}
+                    {'  '}
+                    {genres[1]} */}
                   </div>
                 </ItemDetails>
               </ModalItem>

@@ -6,7 +6,7 @@ import LocoRowGroup from '../slider/loco-row-group';
 import InfiniteScroll from '../infinite-scroll';
 
 const HomeContainer = styled.div`
-  background-color: black;
+  background-color: rgb(24,24,24);
   z-index: -2;
 `;
 

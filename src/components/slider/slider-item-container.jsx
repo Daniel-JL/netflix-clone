@@ -23,6 +23,9 @@ const SliderItemContainer = ({
   const [genres, setGenres] = useState();
   const [runtimeOrNumberOfSeasons, setRuntimeOrNumberOfSeasons] = useState();
   const [ageRating, setAgeRating] = useState();
+  const [overview, setOverview] = useState();
+  const [delayHandler, setDelayHandler] = useState();
+  const delayDuration = 300;
 
   const fetchItemData = async () => {
     const data = await getMediaData(mediaType, mediaId);
@@ -33,30 +36,35 @@ const SliderItemContainer = ({
       ...Array(data.genres.length),
     ].map((undefined, index) => data.genres[index].name));
     setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType) ? `${data.runtime}m` : data.number_of_seasons));
+    setOverview((overview) => data.overview);
 
     const ageRating = await getAgeRating(mediaId, mediaType);
     setAgeRating((ageRating) => ageRating);
+  
 
     setDataLoaded(true);
   };
 
   const handleMouseOver = (itemContainerRef) => {
     if (imgLoadedSuccess) {
-      const rect = itemContainerRef.getBoundingClientRect();
-      setItemDimensions((itemDimensions) => ({
-        left: rect.x,
-        top: rect.y + window.scrollY,
-        bottom: rect.bottom,
-        right: rect.right,
-        width: rect.right - rect.left,
-        height: rect.bottom - rect.top,
-      }));
-      setItemHoverTransition(true);
-      setItemHoverActive(true);
+      setDelayHandler(setTimeout(() => {
+        const rect = itemContainerRef.getBoundingClientRect();
+        setItemDimensions((itemDimensions) => ({
+          left: rect.x,
+          top: rect.y + window.scrollY,
+          bottom: rect.bottom,
+          right: rect.right,
+          width: rect.right - rect.left,
+          height: rect.bottom - rect.top,
+        }));
+        setItemHoverTransition(true);
+        setItemHoverActive(true);
+      }, delayDuration));
     }
   };
 
   const handleMouseOut = () => {
+    clearTimeout(delayHandler);
     setItemHoverTransition(false);
   };
 
@@ -81,6 +89,8 @@ const SliderItemContainer = ({
       runtimeOrNumberOfSeasons,
       genres,
       ageRating,
+      overview,
+
     );
   };
 

@@ -46,6 +46,7 @@ const Routes = () => {
     runtimeOrNumberOfSeasons,
     genres,
     ageRating,
+    overview,
   ) => {
     setEpsAndInfoBoxProps((epsAndInfoBoxProps) => ({
       mediaId,
@@ -54,6 +55,7 @@ const Routes = () => {
       runtimeOrNumberOfSeasons,
       genres,
       ageRating,
+      overview,
     }));
   };
 
@@ -184,6 +186,7 @@ const Routes = () => {
                 sliderItemRuntimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
                 sliderItemGenres={epsAndInfoBoxProps.genres}
                 sliderItemAgeRating={epsAndInfoBoxProps.ageRating}
+                sliderItemOverview={epsAndInfoBoxProps.overview}
               />
             </Modal>
           )}

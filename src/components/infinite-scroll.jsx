@@ -63,7 +63,7 @@ const InfiniteScroll = ({
             scrollLimitReached + 1 > index && (
               <div ref={setInfiniteScrollLoadPoint}>
                 {
-                    React.Children.map(locoRowGroup, (child) => 
+                  React.Children.map(locoRowGroup, (child) => 
                     React.cloneElement(child, {
                       key: index,
                       genreTypeArr: genreTypeArr.slice(index*numItemsPerScroll, index*numItemsPerScroll + numItemsPerScroll),

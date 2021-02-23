@@ -24,9 +24,9 @@ const MediaSliderContainer = (
 ) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const maxIdsNeeded = 42;
+  const pagesNeeded = Math.ceil(maxIdsNeeded / 20);
   const mediaIdsAndTypes = useRef({});
   const numItemsLoaded = useRef(0);
-
 
   const fetchNow = async () => {
     let data;
@@ -35,6 +35,10 @@ const MediaSliderContainer = (
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded);
     } else {
       data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
+      //  Check if we attempted to fetch data out of range of data available
+      if (data[0].total_pages <= numSlidersLoaded) {
+        data = await getMediaListByGenre(mediaType, data[0].total_pages - pagesNeeded - 1, genreId, maxIdsNeeded);
+      }
       mediaIdsAndTypes.current = processIdsAndTypes(data, maxIdsNeeded, mediaType);
     }
 

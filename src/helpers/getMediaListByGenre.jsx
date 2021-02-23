@@ -1,10 +1,14 @@
-import { React } from 'react';
-
-export const getMediaListByGenre = async (mediaType, startingPage, genreId, numIdsNeeded) => {
+const getMediaListByGenre = async (mediaType, startingPage, genreId, numIdsNeeded) => {
   const numPagesNeeded = Math.ceil(numIdsNeeded / 20);
   const pages = new Array(numPagesNeeded);
   let data;
 
+  try {
+    data = await fetch(`https://api.themoviedb.org/3/discover/${mediaType}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}&with_genres=${genreId}&page=1`);
+  } catch (error) {
+    console.log(error);
+    throw (error);
+  }
 
   for (let i = 0; i < numPagesNeeded; i++) {
     pages[i] = [i + startingPage + 1];

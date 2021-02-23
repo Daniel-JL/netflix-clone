@@ -13,6 +13,7 @@ const Container = styled.div`
   justify-self: center;
   padding-top: 0.6vw;
   margin: auto;
+  
 `;
 
 function EpisodesListContainer({

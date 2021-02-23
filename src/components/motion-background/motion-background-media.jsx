@@ -1,7 +1,8 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
+// import YouTube from '@u-wave/react-youtube';
+import YouTube from 'react-youtube';
 
 const BillboardImage = styled.img`
   position: absolute;
@@ -50,6 +51,7 @@ const MotionBackgroundMedia = ({
   handleVideoPlaying,
   handleVideoEnded,
 }) => {
+  console.log(isPlaying);
   return (
     <MotionBackgroundMediaContainer
       id="media-container"
@@ -66,7 +68,32 @@ const MotionBackgroundMedia = ({
               {vidExists
               && (
                 <BillboardVideo>
-                  <ReactPlayer
+                  <YouTube
+                    ref={setPlayer}
+                    videoId={videoURL}
+                    opts={{
+                      width: "100%",
+                      height: "100%",
+                      playerVars: {
+                        autoplay: 1,
+                        mute: 1,
+                      }
+                    }}
+
+                    onReady={handleVideoPlaying}
+                    
+                  />
+                  {/* <YouTube
+                    video={videoURL}
+                    autoplay
+                    muted={true}
+                    controls={false}
+                    paused={!isPlaying}
+                    width="100%"
+                    height="100%"
+                    onPlaying={() => handleVideoPlaying()}
+                  /> */}
+                  {/* <ReactPlayer
                     ref={setPlayer}
                     url={videoURL}
                     playing={isPlaying}
@@ -98,7 +125,7 @@ const MotionBackgroundMedia = ({
                         },
                       },
                     }}
-                  />
+                  /> */}
                 </BillboardVideo>
               )}
             </div>

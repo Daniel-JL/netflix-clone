@@ -6,7 +6,6 @@ import {
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { getMediaData } from '../../helpers/getMediaData';
-import { getAgeRating } from '../../helpers/getAgeRating';
 import mediaIsMovie from '../../helpers/mediaIsMovie';
 import { MotionBackground } from '../motion-background/motion-background';
 import EpisodesListContainer from './episodes-list-container';
@@ -19,8 +18,16 @@ const EpisodesAndInfoBoxContainer = styled.div`
   width: 50%;
   background: #fff;
   border: 2px solid #444;
-  color: black;
+  color: white;
+  background-color: rgb(32,32,32);
   top: 20px;
+`;
+
+const MediaInfo = styled.div`
+  width: 90%;
+  color: white;
+  display: flex;
+  align-items: space-between;
 `;
 
 const epsInfoBoxLoadedFromSliderItem = (mediaId) => {
@@ -34,10 +41,12 @@ export function EpisodesAndInfoBox({
   sliderItemRuntimeOrNumberOfSeasons,
   sliderItemGenres,
   sliderItemAgeRating,
+  sliderItemOverview,
   setScrollHidden,
 }) {
   const [mediaId, setMediaId] = useState(sliderItemMediaId);
   const [mediaType, setMediaType] = useState(sliderItemMediaType);
+  const [overview, setOverview] = useState();
   const [runtimeOrNumberOfSeasons, setRuntimeOrNumberOfSeasons] = useState(sliderItemRuntimeOrNumberOfSeasons);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -74,8 +83,12 @@ export function EpisodesAndInfoBox({
     setMediaType((mediaType) => mediaTypeUrl);
 
     const data = await getMediaData(mediaTypeUrl, mediaIdUrl);
+    console.log(data);
+
+    // overview, seasons.length, 
 
     setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType) ? `${data.runtime}m` : data.number_of_seasons));
+    setOverview((overview) => data.overview);
 
     setDataLoaded(true);
   };
@@ -98,6 +111,14 @@ export function EpisodesAndInfoBox({
           mediaType={mediaType}
           mediaId={mediaId}
         />
+        {/* <MediaInfo>
+          <div>
+            {runtimeOrNumberOfSeasons}
+          </div>
+          <div>
+            {overview}
+          </div>
+        </MediaInfo> */}
         {mediaType === 'tv'
           && (
           <EpisodesListContainer

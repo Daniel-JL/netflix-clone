@@ -22,8 +22,8 @@ const RoundButton = styled.button`
   font-weight: normal;
   cursor: pointer;
   transition: transform 0.3s ease;
-  height: 3vw;
-  width: 3vw;
+  height: 2.5vw;
+  width: 2.5vw;
   font-size: 15px;
   border-radius: 50%;
   border: 1px solid white;
@@ -91,7 +91,7 @@ export const LinkTextButton = styled(RectButton)`
 `;
 
 export const DropdownLinkTextButton = styled(LinkTextButton)`
-  color: black;
+  color: white;
 `;
 
 export const RoundPlayButton = styled(RoundButton)`
@@ -101,6 +101,14 @@ export const RoundPlayButton = styled(RoundButton)`
   &:hover {
     background-color: rgba(255,255,255, 0.8);
   };
+`;
+
+export const PlayButton = styled(RoundPlayButton)`
+  position: absolute;
+  background:rgba(255,255,255, 0.3);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export const RoundMuteButton = styled(RoundButton)`
@@ -147,7 +155,6 @@ export const RoundEpsAndInfoButton = styled(RoundButton)`
   background-color: white;
   font-size: 25px;
   
-
   &:hover {
     background-color: rgba(255,255,255, 0.8);
   };
