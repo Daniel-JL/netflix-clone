@@ -50,6 +50,7 @@ const InfiniteScroll = ({
   }, [infiniteScrollLoadPoint]);
 
   useEffect(() => {
+    console.log('entered');
     setScrollLimitReached(scrollGroupActive.current);
   }, [scrollGroupActive.current]);
 

@@ -34,7 +34,10 @@ function MoreLikeThisBoxContainer({
   const [imgSrcArray, setImgSrcArray] = useState([]);
 
   const fetchSimilarContentData = async () => {
+    console.log(mediaType);
+    console.log(mediaId);
     const data = await getSimilar(mediaType, mediaId);
+    console.log(data);
     const newData = removeMediaWithoutImg(data);
     
     setIsLoading((isLoading) => true);

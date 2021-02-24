@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { getMediaData } from '../../helpers/getMediaData';
+import usePageVisibility from '../../hooks/usePageVisibility';
 import getVideos from '../../helpers/getVideos';
 import LoadingSkeleton from '../loading-skeleton';
 import MotionBackgroundMedia from './motion-background-media';
@@ -50,6 +51,7 @@ export const MotionBackground = ({
   ageRating,
   isEpsInfoBox,
 }) => {
+  const isVisible = usePageVisibility();
   const [backdropPath, setBackdropPath] = useState();
   const [videoURL, setVideoURL] = useState();
   const [vidExists, setVidExists] = useState(false);
@@ -85,7 +87,6 @@ export const MotionBackground = ({
   };
 
   const handleVideoPlaying = () => {
-    console.log('isplaying');
     setImgFadeOut((imgFadeOut) => true);
   };
 
@@ -132,6 +133,16 @@ export const MotionBackground = ({
   }, []);
 
   useEffect(() => {
+    if (isVisible === false) {
+      isPlaying.current = false;
+      setToggleState((toggleState) => !toggleState);
+    } else {
+      isPlaying.current = true;
+      setToggleState((toggleState) => !toggleState);
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
     if (modal !== undefined) {
       console.log('modalUseEffect');
       if (modal.hasChildNodes()) {
@@ -153,13 +164,11 @@ export const MotionBackground = ({
         entries.forEach((entry) => {
           console.log(videoIsOffScreen(entry.intersectionRatio, intersectionThreshold));
           if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying.current) {
-            console.log('IsPlayingSetFalse');
             // setIsPlaying((isPlaying) => false);
             isPlaying.current = false;
             setToggleState((toggleState) => !toggleState);
 
           } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && (modal === undefined || !modal.hasChildNodes())) {
-            console.log('IsPlayingSetTrue');
 
             // setIsPlaying((isPlaying) => true);
             isPlaying.current = true;

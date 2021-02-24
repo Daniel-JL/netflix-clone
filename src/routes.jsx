@@ -187,6 +187,7 @@ const Routes = () => {
                 sliderItemGenres={epsAndInfoBoxProps.genres}
                 sliderItemAgeRating={epsAndInfoBoxProps.ageRating}
                 sliderItemOverview={epsAndInfoBoxProps.overview}
+                setModalProps={setModalProps}
               />
             </Modal>
           )}

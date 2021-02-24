@@ -31,7 +31,7 @@ const MediaInfo = styled.div`
 `;
 
 const epsInfoBoxLoadedFromSliderItem = (mediaId) => {
-  return mediaId === undefined;
+  return mediaId === undefined || mediaId === '';
 };
 
 export function EpisodesAndInfoBox({
@@ -43,6 +43,7 @@ export function EpisodesAndInfoBox({
   sliderItemAgeRating,
   sliderItemOverview,
   setScrollHidden,
+  setModalProps,
 }) {
   const [mediaId, setMediaId] = useState(sliderItemMediaId);
   const [mediaType, setMediaType] = useState(sliderItemMediaType);
@@ -56,6 +57,7 @@ export function EpisodesAndInfoBox({
   document.body.style.overflow = 'hidden';
 
   const back = () => {
+    setModalProps('','','','','','','');
     setScrollHidden();
     history.goBack();
     document.body.style.overflow = 'scroll';
