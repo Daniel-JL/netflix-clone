@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ReactPlayer from 'react-player';
 // import YouTube from '@u-wave/react-youtube';
 import YouTube from 'react-youtube';
+import './motion-background-media.css';
 
 const BillboardImage = styled.img`
   position: absolute;
@@ -21,12 +22,24 @@ const BillboardImage = styled.img`
 } 
 `;
 
-const BillboardVideo = styled.div`
+const VideoContainer = styled.div`
   position: absolute;
   width: 100%;
   top:0;
   z-index: 0;
   height: 100%;
+`;
+
+const BillboardVideo = styled.div`
+  // position: absolute;
+  // width: 100%;
+  // top:0;
+  // z-index: 0;
+  // height: 100%;
+  position: relative; 
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
 `;
 
 const MotionBackgroundMediaContainer = styled.div`
@@ -47,11 +60,74 @@ const MotionBackgroundMedia = ({
   muteActive,
   imgFadeOut,
   imgFadeIn,
-  setPlayer,
   handleVideoPlaying,
   handleVideoEnded,
+  handleVideoNearlyEnded,
 }) => {
+  const [playerEvent, setPlayerEvent] = useState();
+  const [videoProgressInterval, setVideoProgressInterval] = useState();
+  const [videoEnded, setVideoEnded] = useState(false);
+
   console.log(isPlaying);
+  const onReady = (e) => {
+    setPlayerEvent((playerEvent) => e);
+    if (isPlaying === true) {
+      handleVideoPlaying();
+      initialiseProgressInterval(e);
+    } else {
+      e.target.pauseVideo();
+      
+    }
+  };
+
+  const initialiseProgressInterval = (e) => {
+    setVideoProgressInterval((videoProgressInterval) => setInterval(() => {
+      if (e.target.getCurrentTime()/e.target.getDuration() > 0.94) {
+        handleVideoNearlyEnded();
+      }
+    }, 500));
+  };
+
+  const onPlayerStateChange = (e) => {
+    if (e.data === 0) {
+      handleVideoEnded();
+      clearInterval(videoProgressInterval);
+      setVideoEnded((videoEnded) => true);
+    }
+  };
+
+  useEffect(() => {
+    console.log('inUseEffect');
+    if (playerEvent) {
+      console.log(isPlaying);
+      if (!isPlaying) {
+        console.log('pauseVideo');
+        playerEvent.target.pauseVideo();
+        clearInterval(videoProgressInterval);
+
+      } else if (videoEnded === true) {
+        playerEvent.target.seekTo(0);
+        initialiseProgressInterval(playerEvent);
+        playerEvent.target.playVideo();
+
+      } else {
+        handleVideoPlaying();
+        initialiseProgressInterval(playerEvent);
+        playerEvent.target.playVideo();
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (playerEvent) {
+      if (!muteActive) {
+        playerEvent.target.unMute();
+      } else {
+        playerEvent.target.mute();
+      }
+    }
+  }, [muteActive]);
+
   return (
     <MotionBackgroundMediaContainer
       id="media-container"
@@ -67,54 +143,14 @@ const MotionBackgroundMedia = ({
               />
               {vidExists
               && (
-                <BillboardVideo>
-                  <YouTube
-                    ref={setPlayer}
-                    videoId={videoURL}
-                    opts={{
-                      width: "100%",
-                      height: "100%",
-                      playerVars: {
-                        autoplay: 1,
-                        mute: 1,
-                      }
-                    }}
-
-                    onReady={handleVideoPlaying}
-                    
-                  />
-                  {/* <YouTube
-                    video={videoURL}
-                    autoplay
-                    muted={true}
-                    controls={false}
-                    paused={!isPlaying}
-                    width="100%"
-                    height="100%"
-                    onPlaying={() => handleVideoPlaying()}
-                  /> */}
-                  {/* <ReactPlayer
-                    ref={setPlayer}
-                    url={videoURL}
-                    playing={isPlaying}
-                    controls={false}
-                    playIcon={false}
-                    muted={muteActive}
-                    onStart={() => handleVideoPlaying()}
-                    onProgress={(played) => {
-                      if (imgFadeOut !== true) {
-                        handleVideoPlaying();
-                      }
-
-                      if (played.played >= 0.94) {
-                        handleVideoEnded();
-                      }
-                    }}
-                    width="100%"
-                    height="100%"
-                    config={{
-                      youtube: {
+                <VideoContainer id="vidContainer">
+                  <BillboardVideo id="billboardVideo">
+                    <YouTube
+                      videoId={videoURL}
+                      opts={{
                         playerVars: {
+                          autoplay: 1,
+                          mute: 1,
                           cc_load_policy: 3,
                           iv_load_policy: 3,
                           rel: 0,
@@ -123,10 +159,14 @@ const MotionBackgroundMedia = ({
                           fs: 0,
                           modestbranding: 1,
                         },
-                      },
-                    }}
-                  /> */}
-                </BillboardVideo>
+                      }}
+                      onReady={onReady}
+                      onStateChange={onPlayerStateChange}
+                      containerClassName="youtubeContainer"
+                    />
+                  </BillboardVideo>
+                </VideoContainer>
+
               )}
             </div>
           )}

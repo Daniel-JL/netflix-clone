@@ -57,12 +57,13 @@ export const MotionBackground = ({
   const [imgFadeIn, setImgFadeIn] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [pausePoint, setPausePoint] = useState(null);
-  const [isPlaying, setIsPlaying] = useState();
+  // const [isPlaying, setIsPlaying] = useState();
   const [muteActive, setMuteActive] = useState(true);
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');
-  const [player, setPlayer] = useState();
   const [modal, setModal] = useState();
+  const isPlaying = useRef();
+  const [toggleState, setToggleState] = useState(false);
   const videoEnded = useRef(false);
   const intersectionThreshold = 0.2;
 
@@ -76,21 +77,26 @@ export const MotionBackground = ({
     data = await getVideos(mediaType, mediaId);
     if (videosAvailable(data.results.length)) {
       // setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
+      // setVideoURL((videoURL) => `https://www.youtube.com/embed/${data.results[0].key}`);
       setVideoURL((videoURL) => data.results[0].key);
       setVidExists(true);
     }
     setDataLoaded(true);
   };
 
-  const handleVideoPlaying = (e) => {
+  const handleVideoPlaying = () => {
     console.log('isplaying');
-    // e.target.playVideo();
     setImgFadeOut((imgFadeOut) => true);
   };
 
-  const handleVideoEnded = () => {
+  const handleVideoNearlyEnded = () => {
     setImgFadeOut((imgFadeOut) => false);
     setImgFadeIn((imgFadeIn) => true);
+  };
+
+  const handleVideoEnded = () => {
+    // setIsPlaying((isPlaying) => false);
+    isPlaying.current = false;
     videoEnded.current = true;
   };
 
@@ -99,20 +105,23 @@ export const MotionBackground = ({
       setMuteActive((muteActive) => !muteActive);
     } else {
       videoEnded.current = false;
-      player.seekTo(0);
       setImgFadeOut((imgFadeOut) => true);
       setImgFadeIn((imgFadeIn) => false);
-      setIsPlaying((isPlaying) => true);
+      // setIsPlaying((isPlaying) => true);
+      isPlaying.current = true;
+
     }
   };
 
   const handleInfoButtonClick = () => {
-    setIsPlaying((isPlaying) => false);
+    // setIsPlaying((isPlaying) => false);
+    isPlaying.current = false;
   };
 
   const checkIfModalActive = () => {
     const modalNode = document.getElementById('modal-root');
     setModal((modal) => modalNode);
+    console.log('ModalSet');
   };
 
   useEffect(() => {
@@ -124,10 +133,16 @@ export const MotionBackground = ({
 
   useEffect(() => {
     if (modal !== undefined) {
+      console.log('modalUseEffect');
       if (modal.hasChildNodes()) {
-        setIsPlaying((isPlaying) => false);
+        // setIsPlaying((isPlaying) => false);
+        isPlaying.current = false;
+        setToggleState((toggleState) => !toggleState);
+
       } else {
-        setIsPlaying((isPlaying) => true);
+        // setIsPlaying((isPlaying) => true);
+        isPlaying.current = true;
+
       }
     }
   }, [modal]);
@@ -136,10 +151,20 @@ export const MotionBackground = ({
     if (pausePointExists(pausePoint)) {
       const videoObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
-          if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying) {
-            setIsPlaying(false);
+          console.log(videoIsOffScreen(entry.intersectionRatio, intersectionThreshold));
+          if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying.current) {
+            console.log('IsPlayingSetFalse');
+            // setIsPlaying((isPlaying) => false);
+            isPlaying.current = false;
+            setToggleState((toggleState) => !toggleState);
+
           } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && (modal === undefined || !modal.hasChildNodes())) {
-            setIsPlaying(true);
+            console.log('IsPlayingSetTrue');
+
+            // setIsPlaying((isPlaying) => true);
+            isPlaying.current = true;
+            setToggleState((toggleState) => !toggleState);
+
           }
         });
       }, { threshold: intersectionThreshold });
@@ -159,13 +184,13 @@ export const MotionBackground = ({
               backdropPath={backdropPath}
               videoURL={videoURL}
               vidExists={vidExists}
-              isPlaying={isPlaying}
+              isPlaying={isPlaying.current}
               muteActive={muteActive}
               imgFadeOut={imgFadeOut}
               imgFadeIn={imgFadeIn}
-              setPlayer={setPlayer}
               handleVideoPlaying={handleVideoPlaying}
               handleVideoEnded={handleVideoEnded}
+              handleVideoNearlyEnded={handleVideoNearlyEnded}
             />
             <MotionBackgroundOverlay
               mediaId={mediaId}
