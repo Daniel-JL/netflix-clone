@@ -1,0 +1,30 @@
+.slides {
+  margin: 60px;
+  .slick-prev, .slick-next {
+    top: 50%;
+  }
+  .slick-prev {
+    z-index: 1;
+    background-color: black;
+  }
+  .slick-next:before {
+    z-index: 5;
+  }
+  .slick-track {
+    display: flex;
+  }
+  .slick-track .slick-slide {
+    display: flex;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+  }
+  .slick-slide {
+    margin: 0 27px;
+  }
+  .slick-list {
+    margin: 0 -27px;
+  }
+
+}
+

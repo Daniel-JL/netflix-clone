@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loco row component renders correctly 1`] = `
+<div
+  className="sc-fznyAO jdCYPD"
+>
+  <div
+    className="sc-fznKkj cdxqDW"
+  />
+  <header
+    className="sc-fznZeY Idrpa"
+  />
+  <div
+    className="sc-fzokOt eDqSFf"
+  >
+    <div
+      className="sc-fzpans gxFaOO"
+    >
+      <div
+        className="sc-fzplWN etOvms"
+      />
+      <div
+        className="sc-AxjAm jrPXsu"
+      />
+      <div
+        className="sc-AxjAm jrPXsu"
+      />
+      <div
+        className="sc-AxjAm jrPXsu"
+      />
+      <div
+        className="sc-AxjAm jrPXsu"
+      />
+      <div
+        className="sc-AxjAm jrPXsu"
+      />
+      <div
+        className="sc-AxjAm jrPXsu"
+      />
+      <div
+        className="sc-fzplWN etOvms"
+      >
+        <button
+          className="sc-fzoLsD bYBobW"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="sc-fznKkj cdxqDW"
+  />
+</div>
+`;

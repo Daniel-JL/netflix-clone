@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search input should render correctly 1`] = `
+<div>
+  <a
+    aria-current="page"
+    className="active"
+    href="/"
+    onClick={[Function]}
+    style={Object {}}
+  >
+    <input
+      onChange={[Function]}
+      type="text"
+    />
+  </a>
+</div>
+`;
