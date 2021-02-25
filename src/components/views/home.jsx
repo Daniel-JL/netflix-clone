@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import shuffleArray from '../../helpers/shuffleArray';
-import { MotionBackground } from '../motion-background/motion-background';
 import LocoRowGroup from '../slider/loco-row-group';
 import InfiniteScroll from '../infinite-scroll';
 
@@ -67,17 +66,10 @@ const Home = ({
         <InfiniteScroll
           genreTypeArr={genreTypeArr}
           maxNumScrollLoads={maxNumScrollLoads}
-          motionBackground={(
-            <MotionBackground
-              mediaType={trendingItemData.mediaType}
-              mediaId={trendingItemData.id}
-              ageRating={trendingItemData.ageRating}
-              isEpsInfoBox={false}
-            />
-          )}
           locoRowGroup={(
             <LocoRowGroup
               setModalProps={setModalProps}
+              trendingItemData={trendingItemData}
             />
           )}
         />

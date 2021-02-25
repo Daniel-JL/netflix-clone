@@ -19,7 +19,7 @@ const MediaSliderContainer = (
     mediaType,
     genreName,
     genreId,
-    setImagesLoaded,
+    handleItemLoaded
   },
 ) => {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -48,7 +48,7 @@ const MediaSliderContainer = (
   const handleImageLoaded = () => {
     numItemsLoaded.current += 1;
     if (numItemsLoaded.current === 6) {
-      setImagesLoaded(true);
+      handleItemLoaded();
     }
   };
 

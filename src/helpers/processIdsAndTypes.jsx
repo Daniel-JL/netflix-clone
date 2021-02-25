@@ -3,7 +3,7 @@ const processIdsAndTypes = (data, numIdsNeeded, mediaType) => {
   const movieTvShowIdsAndTypes = { ids: [], types: [] };
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < numItemsPerPage; j++) {
-      if (data[i].results[j].backdrop_path === undefined) {
+      if (data[i].results[j] === undefined) {
         console.log(data[i]);
       }
       if (data[i].results[j].backdrop_path !== null) {

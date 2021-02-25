@@ -50,6 +50,8 @@ export const MotionBackground = ({
   mediaId,
   ageRating,
   isEpsInfoBox,
+  handleItemLoaded,
+  itemsLoaded,
 }) => {
   const isVisible = usePageVisibility();
   const [backdropPath, setBackdropPath] = useState();
@@ -200,6 +202,8 @@ export const MotionBackground = ({
               handleVideoPlaying={handleVideoPlaying}
               handleVideoEnded={handleVideoEnded}
               handleVideoNearlyEnded={handleVideoNearlyEnded}
+              handleItemLoaded={handleItemLoaded}
+              itemsLoaded={itemsLoaded}
             />
             <MotionBackgroundOverlay
               mediaId={mediaId}

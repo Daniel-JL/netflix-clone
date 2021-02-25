@@ -34,11 +34,11 @@ const Row = styled.div`
 `;
 
 const SliderContainer = styled.div`
-  visibility: hidden;
+  // visibility: hidden;
 
-  ${({ imagesLoaded }) => imagesLoaded && `
-      visibility: visible;
-    `}
+  // ${({ imagesLoaded }) => imagesLoaded && `
+  //     visibility: visible;
+  // `}
 `;
 
 const LocoRow = (
@@ -48,9 +48,10 @@ const LocoRow = (
     mediaType,
     genreName,
     genreId,
+    handleItemLoaded,
   },
 ) => {
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
 
   return (
     <RowContainer>
@@ -61,18 +62,17 @@ const LocoRow = (
         </HeaderText>
       </RowHeader>
       <Row>
-        {!imagesLoaded &&
+        {/* {!imagesLoaded &&
           <LoadingSkeleton />
-        }
-        <SliderContainer imagesLoaded={imagesLoaded}>
+        } */}
+        <SliderContainer>
           <MediaSliderContainer
-            imagesLoaded={imagesLoaded}
             setModalProps={setModalProps}
             numSlidersLoaded={numSlidersLoaded}
             mediaType={mediaType}
             genreName={genreName}
             genreId={genreId}
-            setImagesLoaded={setImagesLoaded}
+            handleItemLoaded={handleItemLoaded}
           />
         </SliderContainer>
       </Row>
