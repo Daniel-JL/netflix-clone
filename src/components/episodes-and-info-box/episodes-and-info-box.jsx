@@ -30,9 +30,7 @@ const MediaInfo = styled.div`
   align-items: space-between;
 `;
 
-const epsInfoBoxLoadedFromSliderItem = (mediaId) => {
-  return mediaId === undefined || mediaId === '';
-};
+const epsInfoBoxLoadedFromSliderItem = (mediaId) => mediaId === undefined || mediaId === '';
 
 export function EpisodesAndInfoBox({
   sliderItemMediaId,
@@ -57,7 +55,7 @@ export function EpisodesAndInfoBox({
   document.body.style.overflow = 'hidden';
 
   const back = () => {
-    setModalProps('','','','','','','');
+    setModalProps('', '', '', '', '', '', '');
     setScrollHidden();
     history.goBack();
     document.body.style.overflow = 'scroll';
@@ -87,9 +85,20 @@ export function EpisodesAndInfoBox({
     const data = await getMediaData(mediaTypeUrl, mediaIdUrl);
     console.log(data);
 
-    // overview, seasons.length, 
+    // overview, seasons.length,
 
-    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType) ? `${data.runtime}m` : data.number_of_seasons));
+    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType)
+      ? `${data.runtime}m`
+      : [
+        ...Array(data.number_of_seasons),
+      ].map((undefined, index) => (
+        {
+          seasonNum: index + 1,
+          numEps: data.seasons[index].episode_count,
+        }
+      ))
+    ));
+
     setOverview((overview) => data.overview);
 
     setDataLoaded(true);
@@ -125,7 +134,7 @@ export function EpisodesAndInfoBox({
           && (
           <EpisodesListContainer
             mediaId={mediaId}
-            numSeasons={runtimeOrNumberOfSeasons}
+            numEpsPerSeason={runtimeOrNumberOfSeasons}
           />
           )}
         <MoreLikeThisBoxContainer

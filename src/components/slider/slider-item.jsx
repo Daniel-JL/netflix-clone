@@ -198,8 +198,8 @@ export function SliderItem({
                   <div id="media-info">
                     {ageRating}
                     {' '}
-                    {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
-                    {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
+                    {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons.length} Seasons`}
+                    {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons.length} Season`}
                   </div>
                   <div id="genres">
                     {genres[0]}

@@ -29,18 +29,27 @@ const SliderItemContainer = ({
 
   const fetchItemData = async () => {
     const data = await getMediaData(mediaType, mediaId);
-
     setMediaTitle((mediaTitle) => (data.title ? data.title : data.name));
     setPosterPath((posterPath) => `http://image.tmdb.org/t/p/w780${data.backdrop_path}`);
     setGenres((genres) => [
       ...Array(data.genres.length),
     ].map((undefined, index) => data.genres[index].name));
-    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType) ? `${data.runtime}m` : data.number_of_seasons));
+    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType)
+      ? `${data.runtime}m`
+      : [
+        ...Array(data.number_of_seasons),
+      ].map((undefined, index) => (
+        {
+          seasonNum: index + 1,
+          numEps: data.seasons[index].episode_count,
+        }
+      ))
+    ));
+
     setOverview((overview) => data.overview);
 
     const ageRating = await getAgeRating(mediaId, mediaType);
     setAgeRating((ageRating) => ageRating);
-  
 
     setDataLoaded(true);
   };

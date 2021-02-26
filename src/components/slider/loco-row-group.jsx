@@ -5,12 +5,10 @@ import { MotionBackground } from '../motion-background/motion-background';
 import LocoRow from './loco-row';
 
 const GroupContainer = styled.div`
-  // visibility: hidden;
   position: relative;
   display: none;
 
   ${({ itemsLoaded }) => itemsLoaded && `
-      // visibility: visible;
       display: block;
   `}
 `;
