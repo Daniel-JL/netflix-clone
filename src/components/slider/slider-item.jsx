@@ -55,16 +55,12 @@ const MediaTitle = styled.div`
 `;
 
 export function SliderItem({
-  mediaTitle,
   mediaId,
   mediaType,
-  ageRating,
-  genres,
+  sliderItemData,
   imgLoadedSuccess,
   imgLoadingErr,
   dataLoaded,
-  posterPath,
-  runtimeOrNumberOfSeasons,
   itemHoverActive,
   itemHoverTransition,
   handleMouseOver,
@@ -118,19 +114,19 @@ export function SliderItem({
       && (
         <ImgTitleContainer>
           <MediaTitle>
-            {mediaTitle}
+            {sliderItemData.mediaTitle}
           </MediaTitle>
           <SliderItemImage
             alt="Slider image"
-            src={posterPath}
+            src={sliderItemData.posterPath}
             onError={() => setImgLoadingErr()}
             onLoad={() => setImgLoadSuccess()}
           />
         </ImgTitleContainer>
       )}
 
-      {imgLoadedSuccess
-      && <div id="imgSuccess" data-testid="imgSuccess" />}
+      {/* {imgLoadedSuccess
+      && <div id="imgSuccess" data-testid="imgSuccess" />} */}
 
       {itemHoverActive
         && (
@@ -164,11 +160,11 @@ export function SliderItem({
               >
                 <ImgTitleContainer>
                   <MediaTitle>
-                    {mediaTitle}
+                    {sliderItemData.mediaTitle}
                   </MediaTitle>
                   <SliderItemImage
                     alt="Slider image"
-                    src={posterPath}
+                    src={sliderItemData.posterPath}
                     onError={() => setImgLoadingErr()}
                     onLoad={() => setImgLoadSuccess()}
                   />
@@ -196,13 +192,13 @@ export function SliderItem({
                     </Link>
                   </div>
                   <div id="media-info">
-                    {ageRating}
+                    {sliderItemData.ageRating}
                     {' '}
-                    {runtimeOrNumberOfSeasons > 1 && `${runtimeOrNumberOfSeasons} Seasons`}
-                    {runtimeOrNumberOfSeasons === 1 && `${runtimeOrNumberOfSeasons} Season`}
+                    {sliderItemData.runtimeOrNumberOfSeasons > 1 && `${sliderItemData.runtimeOrNumberOfSeasons.length} Seasons`}
+                    {sliderItemData.runtimeOrNumberOfSeasons === 1 && `${sliderItemData.runtimeOrNumberOfSeasons.length} Season`}
                   </div>
                   <div id="genres">
-                    {genres[0]}
+                    {sliderItemData.genres[0]}
                     {/* {'  '}
                     {'  '}
                     {genres[1]} */}

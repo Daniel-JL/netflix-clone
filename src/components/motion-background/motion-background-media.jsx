@@ -63,12 +63,13 @@ const MotionBackgroundMedia = ({
   handleVideoPlaying,
   handleVideoEnded,
   handleVideoNearlyEnded,
+  handleItemLoaded,
+  itemsLoaded,
 }) => {
   const [playerEvent, setPlayerEvent] = useState();
   const [videoProgressInterval, setVideoProgressInterval] = useState();
   const [videoEnded, setVideoEnded] = useState(false);
 
-  console.log(isPlaying);
   const onReady = (e) => {
     setPlayerEvent((playerEvent) => e);
     if (isPlaying === true) {
@@ -140,8 +141,9 @@ const MotionBackgroundMedia = ({
                 src={backdropPath}
                 fadeOut={imgFadeOut}
                 fadeIn={imgFadeIn}
+                onLoad={() => handleItemLoaded()}
               />
-              {vidExists
+              {vidExists && itemsLoaded
               && (
                 <VideoContainer id="vidContainer">
                   <BillboardVideo id="billboardVideo">

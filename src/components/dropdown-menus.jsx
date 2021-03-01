@@ -29,13 +29,11 @@ export const AccountDropdownMenu = () => {
 
 export const EpisodeDropdownMenu = ({
   numOfSeasons,
-  seasonEpisodeData,
+  numEpsPerSeason,
   changeSelectedSeason,
-  resetEpisodeListItemLimit,
 }) => {
   const handleMenuItemClick = (index) => {
-    changeSelectedSeason(seasonEpisodeData[index].seasonNum)
-    resetEpisodeListItemLimit();
+    changeSelectedSeason(numEpsPerSeason[index].seasonNum)
   };
   
   return (
@@ -48,7 +46,7 @@ export const EpisodeDropdownMenu = ({
             key={index}
             onClick={() => handleMenuItemClick(index)}
           >
-            Season {seasonEpisodeData[index].seasonNum} ({seasonEpisodeData[index].episodeData.length} Episodes)
+            Season {numEpsPerSeason[index].seasonNum} ({numEpsPerSeason[index].numEps} Episodes)
           </DropdownLinkTextButton>
           
         ))

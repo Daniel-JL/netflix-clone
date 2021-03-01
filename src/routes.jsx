@@ -180,13 +180,8 @@ const Routes = () => {
               right="0"
             >
               <EpisodesAndInfoBox
-                sliderItemMediaId={epsAndInfoBoxProps.mediaId}
-                sliderItemMediaType={epsAndInfoBoxProps.mediaType}
-                sliderItemPosterPath={epsAndInfoBoxProps.posterPath}
-                sliderItemRuntimeOrNumberOfSeasons={epsAndInfoBoxProps.runtimeOrNumberOfSeasons}
-                sliderItemGenres={epsAndInfoBoxProps.genres}
-                sliderItemAgeRating={epsAndInfoBoxProps.ageRating}
-                sliderItemOverview={epsAndInfoBoxProps.overview}
+                epsAndInfoBoxProps={epsAndInfoBoxProps}
+                setModalProps={setModalProps}
               />
             </Modal>
           )}

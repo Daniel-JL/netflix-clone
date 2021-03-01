@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const InfiniteScroll = ({
-  motionBackground,
+  // motionBackground,
   locoRowGroup,
   genreTypeArr,
 }) => {
@@ -9,6 +9,7 @@ const InfiniteScroll = ({
   const [toggleForRerender, setToggleForRerender] = useState(false);
   const [scrollLimitReached, setScrollLimitReached] = useState(scrollGroupActive.current);
   const [infiniteScrollLoadPoint, setInfiniteScrollLoadPoint] = useState(null);
+  // const infiniteScrollLoadPoint = useRef();
   const numItemsPerScroll = 5;
   const maxNumScrollLoads = Math.floor(genreTypeArr.length / numItemsPerScroll);
 
@@ -25,12 +26,14 @@ const InfiniteScroll = ({
 
         prevY.current = y;
       },
-      { threshold: 0.4 },
+      { threshold: 0.2 },
     ),
   );
 
   const mountMoreComponents = () => {
     scrollGroupActive.current++;
+    //  Scroll load point removed until new items loaded
+    setInfiniteScrollLoadPoint(0);
     setToggleForRerender((toggleForRerender) => !toggleForRerender);
   };
 
@@ -50,22 +53,24 @@ const InfiniteScroll = ({
   }, [infiniteScrollLoadPoint]);
 
   useEffect(() => {
+    console.log('entered');
     setScrollLimitReached(scrollGroupActive.current);
   }, [scrollGroupActive.current]);
 
   return (
     <div>
-      {motionBackground}
+      {/* {motionBackground} */}
         { 
           [
             ...Array(maxNumScrollLoads),
           ].map((value: undefined, index: number) => (
             scrollLimitReached + 1 > index && (
-              <div ref={setInfiniteScrollLoadPoint}>
+              <div>
                 {
                   React.Children.map(locoRowGroup, (child) => 
                     React.cloneElement(child, {
                       key: index,
+                      setInfiniteScrollLoadPoint: setInfiniteScrollLoadPoint,
                       genreTypeArr: genreTypeArr.slice(index*numItemsPerScroll, index*numItemsPerScroll + numItemsPerScroll),
                       numItems: numItemsPerScroll,
                       numSlidersLoaded: numItemsPerScroll*index + 1,

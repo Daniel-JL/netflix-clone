@@ -18,29 +18,35 @@ const SliderItemContainer = ({
   const [itemHoverActive, setItemHoverActive] = useState(false);
   const [itemHoverTransition, setItemHoverTransition] = useState(true);
   const [itemDimensions, setItemDimensions] = useState({});
-  const [mediaTitle, setMediaTitle] = useState();
-  const [posterPath, setPosterPath] = useState();
-  const [genres, setGenres] = useState();
-  const [runtimeOrNumberOfSeasons, setRuntimeOrNumberOfSeasons] = useState();
-  const [ageRating, setAgeRating] = useState();
-  const [overview, setOverview] = useState();
   const [delayHandler, setDelayHandler] = useState();
+  const [sliderItemData, setSliderItemData] = useState();
   const delayDuration = 300;
+  console.log(mediaId);
 
   const fetchItemData = async () => {
     const data = await getMediaData(mediaType, mediaId);
-
-    setMediaTitle((mediaTitle) => (data.title ? data.title : data.name));
-    setPosterPath((posterPath) => `http://image.tmdb.org/t/p/w780${data.backdrop_path}`);
-    setGenres((genres) => [
-      ...Array(data.genres.length),
-    ].map((undefined, index) => data.genres[index].name));
-    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType) ? `${data.runtime}m` : data.number_of_seasons));
-    setOverview((overview) => data.overview);
-
     const ageRating = await getAgeRating(mediaId, mediaType);
-    setAgeRating((ageRating) => ageRating);
-  
+
+    setSliderItemData((sliderItemData) => ({
+      mediaTitle: data.title ? data.title : data.name,
+      posterPath: `http://image.tmdb.org/t/p/w780${data.backdrop_path}`,
+      genres: [
+        ...Array(data.genres.length),
+      ].map((undefined, index) => data.genres[index].name),
+      runtimeOrNumberOfSeasons: (mediaIsMovie(mediaType)
+        ? `${data.runtime}m`
+        : [
+          ...Array(data.number_of_seasons),
+        ].map((undefined, index) => (
+          {
+            seasonNum: index + 1,
+            numEps: data.seasons[index].episode_count,
+          }
+        ))
+      ),
+      overview: data.overview,
+      ageRating,
+    }));
 
     setDataLoaded(true);
   };
@@ -85,12 +91,11 @@ const SliderItemContainer = ({
     setModalProps(
       mediaId,
       mediaType,
-      posterPath,
-      runtimeOrNumberOfSeasons,
-      genres,
-      ageRating,
-      overview,
-
+      sliderItemData.posterPath,
+      sliderItemData.runtimeOrNumberOfSeasons,
+      sliderItemData.genres,
+      sliderItemData.ageRating,
+      sliderItemData.overview,
     );
   };
 
@@ -105,16 +110,12 @@ const SliderItemContainer = ({
       {dataLoaded
         && (
         <SliderItem
-          mediaTitle={mediaTitle}
           mediaId={mediaId}
           mediaType={mediaType}
-          ageRating={ageRating}
-          genres={genres}
+          sliderItemData={sliderItemData}
           imgLoadedSuccess={imgLoadedSuccess}
           imgLoadingErr={imgLoadingErr}
           dataLoaded={dataLoaded}
-          posterPath={posterPath}
-          runtimeOrNumberOfSeasons={runtimeOrNumberOfSeasons}
           itemHoverActive={itemHoverActive}
           itemHoverTransition={itemHoverTransition}
           handleMouseOver={handleMouseOver}

@@ -39,7 +39,7 @@ export const Modal = ({
   left,
   top,
   bottom,
-  right
+  right,
 }) => {
   const [scrollActive, setScrollActive] = useState(true);
   const setScrollHidden = () => {

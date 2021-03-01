@@ -27,9 +27,8 @@ export function AccountDropdown() {
 
 export function EpisodeDropdown({
   selectedSeason,
-  seasonEpisodeData,
+  numEpsPerSeason,
   changeSelectedSeason,
-  resetEpisodeListItemLimit,
 }) {
   const [dropdownActive, setDropdownActive] = useState(false);
   const [numOfSeasons, setNumOfSeasons] = useState();
@@ -44,7 +43,7 @@ export function EpisodeDropdown({
   };
 
   const handleSeasonEpisodeData = () => {
-    setNumOfSeasons((numOfSeasons) => seasonEpisodeData.length);
+    setNumOfSeasons((numOfSeasons) => numEpsPerSeason.length);
     // for (let i = 0; i < seasonEpisodeData.length; i++) {
     //   setEpsPerSeason((epsPerSeason) => [...epsPerSeason, seasonEpisodeData[i].length]);
     // }
@@ -70,9 +69,8 @@ export function EpisodeDropdown({
         && (
           <EpisodeDropdownMenu
             numOfSeasons={numOfSeasons}
-            seasonEpisodeData={seasonEpisodeData}
+            numEpsPerSeason={numEpsPerSeason}
             changeSelectedSeason={changeSelectedSeason}
-            resetEpisodeListItemLimit={resetEpisodeListItemLimit}
           />
         )}
 

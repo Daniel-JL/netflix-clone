@@ -2,170 +2,168 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import getSeasonData from '../../helpers/getSeasonData';
 import EpisodesList from './episodes-list';
-import EpisodesListItemContainer from './episodes-list-item-container';
+import EpisodesListItem from './episodes-list-item';
+import EpisodesListLoadingSkeleton from './episodes-list-loading-skeleton';
+import { EpisodeDropdown } from '../dropdowns';
 
 const Container = styled.div`
   width: 90%;
+  position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   align-self: center;
   justify-self: center;
   padding-top: 0.6vw;
   margin: auto;
-  
 `;
 
-function EpisodesListContainer({
+const ListContainer = styled.div`
+  display: none;
+
+  ${({ imagesLoaded }) => imagesLoaded && `
+      display: block;
+  `}
+`;
+
+const EpisodeDropDownContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
+`;
+
+const processValidEpisodes = (data, season) => {
+  const validEpisodes = [];
+  let episodeAirDate;
+  let todaysDate = new Date();
+
+  const dd = String(todaysDate.getDate()).padStart(2, '0');
+  const mm = String(todaysDate.getMonth() + 1).padStart(2, '0'); // January is 0!
+  const yyyy = todaysDate.getFullYear();
+  todaysDate = `${yyyy}/${mm}/${dd}`;
+
+  if (data.episodes) {
+    for (let j = 0; j < data.episodes.length; j++) {
+      episodeAirDate = data.episodes[j].air_date.replace(/-/g, '/');
+      if (episodeAirDate < todaysDate) {
+        validEpisodes.push(data.episodes[j]);
+      }
+    }
+  }
+  return {
+    seasonNum: season,
+    episodeData: validEpisodes,
+  };
+};
+
+const EpisodesListContainer = ({
   mediaId,
-  numSeasons,
-}) {
+  numEpsPerSeason,
+}) => {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [seasonEpisodeData, setSeasonEpisodeData] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState(1);
-  const [seasonDataNeedsLoading, setSeasonDataNeedsLoading] = useState(false);
-  const [episodesListItemData, setEpisodesListItemData] = useState([]);
+  const [episodesListItemData, setEpisodesListItemData] = useState(new Array(numEpsPerSeason.length));
   const [isLoading, setIsLoading] = useState(false);
-  const [alreadyLoaded, setAlreadyLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const numItemsLoaded = useRef(0);
 
-  const fetchAllSeasonData = async () => {
-    const data = await getSeasonData(mediaId, numSeasons);
-    setIsLoading((isLoading) => true);
+  const processSeasonData = async () => {
+    const data = await getSeasonData(mediaId, selectedSeason);
 
-    handleSeasonEpisodeData(data);
+    const validEpisodeData = processValidEpisodes(data, selectedSeason);
+
+    loadEpisodeListItemData(validEpisodeData);
+
     setDataLoaded(true);
   };
 
-  const handleSeasonEpisodeData = (data) => {
-    const validEpisodes = [];
-    let episodeAirDate;
-    let todaysDate = new Date();
+  const handleImgLoad = () => {
+    let numItemsToLoad;
 
-    const dd = String(todaysDate.getDate()).padStart(2, '0');
-    const mm = String(todaysDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = todaysDate.getFullYear();
-    todaysDate = yyyy + '/' + mm + '/' + dd;
-
-    for (let i = 0; i < data.length; i++) {
-      validEpisodes.push([]);
-      if (data[i].episodes) {
-        for (let j = 0; j < data[i].episodes.length; j++) {
-          episodeAirDate = data[i].episodes[j].air_date.replace(/-/g,'/');
-          if (episodeAirDate < todaysDate) {
-            validEpisodes[i].push(data[i].episodes[j]);
-          }
-        }
-      }
+    numItemsLoaded.current += 1;
+    if (episodesListItemData[selectedSeason - 1].episodeListItems.length >= 10) {
+      numItemsToLoad = 10;
+    } else {
+      numItemsToLoad = episodesListItemData[selectedSeason - 1].episodeListItems.length;
     }
 
-    const seasonEpisodeDataCopy = data.map((undefined, index) => (
-      {
-        seasonNum: index + 1,
-        episodeData: validEpisodes[index],
-      }));
-
-    setSeasonEpisodeData((seasonEpisodeData) => seasonEpisodeDataCopy);
+    if (numItemsLoaded.current >= numItemsToLoad) {
+      setImagesLoaded((imagesLoaded) => true);
+    }
   };
 
-  const initialiseEpisodesListItemData = () => {
-    const episodesListItemDataInitial = seasonEpisodeData.map((undefined, index) => (
-      {
-        seasonNum: index + 1,
-        episodeListItems: [],
-      }
-    ));
+  const loadEpisodeListItemData = (validEpisodeData) => {
+    const episodesListItemDataCopy = episodesListItemData;
 
-    episodesListItemDataInitial[selectedSeason - 1].episodeListItems = [
-      ...Array(seasonEpisodeData[selectedSeason - 1].episodeData.length),
-    ].map((undefined, index) => (
-      <EpisodesListItemContainer
-        key={index}
-        mediaId={mediaId}
-        episodeNum={index + 1}
-        seasonNum={selectedSeason}
-        episodeData={seasonEpisodeData[selectedSeason - 1].episodeData[index]}
-      />
-    ));
-    setIsLoading((isLoading) => false);
-    setEpisodesListItemData((episodesListItemData) => episodesListItemDataInitial);
-  };
-
-  const loadEpisodeListItemData = (season) => {
-    if (episodesListItemData[season - 1].episodeListItems.length === 0) {
-      setIsLoading((isLoading) => true);
-
-      const episodesListItemDataCopy = episodesListItemData;
-      console.log(episodesListItemDataCopy);
-
-      episodesListItemDataCopy[season - 1].episodeListItems = [
-        ...Array(seasonEpisodeData[season - 1].episodeData.length),
+    episodesListItemDataCopy[selectedSeason - 1] = {
+      season: selectedSeason,
+      episodeListItems:
+      [
+        ...Array(validEpisodeData.episodeData.length),
       ].map((undefined, index) => (
-        <EpisodesListItemContainer
+        <EpisodesListItem
           key={index}
           mediaId={mediaId}
           episodeNum={index + 1}
-          seasonNum={season}
-          episodeData={seasonEpisodeData[season - 1].episodeData[index]}
+          seasonNum={selectedSeason}
+          episodeData={validEpisodeData.episodeData[index]}
+          handleImgLoad={handleImgLoad}
         />
-      ));
+      )),
+    };
 
-      setEpisodesListItemData((episodesListItemData) => episodesListItemDataCopy);
-    }
+    setEpisodesListItemData((episodesListItemData) => episodesListItemDataCopy);
+
     setIsLoading((isLoading) => false);
-    setSeasonDataNeedsLoading(false);
   };
 
   const changeSelectedSeason = (newSelectedSeason) => {
     setIsLoading((isLoading) => true);
-
+    setImagesLoaded((imagesLoaded) => false);
     setSelectedSeason((selectedSeason) => newSelectedSeason);
-
-    if (episodesListItemData[newSelectedSeason - 1].episodeListItems.length === 0) {
-      setSeasonDataNeedsLoading(true);
-    } else {
-      setAlreadyLoaded(true);
+    if (episodesListItemData[newSelectedSeason - 1] === undefined) {
+      setDataLoaded(false);
     }
   };
 
   useEffect(() => {
-    if (!dataLoaded) {
-      fetchAllSeasonData();
+    if (episodesListItemData[selectedSeason - 1] === undefined) {
+      setIsLoading((isLoading) => true);
+      processSeasonData();
+    } else {
+      setIsLoading((isLoading) => false);
     }
-  }, []);
-
-  useEffect(() => {
-    if (seasonEpisodeData.length > 0) {
-      initialiseEpisodesListItemData();
-    }
-  }, [seasonEpisodeData]);
-
-  useEffect(() => {
-    if (seasonEpisodeData.length > 0 && seasonDataNeedsLoading === true) {
-      loadEpisodeListItemData(selectedSeason);
-    }
-  }, [seasonDataNeedsLoading]);
-
-  useEffect(() => {
-    setIsLoading((isLoading) => false);
-    setAlreadyLoaded(false);
-  }, [alreadyLoaded]);
+  }, [selectedSeason]);
 
   return (
     <Container id="epslistcontainer">
+      <EpisodeDropDownContainer>
+        Episodes
+        <EpisodeDropdown
+          selectedSeason={selectedSeason}
+          numEpsPerSeason={numEpsPerSeason}
+          changeSelectedSeason={changeSelectedSeason}
+        />
+      </EpisodeDropDownContainer>
+      {!imagesLoaded && <EpisodesListLoadingSkeleton />}
       {dataLoaded
       && (
-        <EpisodesList
-          mediaId={mediaId}
-          seasonEpisodeData={seasonEpisodeData}
-          episodesListItemData={episodesListItemData}
-          selectedSeason={selectedSeason}
-          changeSelectedSeason={changeSelectedSeason}
-          dataLoaded={dataLoaded}
-          isLoading={isLoading}
-        />
+        <div>
+          <ListContainer imagesLoaded={imagesLoaded}>
+            <EpisodesList
+              numEpsPerSeason={numEpsPerSeason}
+              episodesListItemData={episodesListItemData}
+              selectedSeason={selectedSeason}
+              changeSelectedSeason={changeSelectedSeason}
+              isLoading={isLoading}
+            />
+          </ListContainer>
+        </div>
       )}
     </Container>
   );
-}
+};
 
 export default EpisodesListContainer;

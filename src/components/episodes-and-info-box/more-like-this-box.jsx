@@ -12,14 +12,11 @@ const GridContainer = styled.div`
 `;
 
 function MoreLikeThisBox({
-  isLoading,
   children,
 }) {
   return (
     <GridContainer>
-      {isLoading
-        ? <div>Loading</div>
-        : children }
+      {children}
     </GridContainer>
   );
 }
