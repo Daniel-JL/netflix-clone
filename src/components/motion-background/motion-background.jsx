@@ -61,7 +61,6 @@ export const MotionBackground = ({
   const [imgFadeIn, setImgFadeIn] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [pausePoint, setPausePoint] = useState(null);
-  // const [isPlaying, setIsPlaying] = useState();
   const [muteActive, setMuteActive] = useState(true);
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');

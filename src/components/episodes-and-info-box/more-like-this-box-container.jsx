@@ -4,6 +4,7 @@ import getSimilar from '../../helpers/getRecommendations';
 import truncate from '../../helpers/truncate'
 import MoreLikeThisBox from './more-like-this-box';
 import MoreLikeThisItem from './more-like-this-item';
+import MoreLikeThisBoxLoadingSkeleton from './more-like-this-box-loading-skeleton';
 
 const Container = styled.div`
   width: 90%;
@@ -13,6 +14,14 @@ const Container = styled.div`
   align-self: center;
   padding-top: 1vh;
   margin: auto;
+`;
+
+const BoxContainer = styled.div`
+  display: none;
+
+  ${({ imagesLoaded }) => imagesLoaded && `
+      display: block;
+  `}
 `;
 
 const GridItem = styled.div`
@@ -30,18 +39,17 @@ function MoreLikeThisBoxContainer({
 }) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [mediaDetails, setMediaDetails] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [imgSrcArray, setImgSrcArray] = useState([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [numItemsToLoad, setNumItemsToLoad] = useState();
+  const numItemsLoaded = useRef(0);
 
   const fetchSimilarContentData = async () => {
     console.log(mediaType);
     console.log(mediaId);
     const data = await getSimilar(mediaType, mediaId);
-    console.log(data);
     const newData = removeMediaWithoutImg(data);
     
-    setIsLoading((isLoading) => true);
-
     handleMediaDetails(newData);
 
     handleSrcArray(newData);
@@ -64,6 +72,7 @@ function MoreLikeThisBoxContainer({
       `http://image.tmdb.org/t/p/w780${data.results[index].backdrop_path}`
     ));
 
+    setNumItemsToLoad((numItemsToLoad) => srcArrayCopy.length);
     setImgSrcArray((imgSrcArray) => srcArrayCopy);
   };
 
@@ -80,41 +89,45 @@ function MoreLikeThisBoxContainer({
     setMediaDetails((mediaDetails) => mediaDetailsCopy);
   };
 
+  const handleImgLoad = () => {
+    numItemsLoaded.current += 1;
+
+    if (numItemsLoaded.current >= numItemsToLoad) {
+      setImagesLoaded((imagesLoaded) => true);
+    }
+  };
+
   useEffect(() => {
     if (!dataLoaded) {
       fetchSimilarContentData();
     }
   }, []);
 
-  useEffect(() => {
-    setIsLoading((isLoading) => false);
-  }, [imgSrcArray]);
-
   return (
     <Container>
+      {!imagesLoaded && <MoreLikeThisBoxLoadingSkeleton />}
       {dataLoaded
       && (
-        <MoreLikeThisBox
-          isLoading={isLoading}
-          imgSrcArray={imgSrcArray}
-          mediaDetails={mediaDetails}
-        >
-          {
-            [
-              ...Array(imgSrcArray.length),
-            ].map((value: undefined, index: number) => (
-              <GridItem data-index={index} key={index}>
-                <MoreLikeThisItem 
-                  imgSrc={imgSrcArray[index]} 
-                  mediaDetails={mediaDetails[index]}
-                />
-              </GridItem>
-            ))
-          }
-          
-        </MoreLikeThisBox>
-
-        
+        <BoxContainer imagesLoaded={imagesLoaded}>
+          <MoreLikeThisBox
+            imgSrcArray={imgSrcArray}
+            mediaDetails={mediaDetails}
+          >
+            {
+              [
+                ...Array(imgSrcArray.length),
+              ].map((value: undefined, index: number) => (
+                <GridItem data-index={index} key={index}>
+                  <MoreLikeThisItem 
+                    imgSrc={imgSrcArray[index]} 
+                    mediaDetails={mediaDetails[index]}
+                    handleImgLoad={handleImgLoad}
+                  />
+                </GridItem>
+              ))
+            }
+          </MoreLikeThisBox>
+        </BoxContainer>
       )}
     </Container>
   );

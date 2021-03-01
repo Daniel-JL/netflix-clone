@@ -4,11 +4,13 @@ import getSeasonData from '../../helpers/getSeasonData';
 import EpisodesList from './episodes-list';
 import EpisodesListItem from './episodes-list-item';
 import EpisodesListLoadingSkeleton from './episodes-list-loading-skeleton';
+import { EpisodeDropdown } from '../dropdowns';
 
 const Container = styled.div`
   width: 90%;
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   align-self: center;
@@ -23,6 +25,13 @@ const ListContainer = styled.div`
   ${({ imagesLoaded }) => imagesLoaded && `
       display: block;
   `}
+`;
+
+const EpisodeDropDownContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
 `;
 
 const processValidEpisodes = (data, season) => {
@@ -114,6 +123,9 @@ const EpisodesListContainer = ({
     setIsLoading((isLoading) => true);
     setImagesLoaded((imagesLoaded) => false);
     setSelectedSeason((selectedSeason) => newSelectedSeason);
+    if (episodesListItemData[newSelectedSeason - 1] === undefined) {
+      setDataLoaded(false);
+    }
   };
 
   useEffect(() => {
@@ -127,8 +139,15 @@ const EpisodesListContainer = ({
 
   return (
     <Container id="epslistcontainer">
+      <EpisodeDropDownContainer>
+        Episodes
+        <EpisodeDropdown
+          selectedSeason={selectedSeason}
+          numEpsPerSeason={numEpsPerSeason}
+          changeSelectedSeason={changeSelectedSeason}
+        />
+      </EpisodeDropDownContainer>
       {!imagesLoaded && <EpisodesListLoadingSkeleton />}
-      {/* <EpisodesListLoadingSkeleton /> */}
       {dataLoaded
       && (
         <div>

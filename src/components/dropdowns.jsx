@@ -29,7 +29,6 @@ export function EpisodeDropdown({
   selectedSeason,
   numEpsPerSeason,
   changeSelectedSeason,
-  resetEpisodeListItemLimit,
 }) {
   const [dropdownActive, setDropdownActive] = useState(false);
   const [numOfSeasons, setNumOfSeasons] = useState();
@@ -72,7 +71,6 @@ export function EpisodeDropdown({
             numOfSeasons={numOfSeasons}
             numEpsPerSeason={numEpsPerSeason}
             changeSelectedSeason={changeSelectedSeason}
-            resetEpisodeListItemLimit={resetEpisodeListItemLimit}
           />
         )}
 

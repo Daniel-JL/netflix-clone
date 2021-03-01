@@ -37,6 +37,7 @@ const MediaTitle = styled.div`
 function MoreLikeThisItem({
   imgSrc,
   mediaDetails,
+  handleImgLoad,
 }) {
   const [mouseOver, setMouseOver] = useState(false);
 
@@ -59,9 +60,10 @@ function MoreLikeThisItem({
         onMouseLeave={handleMouseOut}
       >
         <ImageWithOverlay 
-          image={<ItemImage src={imgSrc} />}
+          image={<ItemImage src={imgSrc} onLoad={() => handleImgLoad()}/>}
           overlayItem={<PlayButton>|></PlayButton>}
           fadeIn={mouseOver}
+          handleImgLoad={handleImgLoad}
         />
         <ItemDetails>
           <MediaTitle>

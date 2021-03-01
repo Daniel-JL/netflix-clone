@@ -31,11 +31,9 @@ export const EpisodeDropdownMenu = ({
   numOfSeasons,
   numEpsPerSeason,
   changeSelectedSeason,
-  resetEpisodeListItemLimit,
 }) => {
   const handleMenuItemClick = (index) => {
     changeSelectedSeason(numEpsPerSeason[index].seasonNum)
-    resetEpisodeListItemLimit();
   };
   
   return (

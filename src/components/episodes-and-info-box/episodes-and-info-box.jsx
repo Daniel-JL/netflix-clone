@@ -21,6 +21,7 @@ const EpisodesAndInfoBoxContainer = styled.div`
   color: white;
   background-color: rgb(32,32,32);
   top: 20px;
+  padding-bottom: 25px;
 `;
 
 const MediaInfo = styled.div`
@@ -33,20 +34,11 @@ const MediaInfo = styled.div`
 const epsInfoBoxLoadedFromSliderItem = (mediaId) => mediaId === undefined || mediaId === '';
 
 export function EpisodesAndInfoBox({
-  sliderItemMediaId,
-  sliderItemMediaType,
-  sliderItemPosterPath,
-  sliderItemRuntimeOrNumberOfSeasons,
-  sliderItemGenres,
-  sliderItemAgeRating,
-  sliderItemOverview,
+  epsAndInfoBoxProps,
   setScrollHidden,
   setModalProps,
 }) {
-  const [mediaId, setMediaId] = useState(sliderItemMediaId);
-  const [mediaType, setMediaType] = useState(sliderItemMediaType);
-  const [overview, setOverview] = useState();
-  const [runtimeOrNumberOfSeasons, setRuntimeOrNumberOfSeasons] = useState(sliderItemRuntimeOrNumberOfSeasons);
+  const [epsInfoBoxData, setEpsInfoBoxData] = useState(epsAndInfoBoxProps);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const history = useHistory();
@@ -79,33 +71,30 @@ export function EpisodesAndInfoBox({
       mediaTypeUrl = currentUrl.slice(19, 21);
     }
 
-    setMediaId((mediaId) => mediaIdUrl);
-    setMediaType((mediaType) => mediaTypeUrl);
-
     const data = await getMediaData(mediaTypeUrl, mediaIdUrl);
-    console.log(data);
 
-    // overview, seasons.length,
-
-    setRuntimeOrNumberOfSeasons((runtimeOrNumberOfSeasons) => (mediaIsMovie(mediaType)
-      ? `${data.runtime}m`
-      : [
-        ...Array(data.number_of_seasons),
-      ].map((undefined, index) => (
-        {
-          seasonNum: index + 1,
-          numEps: data.seasons[index].episode_count,
-        }
-      ))
-    ));
-
-    setOverview((overview) => data.overview);
+    setEpsInfoBoxData((epsInfoBoxData) => ({
+      mediaId: mediaIdUrl,
+      mediaType: mediaTypeUrl,
+      runtimeOrNumberOfSeasons: (mediaIsMovie(mediaTypeUrl)
+        ? `${data.runtime}m`
+        : [
+          ...Array(data.number_of_seasons),
+        ].map((undefined, index) => (
+          {
+            seasonNum: index + 1,
+            numEps: data.seasons[index].episode_count,
+          }
+        ))
+      ),
+      overview: data.overview,
+    }));
 
     setDataLoaded(true);
   };
 
   useEffect(() => {
-    if (epsInfoBoxLoadedFromSliderItem(mediaId)) {
+    if (epsInfoBoxLoadedFromSliderItem(epsInfoBoxData.mediaId)) {
       fetchMediaData();
     } else {
       setDataLoaded(true);
@@ -119,27 +108,20 @@ export function EpisodesAndInfoBox({
       <div>
         <MotionBackground
           isEpsInfoBox
-          mediaType={mediaType}
-          mediaId={mediaId}
+          mediaType={epsInfoBoxData.mediaType}
+          mediaId={epsInfoBoxData.mediaId}
+          handleItemLoaded={() => {}}
         />
-        {/* <MediaInfo>
-          <div>
-            {runtimeOrNumberOfSeasons}
-          </div>
-          <div>
-            {overview}
-          </div>
-        </MediaInfo> */}
-        {mediaType === 'tv'
+        {epsInfoBoxData.mediaType === 'tv'
           && (
           <EpisodesListContainer
-            mediaId={mediaId}
-            numEpsPerSeason={runtimeOrNumberOfSeasons}
+            mediaId={epsInfoBoxData.mediaId}
+            numEpsPerSeason={epsInfoBoxData.runtimeOrNumberOfSeasons}
           />
           )}
         <MoreLikeThisBoxContainer
-          mediaId={mediaId}
-          mediaType={mediaType}
+          mediaId={epsInfoBoxData.mediaId}
+          mediaType={epsInfoBoxData.mediaType}
         />
       </div>
       )}

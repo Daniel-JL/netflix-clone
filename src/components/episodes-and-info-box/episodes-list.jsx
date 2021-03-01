@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { EpisodeDropdown } from '../dropdowns';
 import { RoundDarkButton } from '../buttons';
 
 const Container = styled.div`
@@ -30,11 +29,8 @@ const EpisodeDropDownContainer = styled.div`
 `;
 
 const EpisodesList = ({
-  numEpsPerSeason,
   episodesListItemData,
   selectedSeason,
-  changeSelectedSeason,
-  dataLoaded,
   isLoading,
 }) => {
   const [selectedSeasonChange, setSelectedSeasonChange] = useState(false);
@@ -61,7 +57,16 @@ const EpisodesList = ({
 
   const resetEpisodeListItemLimit = () => {
     setItemLimit((itemLimit) => 10);
-    setAllSeasonItemsLoaded(false);
+    handleItemLimit();
+  };
+
+  const handleItemLimit = () => {
+    if (itemLimit >= episodesListItemData[selectedSeason - 1].episodeListItems.length) {
+      console.log('its done');
+      setAllSeasonItemsLoaded(true);
+    } else {
+      setAllSeasonItemsLoaded(false);
+    }
   };
 
   useEffect(() => {
@@ -71,26 +76,18 @@ const EpisodesList = ({
   }, [JSON.stringify(episodesListItemData), selectedSeason]);
 
   useEffect(() => {
+    resetEpisodeListItemLimit();
+  }, [selectedSeasonChange]);
+
+  useEffect(() => {
     if(episodesListItemData[0] !== undefined) {
-      if (itemLimit >= numEpsPerSeason[selectedSeason].numEps) {
-        console.log('its done');
-        setAllSeasonItemsLoaded(true);
-      }
+      handleItemLimit();
     }
   }, [itemLimit]);
 
   return (
     <Container id="epslist-container">
       <ListContainer id="list-container">
-        <EpisodeDropDownContainer>
-          Episodes
-          <EpisodeDropdown
-            selectedSeason={currentSelectedSeason}
-            numEpsPerSeason={numEpsPerSeason}
-            changeSelectedSeason={changeSelectedSeason}
-            resetEpisodeListItemLimit={resetEpisodeListItemLimit}
-          />
-        </EpisodeDropDownContainer>
         {isLoading
           ? <div>Test</div>
           : renderEpisodeListItems()
