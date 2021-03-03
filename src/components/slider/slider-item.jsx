@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useRef, useState } from 'react';
 import {
   Link,
@@ -10,7 +9,7 @@ import {
   RoundPlayButton,
   RoundEpsAndInfoButton,
 } from '../buttons';
-import { Modal } from '../modal';
+import Modal from '../modal';
 
 const ItemContainer = styled.div`
 
@@ -54,7 +53,7 @@ const MediaTitle = styled.div`
   font-size: 1.3vw;
 `;
 
-export function SliderItem({
+const SliderItem = ({
   mediaId,
   mediaType,
   sliderItemData,
@@ -70,7 +69,7 @@ export function SliderItem({
   setImgLoadSuccess,
   handleEpsAndInfoButtonClick,
   itemDimensions,
-}) {
+}) => {
   const divRef = useRef();
   const location = useLocation();
   const [itemContainerRef, setItemContainerRef] = useState();
@@ -172,7 +171,7 @@ export function SliderItem({
                 <ItemDetails>
                   <div id="buttons">
                     <Link
-                      key={1}
+                      key={'watch'}
                       to="/watch"
                     >
                       <RoundPlayButton>
@@ -180,7 +179,7 @@ export function SliderItem({
                       </RoundPlayButton>
                     </Link>
                     <Link
-                      key={1}
+                      key={'epsInfoBox'}
                       to={{
                         pathname: `${location.pathname}/epsinfobox/${mediaType}/${mediaId}`,
                         state: { background: location },
@@ -212,3 +211,5 @@ export function SliderItem({
     </ItemContainer>
   );
 }
+
+export default SliderItem;

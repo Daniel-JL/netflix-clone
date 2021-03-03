@@ -1,9 +1,8 @@
-/* eslint-disable import/prefer-default-export */
 import React from 'react';
 import LocoRow from '../slider/loco-row';
 import InfiniteScroll from '../infinite-scroll';
 
-export const Search = (props) => {
+const Search = (props) => {
   const maxNumScrollLoads = 6;
 
   return (
@@ -23,3 +22,5 @@ export const Search = (props) => {
 
   );
 };
+
+export default Search;

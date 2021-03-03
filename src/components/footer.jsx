@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import React from 'react';
 import {
   NavLink,
@@ -11,8 +10,10 @@ const FooterContainer = styled.div`
   background-color: rgb(24,24,24);
 `;
 
-export function Footer() {
+const Footer = () => {
   return (
     <FooterContainer />
   );
-}
+};
+
+export default Footer;

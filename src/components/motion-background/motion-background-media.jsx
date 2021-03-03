@@ -98,9 +98,7 @@ const MotionBackgroundMedia = ({
   };
 
   useEffect(() => {
-    console.log('inUseEffect');
     if (playerEvent) {
-      console.log(isPlaying);
       if (!isPlaying) {
         console.log('pauseVideo');
         playerEvent.target.pauseVideo();

@@ -1,7 +1,7 @@
 import React, {
   useState, useRef, useEffect, createContext,
 } from 'react';
-import { SliderItem } from './slider-item';
+import SliderItem from './slider-item';
 import { getMediaData } from '../../helpers/getMediaData';
 import { getAgeRating } from '../../helpers/getAgeRating';
 import mediaIsMovie from '../../helpers/mediaIsMovie';
@@ -21,7 +21,6 @@ const SliderItemContainer = ({
   const [delayHandler, setDelayHandler] = useState();
   const [sliderItemData, setSliderItemData] = useState();
   const delayDuration = 300;
-  console.log(mediaId);
 
   const fetchItemData = async () => {
     const data = await getMediaData(mediaType, mediaId);

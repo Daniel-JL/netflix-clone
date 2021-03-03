@@ -52,6 +52,7 @@ export const MotionBackground = ({
   isEpsInfoBox,
   handleItemLoaded,
   itemsLoaded,
+  modalActive,
 }) => {
   const isVisible = usePageVisibility();
   const [backdropPath, setBackdropPath] = useState();
@@ -70,6 +71,8 @@ export const MotionBackground = ({
   const videoEnded = useRef(false);
   const intersectionThreshold = 0.2;
 
+  console.log(modalActive);
+  
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
 
@@ -144,20 +147,17 @@ export const MotionBackground = ({
   }, [isVisible]);
 
   useEffect(() => {
-    if (modal !== undefined) {
-      console.log('modalUseEffect');
-      if (modal.hasChildNodes()) {
-        // setIsPlaying((isPlaying) => false);
-        isPlaying.current = false;
-        setToggleState((toggleState) => !toggleState);
+    console.log('modalUseEffect');
+    if (modalActive) {
+      // setIsPlaying((isPlaying) => false);
+      isPlaying.current = false;
+      setToggleState((toggleState) => !toggleState);
 
-      } else {
-        // setIsPlaying((isPlaying) => true);
-        isPlaying.current = true;
-
-      }
+    } else {
+      // setIsPlaying((isPlaying) => true);
+      isPlaying.current = true;
     }
-  }, [modal]);
+  }, [modalActive]);
 
   useEffect(() => {
     if (pausePointExists(pausePoint)) {

@@ -1,8 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 import React from 'react';
 import {
   NavLink,
-  Link,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -10,8 +8,6 @@ import {
   NetflixButton,
 } from './buttons';
 import { SearchBox } from './search-box';
-import { Notifications } from './notifications';
-import { AccountDropdown } from './dropdowns';
 
 const Nav = styled.div`
   background-color: transparent;
@@ -35,7 +31,7 @@ const NavRight = styled.div`
   
 `;
 
-export function Header() {
+const Header = () => {
   return (
     <Nav>
       <NavLeft>
@@ -54,27 +50,13 @@ export function Header() {
         <NavLink to="/browse/genre/34399">
           <LinkTextButton>Films</LinkTextButton>
         </NavLink>
-
-        <NavLink to="/latest">
-          <LinkTextButton>Latest</LinkTextButton>
-        </NavLink>
-
-        <NavLink to="/browse/my-list">
-          <LinkTextButton>My List</LinkTextButton>
-        </NavLink>
       </NavLeft>
 
-      <NavRight>
+      {/* <NavRight>
         <SearchBox />
-
-        <Link to="/Kids">
-          <LinkTextButton>Children</LinkTextButton>
-        </Link>
-
-        <Notifications />
-
-        <AccountDropdown />
-      </NavRight>
+      </NavRight> */}
     </Nav>
   );
-}
+};
+
+export default Header;

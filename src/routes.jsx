@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useCallback, useRef,
+} from 'react';
 import styled from 'styled-components';
 import {
   Route,
@@ -10,19 +12,14 @@ import getTrendingMediaIdsAndTypes from './helpers/getTrendingMediaIdsAndTypes';
 import getGenres from './helpers/getGenres';
 import { getAgeRating } from './helpers/getAgeRating';
 import processIdsAndTypes from './helpers/processIdsAndTypes';
-import { Header } from './components/header';
-import { Footer } from './components/footer';
+import Header from './components/header';
+import Footer from './components/footer';
 import Home from './components/views/home';
-import { Series } from './components/views/series';
-import { Films } from './components/views/films';
-import { Latest } from './components/views/latest';
-import { MyList } from './components/views/my-list';
-import { Search } from './components/views/search';
-import { Kids } from './components/views/kids';
+import Search from './components/views/search';
 import VideoPlayer from './components/views/video-player';
-import { NoMatch } from './components/views/no-match';
-import { Modal } from './components/modal';
-import { EpisodesAndInfoBox } from './components/episodes-and-info-box/episodes-and-info-box';
+import NoMatch from './components/views/no-match';
+import Modal from './components/modal';
+import EpisodesAndInfoBox from './components/episodes-and-info-box/episodes-and-info-box';
 
 const PortalContainer = styled.div`
   z-index: 3;
@@ -38,6 +35,11 @@ const Routes = () => {
   const [trendingItemData, setTrendingItemData] = useState();
   const [movieGenres, setMovieGenres] = useState();
   const [tvGenres, setTvGenres] = useState();
+  const [portalRef, setPortalRef] = useState();
+  // const portalRef = useRef();
+  const [modalActive, setModalActive] = useState(false);
+  const observer = useRef();
+  const modalActiveRef = useRef(false);
 
   const setModalProps = (
     mediaId,
@@ -57,6 +59,15 @@ const Routes = () => {
       ageRating,
       overview,
     }));
+  };
+
+  // Options for the observer (which mutations to observe)
+  const config = { childList: true };
+
+  const initialiseMutationObserver = () => {
+    // Start observing the target node for configured mutations
+    // Callback function to execute when mutations are observed
+    
   };
 
   const fetchGenreData = async () => {
@@ -98,9 +109,45 @@ const Routes = () => {
     fetchGenreData();
   };
 
+  const updateModalActive = (newModalActiveValue) => {
+    modalActiveRef.current = newModalActiveValue;
+    setModalActive(newModalActiveValue);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (portalRef !== '' && portalRef !== undefined && observer.current === undefined) {
+      const callback = function (mutationsList, observer) {
+        // console.log(portalRef.childNodes[0]);
+        // Use traditional 'for loops' for IE 11
+        setModalActive((modalActive) => true);
+
+        for (const mutation of mutationsList) {
+          
+          console.log(portalRef.childNodes[0]);
+          if (portalRef.childNodes[0] !== undefined && !modalActive) {
+            console.log(modalActive);
+            console.log('setModalActive:True');
+            updateModalActive(true);
+          } else if (portalRef.childNodes[0] === undefined && modalActive) {
+            console.log(modalActive);
+            console.log('setModalActive:False');
+            updateModalActive(false);
+          }
+          // console.log(portalRef.childNodes);
+          // console.log('A child node has been added or removed.');
+        }
+      };
+  
+      // Create an observer instance linked to the callback function
+      observer.current = new MutationObserver(callback);
+      console.log(portalRef);
+      observer.current.observe(portalRef, config);
+    }
+  }, [portalRef, modalActive, setModalActive]);
 
   return (
     <div>
@@ -109,6 +156,7 @@ const Routes = () => {
         && (
         <Switch location={background || location}>
           <Route
+            key="home"
             exact
             path="/browse"
           >
@@ -117,6 +165,7 @@ const Routes = () => {
               trendingItemData={trendingItemData}
               movieGenres={movieGenres}
               tvGenres={tvGenres}
+              modalActive={modalActive}
             />
           </Route>
           <Route exact path="/">
@@ -128,11 +177,14 @@ const Routes = () => {
           <Route
             exact
             path="/browse/genre/83"
+            key="series"
           >
-            <Series
+            <Home
               setModalProps={setModalProps}
-              trendingSeriesData={trendingSeriesData}
+              trendingItemData={trendingSeriesData}
+              movieGenres={[]}
               tvGenres={tvGenres}
+
             />
           </Route>
           <Route exact path="/browse/genre/83/">
@@ -141,20 +193,19 @@ const Routes = () => {
           <Route
             exact
             path="/browse/genre/34399"
+            key="films"
           >
-            <Films
+            <Home
               setModalProps={setModalProps}
+              trendingItemData={trendingMovieData}
               movieGenres={movieGenres}
-              trendingMovieData={trendingMovieData}
+              tvGenres={[]}
             />
           </Route>
           <Route exact path="/browse/genre/34399/">
             <Redirect to="/browse/genre/34399" />
           </Route>
-          <Route exact path="/latest"><Latest setModalProps={setModalProps} /></Route>
-          <Route exact path="/browse/my-list"><MyList /></Route>
           <Route exact path="/search"><Search setModalProps={setModalProps} /></Route>
-          <Route exact path="/Kids"><Kids /></Route>
           <Route exact path="/watch"><VideoPlayer /></Route>
           <Route><NoMatch /></Route>
         </Switch>
@@ -170,7 +221,7 @@ const Routes = () => {
           ]}
           render={() => (
             <Modal
-              id="modal-root"
+              id="slider-item-modal"
               isEpsInfoBox
               height="100%"
               width="100%"
@@ -187,8 +238,8 @@ const Routes = () => {
           )}
         />
         )}
-      <PortalContainer id="slider-item-modal" />
-      
+      <PortalContainer id="slider-item-modal" ref={setPortalRef} />
+
       <Footer />
     </div>
   );
