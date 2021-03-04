@@ -31,6 +31,7 @@ const LocoRowGroup = ({
   setModalProps,
   numSlidersLoaded,
   setInfiniteScrollLoadPoint,
+  portalRef,
 }) => {
   const [itemsLoaded, setItemsLoaded] = useState(false);
   const numItemsLoaded = useRef(0);
@@ -72,6 +73,7 @@ const LocoRowGroup = ({
               isEpsInfoBox={false}
               handleItemLoaded={handleItemLoaded}
               itemsLoaded={itemsLoaded}
+              portalRef={portalRef}
             />
           }
           {

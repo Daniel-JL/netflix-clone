@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useState, useRef, useEffect } from 'react';
 import {
   useHistory,
@@ -33,11 +32,11 @@ const MediaInfo = styled.div`
 
 const epsInfoBoxLoadedFromSliderItem = (mediaId) => mediaId === undefined || mediaId === '';
 
-export function EpisodesAndInfoBox({
+const EpisodesAndInfoBox = ({
   epsAndInfoBoxProps,
   setScrollHidden,
   setModalProps,
-}) {
+}) => {
   const [epsInfoBoxData, setEpsInfoBoxData] = useState(epsAndInfoBoxProps);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -127,4 +126,6 @@ export function EpisodesAndInfoBox({
       )}
     </EpisodesAndInfoBoxContainer>
   );
-}
+};
+
+export default EpisodesAndInfoBox;

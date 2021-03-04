@@ -52,6 +52,7 @@ export const MotionBackground = ({
   isEpsInfoBox,
   handleItemLoaded,
   itemsLoaded,
+  portalRef,
 }) => {
   const isVisible = usePageVisibility();
   const [backdropPath, setBackdropPath] = useState();
@@ -60,15 +61,21 @@ export const MotionBackground = ({
   const [imgFadeOut, setImgFadeOut] = useState(false);
   const [imgFadeIn, setImgFadeIn] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [pausePoint, setPausePoint] = useState(null);
+  const [pausePoint, setPausePoint] = useState();
   const [muteActive, setMuteActive] = useState(true);
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');
+  const [intersectionActive, setIntersectionActive] = useState(true);
   const [modal, setModal] = useState();
+  const [modalActive, setModalActive] = useState(false);
+  const modalActiveRef = useRef(false);
+  // const intersectionActive = useRef(true);
   const isPlaying = useRef();
   const [toggleState, setToggleState] = useState(false);
   const videoEnded = useRef(false);
   const intersectionThreshold = 0.2;
+  const mutationObserver = useRef();
+  const videoObserver = useRef();
 
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
@@ -86,14 +93,46 @@ export const MotionBackground = ({
     }
     setDataLoaded(true);
   };
+  if (pausePoint !== undefined && videoObserver.current === undefined) {
+    videoObserver.current = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying.current) {
+          fadeOutImg();
+          isPlaying.current = false;
+          // intersectionActive.current = false;
+          setIntersectionActive((intersectionActive) => false);
+          // setToggleState((toggleState) => !toggleState);
+        } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && (modal === undefined || !modal.hasChildNodes())) {
+          fadeInImg();
+          isPlaying.current = true;
+          setIntersectionActive((intersectionActive) => true);
+
+          // intersectionActive.current = true;
+          // setToggleState((toggleState) => !toggleState);
+        }
+      });
+    }, { threshold: intersectionThreshold });
+    videoObserver.current.observe(pausePoint);
+
+  }
+  
+
+  const fadeInImg = () => {
+    setImgFadeOut((imgFadeOut) => false);
+    setImgFadeIn((imgFadeIn) => true);
+  };
+
+  const fadeOutImg = () => {
+    setImgFadeOut((imgFadeOut) => true);
+    setImgFadeIn((imgFadeIn) => false);
+  };
 
   const handleVideoPlaying = () => {
-    setImgFadeOut((imgFadeOut) => true);
+    fadeOutImg();
   };
 
   const handleVideoNearlyEnded = () => {
-    setImgFadeOut((imgFadeOut) => false);
-    setImgFadeIn((imgFadeIn) => true);
+    fadeInImg();
   };
 
   const handleVideoEnded = () => {
@@ -107,80 +146,89 @@ export const MotionBackground = ({
       setMuteActive((muteActive) => !muteActive);
     } else {
       videoEnded.current = false;
-      setImgFadeOut((imgFadeOut) => true);
-      setImgFadeIn((imgFadeIn) => false);
-      // setIsPlaying((isPlaying) => true);
+      fadeOutImg();
       isPlaying.current = true;
-
     }
   };
 
   const handleInfoButtonClick = () => {
-    // setIsPlaying((isPlaying) => false);
+    fadeInImg();
     isPlaying.current = false;
   };
 
-  const checkIfModalActive = () => {
-    const modalNode = document.getElementById('modal-root');
-    setModal((modal) => modalNode);
-    console.log('ModalSet');
-  };
+  if (mutationObserver.current === undefined && !isEpsInfoBox) {
+    // Options for the observer (which mutations to observe)
+    const config = { childList: true };
+
+    const callback = function (mutationsList, observer) {
+      // console.log(portalRef.childNodes[0]);
+      // Use traditional 'for loops' for IE 11
+
+      for (const mutation of mutationsList) {
+        if (portalRef.childNodes[0] !== undefined && !modalActiveRef.current) {
+          modalActiveRef.current = true;
+          setModalActive((modalActive) => true);
+        } else if (portalRef.childNodes[0] === undefined && modalActiveRef.current) {
+          modalActiveRef.current = false;
+          setModalActive((modalActive) => false);
+        }
+      }
+    };
+
+    // Create an observer instance linked to the callback function
+    mutationObserver.current = new MutationObserver(callback);
+    mutationObserver.current.observe(portalRef, config);
+  }
 
   useEffect(() => {
-    if (!isEpsInfoBox) {
-      checkIfModalActive();
-    }
     fetchItemData();
   }, []);
 
   useEffect(() => {
-    if (isVisible === false) {
-      isPlaying.current = false;
-      setToggleState((toggleState) => !toggleState);
-    } else {
-      isPlaying.current = true;
-      setToggleState((toggleState) => !toggleState);
+    if (intersectionActive) {
+      if (isVisible === false) {
+        // fadeInImg();
+        isPlaying.current = false;
+        setToggleState((toggleState) => !toggleState);
+      } else {
+        // fadeOutImg();
+        isPlaying.current = true;
+        setToggleState((toggleState) => !toggleState);
+      }
     }
   }, [isVisible]);
 
   useEffect(() => {
-    if (modal !== undefined) {
-      console.log('modalUseEffect');
-      if (modal.hasChildNodes()) {
-        // setIsPlaying((isPlaying) => false);
+    if (intersectionActive) {
+      if (modalActive) {
+        fadeInImg();
         isPlaying.current = false;
         setToggleState((toggleState) => !toggleState);
-
       } else {
-        // setIsPlaying((isPlaying) => true);
+        if (imgFadeOut === true) {
+          fadeOutImg();
+        }
         isPlaying.current = true;
-
+        setToggleState((toggleState) => !toggleState);
       }
     }
-  }, [modal]);
+  }, [modalActive]);
 
   useEffect(() => {
-    if (pausePointExists(pausePoint)) {
-      const videoObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-          console.log(videoIsOffScreen(entry.intersectionRatio, intersectionThreshold));
-          if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying.current) {
-            // setIsPlaying((isPlaying) => false);
-            isPlaying.current = false;
-            setToggleState((toggleState) => !toggleState);
-
-          } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && (modal === undefined || !modal.hasChildNodes())) {
-
-            // setIsPlaying((isPlaying) => true);
-            isPlaying.current = true;
-            setToggleState((toggleState) => !toggleState);
-
-          }
-        });
-      }, { threshold: intersectionThreshold });
-      videoObserver.observe(pausePoint);
+    console.log('intersectionActive');
+    console.log(intersectionActive);
+    if (!intersectionActive) {
+      fadeInImg();
+      isPlaying.current = false;
+      setToggleState((toggleState) => !toggleState);
+    } else {
+      if (imgFadeOut === true) {
+        fadeOutImg();
+      }
+      isPlaying.current = true;
+      setToggleState((toggleState) => !toggleState);
     }
-  }, [pausePoint]);
+  }, [intersectionActive]);
 
   return (
     <MotionBackgroundContainer isEpsInfoBox={isEpsInfoBox}>

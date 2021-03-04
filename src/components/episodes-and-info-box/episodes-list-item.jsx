@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import ImageWithOverlay from './image-with-overlay';
 import { PlayButton } from '../buttons';
+import ImageErrorPlaceholder from '../../assets/images/no-img-placeholder.png';
 
 const Container = styled.div`
   width: 100%;
@@ -79,6 +80,8 @@ function EpisodesListItem({
 
   const handleImgLoadingErr = () => {
     console.log('imgLoadError');
+    console.log(ImageErrorPlaceholder);
+    setImagePath((imagePath) => ImageErrorPlaceholder);
     handleImgLoad();
     setImgLoadingErr(true);
   };
@@ -119,23 +122,21 @@ function EpisodesListItem({
           >
             <ItemInfoContainer>
               {episodeNumber}
-              {!imgLoadingErr
-              && (
-                <ImgContainer>
-                  <ImageWithOverlay 
-                    image={<EpisodeImage
-                      alt="Slider image"
-                      src={imagePath}
-                      onError={() => handleImgLoadingErr()}
-                      onLoad={
-                        () => handleImgLoadedSuccess()
-                      }
-                    />}
-                    overlayItem={<PlayButton>|></PlayButton>}
-                    fadeIn={mouseOver}
-                  />
-                </ImgContainer>
-              )}
+              <ImgContainer>
+                <ImageWithOverlay 
+                  image={<EpisodeImage
+                    alt="Slider image"
+                    src={imagePath}
+                    onError={() => handleImgLoadingErr()}
+                    onLoad={
+                      () => handleImgLoadedSuccess()
+                    }
+                  />}
+                  overlayItem={<PlayButton>|></PlayButton>}
+                  fadeIn={mouseOver}
+                />
+              </ImgContainer>
+              
               <EpisodeDetailsContainer>
                 <EpisodeTitleRuntimeContainer>
                   <div>

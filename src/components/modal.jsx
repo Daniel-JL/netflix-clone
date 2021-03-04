@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
@@ -30,7 +29,7 @@ const ModalContainer = styled.div`
   `}
 `;
 
-export const Modal = ({ 
+const Modal = ({ 
   children,
   id,
   isEpsInfoBox,
@@ -67,3 +66,5 @@ export const Modal = ({
     document.getElementById(id),
   );
 };
+
+export default Modal;

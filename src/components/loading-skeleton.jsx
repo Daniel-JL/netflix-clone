@@ -3,6 +3,7 @@ import ContentLoader from 'react-content-loader';
 import styled from 'styled-components';
 
 const ContentLoaderContainer = styled.div`
+  margin-top: 10vh;
   position: absolute;
   width: 100%;
 `;

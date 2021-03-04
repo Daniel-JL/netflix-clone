@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import sortGenreTypeArrayObjects from '../../helpers/sortGenreTypeArrayObjects';
 import shuffleArray from '../../helpers/shuffleArray';
 import LocoRowGroup from '../slider/loco-row-group';
 import InfiniteScroll from '../infinite-scroll';
@@ -14,31 +15,14 @@ const Home = ({
   trendingItemData,
   movieGenres,
   tvGenres,
+  portalRef,
 }) => {
   const [genreTypeArr, setGenreTypeArr] = useState('');
   const [genreTypeArrFilled, setGenreTypeArrFilled] = useState(false);
   const maxNumScrollLoads = 5;
 
   const fillGenreTypeArr = () => {
-    const genreTypeArrCopy = [];
-    const longestArrLength = movieGenres.length > tvGenres.length ? movieGenres.length : tvGenres.length;
-
-    for (let i = 0; i < longestArrLength; i++) {
-      genreTypeArrCopy.push(
-        {
-          mediaType: 'movie',
-          genre: movieGenres[i],
-        },
-      );
-      if (i < tvGenres.length) {
-        genreTypeArrCopy.push(
-          {
-            mediaType: 'tv',
-            genre: tvGenres[i],
-          },
-        );
-      }
-    }
+    const genreTypeArrCopy = sortGenreTypeArrayObjects(movieGenres, tvGenres);
     const shuffledArray = shuffleArray(genreTypeArrCopy);
 
     //Always have trending items slider as first to load
@@ -70,6 +54,7 @@ const Home = ({
             <LocoRowGroup
               setModalProps={setModalProps}
               trendingItemData={trendingItemData}
+              portalRef={portalRef}
             />
           )}
         />
