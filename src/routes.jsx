@@ -37,7 +37,6 @@ const Routes = () => {
   const [tvGenres, setTvGenres] = useState();
   const [portalRef, setPortalRef] = useState();
   // const portalRef = useRef();
-  const [modalActive, setModalActive] = useState(false);
   const observer = useRef();
   const modalActiveRef = useRef(false);
 
@@ -61,14 +60,6 @@ const Routes = () => {
     }));
   };
 
-  // Options for the observer (which mutations to observe)
-  const config = { childList: true };
-
-  const initialiseMutationObserver = () => {
-    // Start observing the target node for configured mutations
-    // Callback function to execute when mutations are observed
-    
-  };
 
   const fetchGenreData = async () => {
     let data = await getGenres('movie');
@@ -109,45 +100,9 @@ const Routes = () => {
     fetchGenreData();
   };
 
-  const updateModalActive = (newModalActiveValue) => {
-    modalActiveRef.current = newModalActiveValue;
-    setModalActive(newModalActiveValue);
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (portalRef !== '' && portalRef !== undefined && observer.current === undefined) {
-      const callback = function (mutationsList, observer) {
-        // console.log(portalRef.childNodes[0]);
-        // Use traditional 'for loops' for IE 11
-        setModalActive((modalActive) => true);
-
-        for (const mutation of mutationsList) {
-          
-          console.log(portalRef.childNodes[0]);
-          if (portalRef.childNodes[0] !== undefined && !modalActive) {
-            console.log(modalActive);
-            console.log('setModalActive:True');
-            updateModalActive(true);
-          } else if (portalRef.childNodes[0] === undefined && modalActive) {
-            console.log(modalActive);
-            console.log('setModalActive:False');
-            updateModalActive(false);
-          }
-          // console.log(portalRef.childNodes);
-          // console.log('A child node has been added or removed.');
-        }
-      };
-  
-      // Create an observer instance linked to the callback function
-      observer.current = new MutationObserver(callback);
-      console.log(portalRef);
-      observer.current.observe(portalRef, config);
-    }
-  }, [portalRef, modalActive, setModalActive]);
 
   return (
     <div>
@@ -165,7 +120,7 @@ const Routes = () => {
               trendingItemData={trendingItemData}
               movieGenres={movieGenres}
               tvGenres={tvGenres}
-              modalActive={modalActive}
+              portalRef={portalRef}
             />
           </Route>
           <Route exact path="/">
@@ -184,7 +139,7 @@ const Routes = () => {
               trendingItemData={trendingSeriesData}
               movieGenres={[]}
               tvGenres={tvGenres}
-
+              portalRef={portalRef}
             />
           </Route>
           <Route exact path="/browse/genre/83/">
@@ -200,6 +155,7 @@ const Routes = () => {
               trendingItemData={trendingMovieData}
               movieGenres={movieGenres}
               tvGenres={[]}
+              portalRef={portalRef}
             />
           </Route>
           <Route exact path="/browse/genre/34399/">
