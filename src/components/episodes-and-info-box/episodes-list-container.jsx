@@ -66,6 +66,7 @@ const EpisodesListContainer = ({
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [episodesListItemData, setEpisodesListItemData] = useState(new Array(numEpsPerSeason.length));
   const [isLoading, setIsLoading] = useState(false);
+  const [noEpsToDisplay, setNoEpsToDisplay] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const numItemsLoaded = useRef(0);
 
@@ -73,8 +74,12 @@ const EpisodesListContainer = ({
     const data = await getSeasonData(mediaId, selectedSeason);
 
     const validEpisodeData = processValidEpisodes(data, selectedSeason);
-
-    loadEpisodeListItemData(validEpisodeData);
+    if (validEpisodeData.episodeData.length > 0) {
+      loadEpisodeListItemData(validEpisodeData);
+    } else {
+      setNoEpsToDisplay(true);
+      setImagesLoaded((imagesLoaded) => true);
+    }
 
     setDataLoaded(true);
   };
@@ -120,11 +125,13 @@ const EpisodesListContainer = ({
   };
 
   const changeSelectedSeason = (newSelectedSeason) => {
-    setIsLoading((isLoading) => true);
-    setImagesLoaded((imagesLoaded) => false);
-    setSelectedSeason((selectedSeason) => newSelectedSeason);
-    if (episodesListItemData[newSelectedSeason - 1] === undefined) {
-      setDataLoaded(false);
+    if (newSelectedSeason !== selectedSeason) {
+      setIsLoading((isLoading) => true);
+      setImagesLoaded((imagesLoaded) => false);
+      setSelectedSeason((selectedSeason) => newSelectedSeason);
+      if (episodesListItemData[newSelectedSeason - 1] === undefined) {
+        setDataLoaded(false);
+      }
     }
   };
 
@@ -148,8 +155,8 @@ const EpisodesListContainer = ({
         />
       </EpisodeDropDownContainer>
       {!imagesLoaded && <EpisodesListLoadingSkeleton />}
-      {dataLoaded
-      && (
+      {(dataLoaded && !noEpsToDisplay)
+      ? (
         <div>
           <ListContainer imagesLoaded={imagesLoaded}>
             <EpisodesList
@@ -161,7 +168,9 @@ const EpisodesListContainer = ({
             />
           </ListContainer>
         </div>
-      )}
+      )
+      : 'Episode list data unavailable'
+    }
     </Container>
   );
 };

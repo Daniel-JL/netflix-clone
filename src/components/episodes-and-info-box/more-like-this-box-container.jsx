@@ -49,11 +49,15 @@ function MoreLikeThisBoxContainer({
     console.log(mediaId);
     const data = await getSimilar(mediaType, mediaId);
     const newData = removeMediaWithoutImg(data);
+    console.log(newData);
+
+    if (newData.results.length > 0) {
+      handleMediaDetails(newData);
+      handleSrcArray(newData);
+    } else {
+      setImagesLoaded((imagesLoaded) => true);
+    }
     
-    handleMediaDetails(newData);
-
-    handleSrcArray(newData);
-
     setDataLoaded(true);
   };
 
@@ -113,8 +117,9 @@ function MoreLikeThisBoxContainer({
             imgSrcArray={imgSrcArray}
             mediaDetails={mediaDetails}
           >
-            {
-              [
+            {imgSrcArray.length === 0 
+            ? 'No similar items available'
+            :  [
                 ...Array(imgSrcArray.length),
               ].map((value: undefined, index: number) => (
                 <GridItem data-index={index} key={index}>

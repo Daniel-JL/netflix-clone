@@ -88,9 +88,9 @@ const EpisodesList = ({
   return (
     <Container id="epslist-container">
       <ListContainer id="list-container">
-        {isLoading
-          ? <div>Test</div>
-          : renderEpisodeListItems()
+        {!isLoading 
+          ? renderEpisodeListItems()
+          : 'Episode data not available'
         }
         {!allSeasonItemsLoaded &&
           <RoundDarkButton onClick={loadMoreItems}/>

@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
-import { RectInfoButton } from './buttons';
+import { RectDropdownButton } from './buttons';
 import { AccountDropdownMenu, EpisodeDropdownMenu } from './dropdown-menus';
 
 export function AccountDropdown() {
@@ -14,7 +14,7 @@ export function AccountDropdown() {
   return (
     <div>
       <nav>
-        <RectInfoButton
+        <RectDropdownButton
           onMouseOver={() => setDropdownActive((dropdownActive) => !dropdownActive)}
           onMouseOut={() => setDropdownActive((dropdownActive) => !dropdownActive)}
         />
@@ -32,6 +32,7 @@ export function EpisodeDropdown({
 }) {
   const [dropdownActive, setDropdownActive] = useState(false);
   const [numOfSeasons, setNumOfSeasons] = useState();
+  const [displaySeason, setDisplaySeason] = useState('Season 1');
   const [epsPerSeason, setEpsPerSeason] = useState([]);
   const ref = useRef();
   useOnClickOutside(ref, () => handleClickOutside());
@@ -44,33 +45,27 @@ export function EpisodeDropdown({
 
   const handleSeasonEpisodeData = () => {
     setNumOfSeasons((numOfSeasons) => numEpsPerSeason.length);
-    // for (let i = 0; i < seasonEpisodeData.length; i++) {
-    //   setEpsPerSeason((epsPerSeason) => [...epsPerSeason, seasonEpisodeData[i].length]);
-    // }
   };
 
   useEffect(() => {
     handleSeasonEpisodeData();
   }, []);
 
-  useEffect(() => {
-    // console.log(numOfSeasons);
-    // console.log(epsPerSeason);
-  });
-
   return (
     <div ref={ref}>
       <nav>
-        <RectInfoButton
-          
+        <RectDropdownButton
           onClick={() => setDropdownActive((dropdownActive) => !dropdownActive)}
-        />
+        >
+          {`Season ${selectedSeason}`}
+        </RectDropdownButton>
         {dropdownActive
         && (
           <EpisodeDropdownMenu
             numOfSeasons={numOfSeasons}
             numEpsPerSeason={numEpsPerSeason}
             changeSelectedSeason={changeSelectedSeason}
+            closeDropdown={() => setDropdownActive((dropdownActive) => !dropdownActive)}
           />
         )}
 

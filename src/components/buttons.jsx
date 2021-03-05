@@ -1,7 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
 import NetflixIcon from '../assets/images/netflix-logo.png';
 import SearchIcon from '../assets/images/magnifying-glass.png';
+import PlayIcon from '../assets/images/play.png';
+import InfoIcon from '../assets/images/information.png';
+import MuteIcon from '../assets/images/mute.png';
+import ReplayIcon from '../assets/images/replay.png';
 
 const RectButton = styled.button`
   font-family: "Roboto", sans-serif;
@@ -10,7 +13,7 @@ const RectButton = styled.button`
   cursor: pointer;
   transition: transform 0.3s ease;
   height: 3vw;
-  // width: 65px;
+  width: 65px;
   font-size: 1vw;
   border: 1px solid black;
   margin: 0.3vw;
@@ -31,6 +34,8 @@ const RoundButton = styled.button`
 `;
 
 export const RectPlayButton = styled(RectButton)`
+  width: 5vw;
+  border-radius: 0.2vw;
   color: black;
   background-color: rgba(255, 255, 255, 0.9);
   &:hover {
@@ -39,12 +44,22 @@ export const RectPlayButton = styled(RectButton)`
 `;
 
 export const RectInfoButton = styled(RectButton)`
+  width: 8vw;
+  border-radius: 0.2vw;
   color: white;
   background-color: rgba(128,128,128, 0.7);
 
   &:hover {
     background-color: rgba(128,128,128, 0.4);
   };
+`;
+
+export const RectDropdownButton = styled(RectButton)`
+  width: 140px;
+  height: 45px;
+  border-radius: 0.2vw;
+  color: white;
+  background-color: rgba(128,128,128, 0.7);
 `;
 
 export const NetflixButton = styled.button`
@@ -84,17 +99,24 @@ export const LinkTextButton = styled(RectButton)`
   }
 
   &:focus {
-    font-size: 12px;
+    font-size: 0.9vw;
     font-weight: bold;
     outline: none;
   }
 `;
 
-export const DropdownLinkTextButton = styled(LinkTextButton)`
+export const DropdownLinkTextButton = styled(RectButton)`
+  border: 0px;
+  background-color: transparent;
   color: white;
+  font-size: 14px;
+  width: 100%;
+  height: 20px;
 `;
 
 export const RoundPlayButton = styled(RoundButton)`
+  background: url(${PlayIcon}) no-repeat center;
+  background-size: 1vw, 1vw;
   background-color: white;
   font-size: 25px;
   
@@ -112,46 +134,28 @@ export const PlayButton = styled(RoundPlayButton)`
 `;
 
 export const RoundMuteButton = styled(RoundButton)`
-  background-color: transparent;
-  font-size: 25px;
+  background: url(${MuteIcon}) no-repeat center;
+  background-size: 1vw, 1vw;
+  background-color: rgba(255,255,255, 1);
   border: 1px solid white;
 
   &:hover {
     background-color: rgba(255,255,255, 0.8);
   };
-`;
 
-export const RoundPlusButton = styled(RoundButton)`
-  background-color: white;
-  font-size: 25px;
+  ${({ videoEnded }) => videoEnded
+  && `
+    background: url(${ReplayIcon}) no-repeat center;
+    background-size: 1vw, 1vw;
+    background-color: rgba(255,255,255, 1);
 
-
-  &:hover {
-    background-color: rgba(255,255,255, 0.8);
-  };
-`;
-
-export const RoundThumbsUpButton = styled(RoundButton)`
-  background-color: white;
-  font-size: 25px;
-
-
-  &:hover {
-    background-color: rgba(255,255,255, 0.8);
-  };
-`;
-
-export const RoundThumbsDownButton = styled(RoundButton)`
-  background-color: white;
-  font-size: 25px;
-
-
-  &:hover {
-    background-color: rgba(255,255,255, 0.8);
-  };
+  `
+}
 `;
 
 export const RoundEpsAndInfoButton = styled(RoundButton)`
+  background: url(${InfoIcon}) no-repeat center;
+  background-size: 1.3vw, 1.3vw;
   background-color: white;
   font-size: 25px;
   
@@ -167,13 +171,4 @@ export const RoundDarkButton = styled(RoundButton)`
   &:hover {
     background-color: rgba(255,255,255, 0.2);
   };
-`;
-
-export const ArrowButton = styled.button`
-  height: 140px;
-  width: 40px;
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
 `;

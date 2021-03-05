@@ -36,7 +36,6 @@ const Routes = () => {
   const [movieGenres, setMovieGenres] = useState();
   const [tvGenres, setTvGenres] = useState();
   const [portalRef, setPortalRef] = useState();
-  // const portalRef = useRef();
   const observer = useRef();
   const modalActiveRef = useRef(false);
 
@@ -166,6 +165,7 @@ const Routes = () => {
           <Route><NoMatch /></Route>
         </Switch>
         )}
+      <PortalContainer id="slider-item-modal" ref={setPortalRef} />
 
       {background
         && (
@@ -194,7 +194,6 @@ const Routes = () => {
           )}
         />
         )}
-      <PortalContainer id="slider-item-modal" ref={setPortalRef} />
 
       <Footer />
     </div>

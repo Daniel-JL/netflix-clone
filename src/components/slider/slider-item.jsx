@@ -174,9 +174,7 @@ const SliderItem = ({
                       key={'watch'}
                       to="/watch"
                     >
-                      <RoundPlayButton>
-                        |>
-                      </RoundPlayButton>
+                      <RoundPlayButton />
                     </Link>
                     <Link
                       key={'epsInfoBox'}
@@ -185,9 +183,7 @@ const SliderItem = ({
                         state: { background: location },
                       }}
                     >
-                      <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick}>
-                        v
-                      </RoundEpsAndInfoButton>
+                      <RoundEpsAndInfoButton onClick={handleEpsAndInfoButtonClick} />
                     </Link>
                   </div>
                   <div id="media-info">

@@ -29,7 +29,7 @@ const ModalContainer = styled.div`
   `}
 `;
 
-const Modal = ({ 
+const Modal = ({
   children,
   id,
   isEpsInfoBox,
@@ -45,7 +45,7 @@ const Modal = ({
     setScrollActive(false);
   };
 
-  return createPortal(
+  return document.getElementById(id) !== null && createPortal(
     <ModalContainer
       isEpsInfoBox={isEpsInfoBox}
       scrollActive={scrollActive}

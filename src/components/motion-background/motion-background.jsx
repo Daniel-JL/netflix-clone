@@ -69,7 +69,6 @@ export const MotionBackground = ({
   const [modal, setModal] = useState();
   const [modalActive, setModalActive] = useState(false);
   const modalActiveRef = useRef(false);
-  // const intersectionActive = useRef(true);
   const isPlaying = useRef();
   const [toggleState, setToggleState] = useState(false);
   const videoEnded = useRef(false);
@@ -136,7 +135,6 @@ export const MotionBackground = ({
   };
 
   const handleVideoEnded = () => {
-    // setIsPlaying((isPlaying) => false);
     isPlaying.current = false;
     videoEnded.current = true;
   };
@@ -161,7 +159,6 @@ export const MotionBackground = ({
     const config = { childList: true };
 
     const callback = function (mutationsList, observer) {
-      // console.log(portalRef.childNodes[0]);
       // Use traditional 'for loops' for IE 11
 
       for (const mutation of mutationsList) {
@@ -185,13 +182,12 @@ export const MotionBackground = ({
   }, []);
 
   useEffect(() => {
-    if (intersectionActive) {
+    if (intersectionActive && !modalActive) {
       if (isVisible === false) {
-        // fadeInImg();
         isPlaying.current = false;
         setToggleState((toggleState) => !toggleState);
       } else {
-        // fadeOutImg();
+        fadeOutImg();
         isPlaying.current = true;
         setToggleState((toggleState) => !toggleState);
       }
@@ -215,8 +211,6 @@ export const MotionBackground = ({
   }, [modalActive]);
 
   useEffect(() => {
-    console.log('intersectionActive');
-    console.log(intersectionActive);
     if (!intersectionActive) {
       fadeInImg();
       isPlaying.current = false;
@@ -257,6 +251,7 @@ export const MotionBackground = ({
               mediaType={mediaType}
               mediaTitle={mediaTitle}
               mediaTagline={mediaTagline}
+              videoEnded={videoEnded.current}
               ageRating={ageRating}
               isEpsInfoBox={isEpsInfoBox}
               handleMuteReplayButtonClick={handleMuteReplayButtonClick}

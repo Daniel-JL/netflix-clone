@@ -5,10 +5,10 @@ import {
   NavLink,
   useLocation,
 } from 'react-router-dom';
-import { 
-  RectPlayButton, 
-  RectInfoButton, 
-  RoundMuteButton 
+import {
+  RectPlayButton,
+  RectInfoButton,
+  RoundMuteButton,
 } from '../buttons';
 
 const BillboardRow = styled.div`
@@ -50,38 +50,40 @@ const MotionBackgroundOverlay = ({
   mediaType,
   mediaTitle,
   mediaTagline,
+  videoEnded,
   ageRating,
   isEpsInfoBox,
   handleMuteReplayButtonClick,
   handleInfoButtonClick,
   setPausePoint,
-}) => { 
+}) => {
   const location = useLocation();
 
   return (
-      <BillboardRow
-        id="billboard-row"
-        isEpsInfoBox={isEpsInfoBox}
-        ref={setPausePoint}
-      >
-        <InfoAndButtons>
-          <MediaTitle>
-            {mediaTitle}
-          </MediaTitle>
-          <Tagline>
-            {mediaTagline}
-          </Tagline>
-          <PlayAndInfoButtonsContainer>
-            <NavLink
-              key={1}
-              to="/watch"
-            >
-              <RectPlayButton>
-              |> Play
-              </RectPlayButton>
-            </NavLink>
-            
-            {!isEpsInfoBox && 
+    <BillboardRow
+      id="billboard-row"
+      isEpsInfoBox={isEpsInfoBox}
+      ref={setPausePoint}
+    >
+      <InfoAndButtons>
+        <MediaTitle>
+          {mediaTitle}
+        </MediaTitle>
+        <Tagline>
+          {mediaTagline}
+        </Tagline>
+        <PlayAndInfoButtonsContainer>
+          <NavLink
+            key={1}
+            to="/watch"
+          >
+            <RectPlayButton>
+              &#9654; Play
+            </RectPlayButton>
+          </NavLink>
+
+          {!isEpsInfoBox
+              && (
               <NavLink
                 key={2}
                 to={{
@@ -90,17 +92,20 @@ const MotionBackgroundOverlay = ({
                 }}
               >
                 <RectInfoButton onClick={handleInfoButtonClick}>
-                  i More info
+                  &#9432; More info
                 </RectInfoButton>
               </NavLink>
-            }
-          </PlayAndInfoButtonsContainer>
-        </InfoAndButtons>
-        <AgeRatingAndControl>
-          <RoundMuteButton onClick={handleMuteReplayButtonClick} />
-          {ageRating}
-        </AgeRatingAndControl>
-      </BillboardRow>
+              )}
+        </PlayAndInfoButtonsContainer>
+      </InfoAndButtons>
+      <AgeRatingAndControl>
+        <RoundMuteButton
+          videoEnded={videoEnded}
+          onClick={handleMuteReplayButtonClick}
+        />
+        {ageRating}
+      </AgeRatingAndControl>
+    </BillboardRow>
   );
 };
 

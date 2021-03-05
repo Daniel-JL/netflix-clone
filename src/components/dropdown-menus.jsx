@@ -10,8 +10,9 @@ import { DropdownLinkTextButton } from './buttons';
 
 const DropdownPanel = styled.div`
   display: flex;
+  width: 200px;
+  background-color: rgb(36,36,36);
   flex-direction: column;
-  margin-right: 50px;
   position: absolute;
   z-index: 2;
 `;
@@ -31,9 +32,11 @@ export const EpisodeDropdownMenu = ({
   numOfSeasons,
   numEpsPerSeason,
   changeSelectedSeason,
+  closeDropdown,
 }) => {
   const handleMenuItemClick = (index) => {
     changeSelectedSeason(numEpsPerSeason[index].seasonNum)
+    closeDropdown();
   };
   
   return (
