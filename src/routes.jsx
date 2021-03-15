@@ -10,20 +10,36 @@ import {
 } from 'react-router-dom';
 import getTrendingMediaIdsAndTypes from './helpers/getTrendingMediaIdsAndTypes';
 import getGenres from './helpers/getGenres';
-import { getAgeRating } from './helpers/getAgeRating';
+import getAgeRating from './helpers/getAgeRating';
 import processIdsAndTypes from './helpers/processIdsAndTypes';
-import Header from './components/header';
-import Footer from './components/footer';
-import Home from './components/views/home';
-import Search from './components/views/search';
-import VideoPlayer from './components/views/video-player';
-import NoMatch from './components/views/no-match';
-import Modal from './components/modal';
-import EpisodesAndInfoBox from './components/episodes-and-info-box/episodes-and-info-box';
+import Header from './components/main-page/header/header';
+import Footer from './components/main-page/footer/footer';
+import Home from './components/views/home/home';
+import VideoPlayer from './components/views/video-player/video-player';
+import NoMatch from './components/views/no-match/no-match';
+import Modal from './components/main-page/modal/modal';
+import EpisodesAndInfoBox from './components/episodes-and-info-box/episodes-and-info-box/episodes-and-info-box';
 
 const PortalContainer = styled.div`
   z-index: 3;
 `;
+
+const processTrendingMediaData = async (mediaType) => {
+  const numIdsNeeded = 1;
+  const startingPage = 0;
+
+  let data = await getTrendingMediaIdsAndTypes(numIdsNeeded, startingPage, mediaType);
+  data = processIdsAndTypes(data);
+
+  const trendingMediaData = {
+    id: data.ids[0],
+    mediaType,
+  };
+  const ageRating = await getAgeRating(trendingMediaData.id, trendingMediaData.mediaType);
+  trendingMediaData.ageRating = ageRating;
+
+  return trendingMediaData;
+};
 
 const Routes = () => {
   const [epsAndInfoBoxProps, setEpsAndInfoBoxProps] = useState({});
@@ -36,8 +52,6 @@ const Routes = () => {
   const [movieGenres, setMovieGenres] = useState();
   const [tvGenres, setTvGenres] = useState();
   const [portalRef, setPortalRef] = useState();
-  const observer = useRef();
-  const modalActiveRef = useRef(false);
 
   const setModalProps = (
     mediaId,
@@ -59,7 +73,6 @@ const Routes = () => {
     }));
   };
 
-
   const fetchGenreData = async () => {
     let data = await getGenres('movie');
     setMovieGenres((movieGenres) => data.genres);
@@ -67,23 +80,6 @@ const Routes = () => {
     data = await getGenres('tv');
     setTvGenres((tvGenres) => data.genres);
     setDataLoaded(true);
-  };
-
-  const processTrendingMediaData = async (mediaType) => {
-    const numIdsNeeded = 1;
-    const startingPage = 0;
-
-    let data = await getTrendingMediaIdsAndTypes(numIdsNeeded, startingPage, mediaType);
-    data = processIdsAndTypes(data);
-
-    const trendingMediaData = {
-      id: data.ids[0],
-      mediaType,
-    };
-    const ageRating = await getAgeRating(trendingMediaData.id, trendingMediaData.mediaType);
-    trendingMediaData.ageRating = ageRating;
-
-    return trendingMediaData;
   };
 
   const fetchData = async () => {
@@ -108,6 +104,7 @@ const Routes = () => {
       <Header />
       {dataLoaded
         && (
+          // Switch statement for React Router
         <Switch location={background || location}>
           <Route
             key="home"
@@ -160,13 +157,13 @@ const Routes = () => {
           <Route exact path="/browse/genre/34399/">
             <Redirect to="/browse/genre/34399" />
           </Route>
-          <Route exact path="/search"><Search setModalProps={setModalProps} /></Route>
           <Route exact path="/watch"><VideoPlayer /></Route>
           <Route><NoMatch /></Route>
         </Switch>
         )}
       <PortalContainer id="slider-item-modal" ref={setPortalRef} />
 
+      {/* Modal path for EpisodesAndInfoBox */}
       {background
         && (
         <Route
