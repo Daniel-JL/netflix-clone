@@ -56,7 +56,6 @@ const EpisodesAndInfoBox = ({
 }) => {
   const [epsInfoBoxData, setEpsInfoBoxData] = useState(epsAndInfoBoxProps);
   const [dataLoaded, setDataLoaded] = useState(false);
-
   const history = useHistory();
   const ref = useRef();
   useOnClickOutside(ref, () => back());

@@ -37,7 +37,7 @@ const MediaSliderContainer = (
     } else {
       data = await getMediaListByGenre(mediaType, numSlidersLoaded, genreId, maxIdsNeeded);
       //  Check if we attempted to fetch data out of range of data available
-      if (data[0].total_pages <= numSlidersLoaded + 1) {
+      if (data[0].total_pages <= numSlidersLoaded + pagesNeeded) {
         console.log(data[0].total_pages - pagesNeeded - 1);
         data = await getMediaListByGenre(mediaType, data[0].total_pages - pagesNeeded - 1, genreId, maxIdsNeeded);
       }

@@ -88,8 +88,6 @@ const SliderItemContainer = ({
   };
 
   const handleEpsAndInfoButtonClick = () => {
-    //  When EpsInfoButtonClicked then data already fetched by SliderItem is passed
-    //  to the EpsInfoBox.
     setModalProps(
       mediaId,
       mediaType,

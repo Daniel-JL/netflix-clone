@@ -17,6 +17,7 @@ const Container = styled.div`
   justify-self: center;
   padding-top: 0.6vw;
   margin: auto;
+  padding-top: 2vw;
 `;
 
 const ListContainer = styled.div`
@@ -34,6 +35,14 @@ const EpisodeDropDownContainer = styled.div`
   align-items: space-between;
 `;
 
+const EpisodesListTitle = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+//  Valid episodes are episodes that have already been released
 const processValidEpisodes = (data, season) => {
   const validEpisodes = [];
   let episodeAirDate;
@@ -58,6 +67,8 @@ const processValidEpisodes = (data, season) => {
   };
 };
 
+const seasonHasNoEpsData = (numEps) => numEps === 0;
+
 const EpisodesListContainer = ({
   mediaId,
   numEpsPerSeason,
@@ -69,12 +80,15 @@ const EpisodesListContainer = ({
   const [noEpsToDisplay, setNoEpsToDisplay] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const numItemsLoaded = useRef(0);
+  const maxItemsPerLoad = 10;
+
+  const validEpisodesAvailable = (validEpisodes) => validEpisodes > 0;
 
   const processSeasonData = async () => {
     const data = await getSeasonData(mediaId, selectedSeason);
-
     const validEpisodeData = processValidEpisodes(data, selectedSeason);
-    if (validEpisodeData.episodeData.length > 0) {
+
+    if (validEpisodesAvailable(validEpisodeData.episodeData.length)) {
       loadEpisodeListItemData(validEpisodeData);
     } else {
       setNoEpsToDisplay(true);
@@ -85,13 +99,14 @@ const EpisodesListContainer = ({
   };
 
   const handleImgLoad = () => {
+    const numEpisodeItems = episodesListItemData[selectedSeason - 1].episodeListItems.length;
     let numItemsToLoad;
-
     numItemsLoaded.current += 1;
-    if (episodesListItemData[selectedSeason - 1].episodeListItems.length >= 10) {
-      numItemsToLoad = 10;
+
+    if (numEpisodeItems >= maxItemsPerLoad) {
+      numItemsToLoad = maxItemsPerLoad;
     } else {
-      numItemsToLoad = episodesListItemData[selectedSeason - 1].episodeListItems.length;
+      numItemsToLoad = numEpisodeItems;
     }
 
     if (numItemsLoaded.current >= numItemsToLoad) {
@@ -141,13 +156,18 @@ const EpisodesListContainer = ({
       processSeasonData();
     } else {
       setIsLoading((isLoading) => false);
+      if (seasonHasNoEpsData(episodesListItemData[selectedSeason - 1].episodeListItems.length)) {
+        setNoEpsToDisplay(true);
+      } else {
+        setNoEpsToDisplay(false);
+      }
     }
   }, [selectedSeason]);
 
   return (
     <Container id="epslistcontainer">
       <EpisodeDropDownContainer>
-        Episodes
+        <EpisodesListTitle>Episodes</EpisodesListTitle>
         <EpisodeDropdown
           selectedSeason={selectedSeason}
           numEpsPerSeason={numEpsPerSeason}
@@ -156,21 +176,20 @@ const EpisodesListContainer = ({
       </EpisodeDropDownContainer>
       {!imagesLoaded && <EpisodesListLoadingSkeleton />}
       {(dataLoaded && !noEpsToDisplay)
-      ? (
-        <div>
-          <ListContainer imagesLoaded={imagesLoaded}>
-            <EpisodesList
-              numEpsPerSeason={numEpsPerSeason}
-              episodesListItemData={episodesListItemData}
-              selectedSeason={selectedSeason}
-              changeSelectedSeason={changeSelectedSeason}
-              isLoading={isLoading}
-            />
-          </ListContainer>
-        </div>
-      )
-      : 'Episode list data unavailable'
-    }
+        ? (
+          <div>
+            <ListContainer imagesLoaded={imagesLoaded}>
+              <EpisodesList
+                numEpsPerSeason={numEpsPerSeason}
+                episodesListItemData={episodesListItemData}
+                selectedSeason={selectedSeason}
+                changeSelectedSeason={changeSelectedSeason}
+                isLoading={isLoading}
+              />
+            </ListContainer>
+          </div>
+        )
+        : 'Episode list data unavailable'}
     </Container>
   );
 };

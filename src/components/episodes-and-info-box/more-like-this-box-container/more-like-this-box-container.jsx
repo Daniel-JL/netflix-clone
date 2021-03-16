@@ -14,6 +14,7 @@ const Container = styled.div`
   align-self: center;
   padding-top: 1vh;
   margin: auto;
+  padding-top: 1vw;
 `;
 
 const BoxContainer = styled.div`
@@ -26,7 +27,6 @@ const BoxContainer = styled.div`
   ${({ imagesAvailable }) => !imagesAvailable && `
       text-align: center;
   `}
-
 `;
 
 const GridItem = styled.div`
@@ -36,6 +36,13 @@ const GridItem = styled.div`
   align-items: center;
   align-self: center;
   margin: 1vw;
+`;
+
+const BoxTitle = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
 `;
 
 const MoreLikeThisBoxContainer = ({
@@ -51,11 +58,8 @@ const MoreLikeThisBoxContainer = ({
   const numItemsLoaded = useRef(0);
 
   const fetchSimilarContentData = async () => {
-    console.log(mediaType);
-    console.log(mediaId);
     const data = await getSimilar(mediaType, mediaId);
     const newData = removeMediaWithoutImg(data);
-    console.log(newData);
 
     if (newData.results.length > 0) {
       handleMediaDetails(newData);
@@ -77,6 +81,17 @@ const MoreLikeThisBoxContainer = ({
     return data;
   };
 
+  const handleMediaDetails = (data) => {
+    const mediaDetailsCopy = data.results.map((undefined, index) => (
+      {
+        name: data.results[index].name ? data.results[index].name : data.results[index].title,
+        overview: truncate(data.results[index].overview, 120),
+      }
+    ));
+
+    setMediaDetails((mediaDetails) => mediaDetailsCopy);
+  };
+
   const handleSrcArray = (data) => {
     const srcArrayCopy = data.results.map((undefined, index) => (
       `http://image.tmdb.org/t/p/w780${data.results[index].backdrop_path}`
@@ -84,19 +99,6 @@ const MoreLikeThisBoxContainer = ({
 
     setNumItemsToLoad((numItemsToLoad) => srcArrayCopy.length);
     setImgSrcArray((imgSrcArray) => srcArrayCopy);
-  };
-
-  const handleMediaDetails = (data) => {
-    // const regex = /^.*?[\.!\?](?:\s|$)/;
-    const mediaDetailsCopy = data.results.map((undefined, index) => (
-      {
-        name: data.results[index].name ? data.results[index].name : data.results[index].title,
-        // overview: data.results[index].overview.match(regex),
-        overview: truncate(data.results[index].overview, 120),
-      }
-    ));
-
-    setMediaDetails((mediaDetails) => mediaDetailsCopy);
   };
 
   const handleImgLoad = () => {
@@ -120,6 +122,7 @@ const MoreLikeThisBoxContainer = ({
       {dataLoaded
       && (
         <BoxContainer imagesLoaded={imagesLoaded} imagesAvailable={imagesAvailable}>
+          <BoxTitle>More Like This</BoxTitle>
           <MoreLikeThisBox
             imgSrcArray={imgSrcArray}
             mediaDetails={mediaDetails}

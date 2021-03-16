@@ -60,33 +60,29 @@ function EpisodesListItem({
   episodeData,
   handleImgLoad,
 }) {
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataReady, setDataReady] = useState(false);
   const [episodeName, setEpisodeName] = useState();
   const [episodeDescription, setEpisodeDescription] = useState();
   const [episodeNumber, setEpisodeNumber] = useState();
   const [imagePath, setImagePath] = useState();
-  const [imgLoadingErr, setImgLoadingErr] = useState(false);
-  const [imgLoadedSuccess, setImgLoadedSuccess] = useState(false);
   const [mouseOver, setMouseOver] = useState(false);
   const [runtime, setRuntime] = useState('');
 
-  const fetchEpisodeData = async () => {
+  const handleEpisodeData = async () => {
     setEpisodeName((episodeName) => episodeData.name);
     setEpisodeDescription((episodeDescription) => episodeData.overview);
     setEpisodeNumber((episodeNumber) => episodeData.episode_number);
     setImagePath((imagePath) => `http://image.tmdb.org/t/p/w780${episodeData.still_path}`);
-    setDataLoaded(true);
+    setDataReady(true);
   };
 
   const handleImgLoadingErr = () => {
     setImagePath((imagePath) => ImageErrorPlaceholder);
     handleImgLoad();
-    setImgLoadingErr(true);
   };
 
   const handleImgLoadedSuccess = () => {
     handleImgLoad();
-    setImgLoadedSuccess(true);
   };
 
   const handleMouseOver = () => {
@@ -98,14 +94,14 @@ function EpisodesListItem({
   };
 
   useEffect(() => {
-    if (!dataLoaded) {
-      fetchEpisodeData();
+    if (!dataReady) {
+      handleEpisodeData();
     }
   }, []);
 
   return (
     <Container>
-      {dataLoaded
+      {dataReady
       && (
         <Link
           key={1}

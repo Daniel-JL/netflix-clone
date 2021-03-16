@@ -24,7 +24,6 @@ const ItemDetails = styled.div`
   display: flex;
   display: relative;
   flex-direction: column;
-
   font-size: 80%;
 `;
 

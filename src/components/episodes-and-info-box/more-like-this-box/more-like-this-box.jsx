@@ -12,9 +12,9 @@ const GridContainer = styled.div`
   margin: auto;
 `;
 
-function MoreLikeThisBox({
+const MoreLikeThisBox = ({
   children,
-}) {
+}) => {
   return (
     <GridContainer>
       {children}

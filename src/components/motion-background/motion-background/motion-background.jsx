@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import getMediaData from '../../../helpers/getMediaData';
+import useMutationObserver from "@rooks/use-mutation-observer";
 import usePageVisibility from '../../../hooks/usePageVisibility';
+import getMediaData from '../../../helpers/getMediaData';
 import getVideos from '../../../helpers/getVideos';
 import LoadingSkeleton from '../../main-page/loading-skeleton/loading-skeleton';
 import MotionBackgroundMedia from '../motion-background-media/motion-background-media';
@@ -11,9 +12,7 @@ const MotionBackgroundContainer = styled.div`
   width: 100%;
   
   ${({ isEpsInfoBox }) => isEpsInfoBox
-  && `
-    height: 27.765vw;
-  `
+  && 'height: 27.765vw;'
 } 
 `;
 
@@ -28,21 +27,11 @@ const SpacingRow = styled.div`
   color: white;
 `;
 
-const videosAvailable = (numVideos) => {
-  return numVideos > 0;
-};
+const videosAvailable = (numVideos) => numVideos > 0;
 
-const videoHasEnded = (videoEnded) => {
-  return videoEnded === false;
-};
+const videoHasEnded = (videoEnded) => videoEnded === true;
 
-const pausePointExists = (pausePoint) => {
-  return pausePoint !== null;
-};
-
-const videoIsOffScreen = (intersectionRatio, intersectionThreshold) => {
-  return intersectionRatio <= intersectionThreshold;
-};
+const videoIsOffScreen = (intersectionRatio, intersectionThreshold) => intersectionRatio <= intersectionThreshold;
 
 const MotionBackground = ({
   mediaType,
@@ -65,15 +54,16 @@ const MotionBackground = ({
   const [mediaTitle, setMediaTitle] = useState('');
   const [mediaTagline, setMediaTagline] = useState('');
   const [intersectionActive, setIntersectionActive] = useState(true);
-  const [modal, setModal] = useState();
   const [modalActive, setModalActive] = useState(false);
+  const [toggleState, setToggleState] = useState(false);
   const modalActiveRef = useRef(false);
   const isPlaying = useRef();
-  const [toggleState, setToggleState] = useState(false);
   const videoEnded = useRef(false);
   const intersectionThreshold = 0.2;
   const mutationObserver = useRef();
   const videoObserver = useRef();
+
+  // useMutationObserver(portalRef, mutationCallback);
 
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
@@ -91,27 +81,22 @@ const MotionBackground = ({
     }
     setDataLoaded(true);
   };
+
   if (pausePoint !== undefined && videoObserver.current === undefined) {
     videoObserver.current = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying.current) {
           fadeOutImg();
           isPlaying.current = false;
-          // intersectionActive.current = false;
           setIntersectionActive((intersectionActive) => false);
-          // setToggleState((toggleState) => !toggleState);
         } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && !modalActiveRef.current) {
           fadeInImg();
           isPlaying.current = true;
           setIntersectionActive((intersectionActive) => true);
-
-          // intersectionActive.current = true;
-          // setToggleState((toggleState) => !toggleState);
         }
       });
     }, { threshold: intersectionThreshold });
     videoObserver.current.observe(pausePoint);
-
   }
 
   const fadeInImg = () => {
@@ -139,11 +124,11 @@ const MotionBackground = ({
 
   const handleMuteReplayButtonClick = () => {
     if (videoHasEnded(videoEnded.current)) {
-      setMuteActive((muteActive) => !muteActive);
-    } else {
       videoEnded.current = false;
       fadeOutImg();
       isPlaying.current = true;
+    } else {
+      setMuteActive((muteActive) => !muteActive);
     }
   };
 
@@ -157,24 +142,20 @@ const MotionBackground = ({
     const config = { childList: true };
 
     const callback = function (mutationsList, observer) {
-      // Use traditional 'for loops' for IE 11
-
-      for (const mutation of mutationsList) {
-        if (portalRef.childNodes[0] !== undefined && !modalActiveRef.current) {
-          modalActiveRef.current = true;
-          setModalActive((modalActive) => true);
-        } else if (portalRef.childNodes[0] === undefined && modalActiveRef.current) {
-          modalActiveRef.current = false;
-          setModalActive((modalActive) => false);
-        }
+      if (portalRef.childNodes[0] !== undefined && !modalActiveRef.current) {
+        modalActiveRef.current = true;
+        setModalActive((modalActive) => true);
+      } else if (portalRef.childNodes[0] === undefined && modalActiveRef.current) {
+        modalActiveRef.current = false;
+        setModalActive((modalActive) => false);
       }
     };
 
-    if (portalRef.childNodes[0] !== undefined && !modalActiveRef.current){
+    if (portalRef.childNodes[0] !== undefined && !modalActiveRef.current) {
       modalActiveRef.current = true;
       setModalActive((modalActive) => true);
     }
-    
+
     // Create an observer instance linked to the callback function
     mutationObserver.current = new MutationObserver(callback);
     mutationObserver.current.observe(portalRef, config);
@@ -185,7 +166,7 @@ const MotionBackground = ({
   }, []);
 
   useEffect(() => {
-    if (intersectionActive && !modalActiveRef.current) {
+    if (intersectionActive && !modalActiveRef.current && vidExists) {
       if (isVisible === false) {
         isPlaying.current = false;
         setToggleState((toggleState) => !toggleState);
@@ -229,7 +210,6 @@ const MotionBackground = ({
         setToggleState((toggleState) => !toggleState);
       }
     }
-    
   }, [intersectionActive]);
 
   return (

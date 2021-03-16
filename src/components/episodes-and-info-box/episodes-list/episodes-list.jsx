@@ -30,12 +30,12 @@ const EpisodeDropDownContainer = styled.div`
 
 const EpisodesList = ({
   episodesListItemData,
+  numItemsPerLoad,
   selectedSeason,
   isLoading,
 }) => {
   const [selectedSeasonChange, setSelectedSeasonChange] = useState(false);
   const [currentSelectedSeason, setCurrentSelectedSeason] = useState(1);
-  const [numItemsPerLoad, setNumItemsPerLoad] = useState(10);
   const [itemLimit, setItemLimit] = useState(10);
   const [seasonItemData, setSeasonItemData] = useState([]);
   const [allSeasonItemsLoaded, setAllSeasonItemsLoaded] = useState(false);
