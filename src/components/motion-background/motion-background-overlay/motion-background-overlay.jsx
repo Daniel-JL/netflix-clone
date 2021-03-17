@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   NavLink,
@@ -21,7 +20,6 @@ const BillboardRow = styled.div`
   z-index: 3;
   color: white;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-
 `;
 
 const InfoAndButtons = styled.div`
@@ -48,20 +46,21 @@ const AgeRatingAndControl = styled.div`
 `;
 
 const MotionBackgroundOverlay = ({
-  mediaId,
-  mediaType,
-  mediaTitle,
-  mediaTagline,
+  overlayData: {
+    mediaId,
+    mediaType,
+    mediaTitle,
+    mediaTagline,
+    ageRating
+  },
   vidExists,
   videoEnded,
-  ageRating,
   isEpsInfoBox,
   handleMuteReplayButtonClick,
   handleInfoButtonClick,
   setPausePoint,
 }) => {
   const location = useLocation();
-
   return (
     <BillboardRow
       id="billboard-row"

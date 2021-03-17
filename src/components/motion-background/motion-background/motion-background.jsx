@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import useMutationObserver from "@rooks/use-mutation-observer";
 import usePageVisibility from '../../../hooks/usePageVisibility';
 import getMediaData from '../../../helpers/getMediaData';
 import getVideos from '../../../helpers/getVideos';
@@ -43,102 +42,61 @@ const MotionBackground = ({
   portalRef,
 }) => {
   const isVisible = usePageVisibility();
+  const [overlayData, setOverlayData] = useState({
+    mediaId,
+    mediaType,
+    mediaTitle: '',
+    mediaTagline: '',
+    ageRating,
+  });
   const [backdropPath, setBackdropPath] = useState();
   const [videoURL, setVideoURL] = useState();
   const [vidExists, setVidExists] = useState(false);
-  const [imgFadeOut, setImgFadeOut] = useState(false);
-  const [imgFadeIn, setImgFadeIn] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [pausePoint, setPausePoint] = useState();
   const [muteActive, setMuteActive] = useState(true);
-  const [mediaTitle, setMediaTitle] = useState('');
-  const [mediaTagline, setMediaTagline] = useState('');
   const [intersectionActive, setIntersectionActive] = useState(true);
   const [modalActive, setModalActive] = useState(false);
-  const [toggleState, setToggleState] = useState(false);
+  const [isPlaying, setIsPlaying] = useState();
+  const [videoEnded, setVideoEnded] = useState(false);
   const modalActiveRef = useRef(false);
-  const isPlaying = useRef();
-  const videoEnded = useRef(false);
   const intersectionThreshold = 0.2;
   const mutationObserver = useRef();
   const videoObserver = useRef();
-
-  // useMutationObserver(portalRef, mutationCallback);
 
   const fetchItemData = async () => {
     let data = await getMediaData(mediaType, mediaId);
 
     setBackdropPath((backdropPath) => `https://image.tmdb.org/t/p/original${data.backdrop_path}`);
-    setMediaTitle((mediaTitle) => (data.title ? data.title : data.name));
-    setMediaTagline((mediaTagline) => data.tagline);
+    setOverlayData((overlayData) => ({
+      ...overlayData,
+      mediaTitle: data.title ? data.title : data.name,
+      mediaTagline: data.tagline,
+    }));
 
     data = await getVideos(mediaType, mediaId);
     if (videosAvailable(data.results.length)) {
-      // setVideoURL((videoURL) => `https://www.youtube.com/watch?v=${data.results[0].key}`);
-      // setVideoURL((videoURL) => `https://www.youtube.com/embed/${data.results[0].key}`);
       setVideoURL((videoURL) => data.results[0].key);
       setVidExists(true);
     }
+
     setDataLoaded(true);
   };
 
-  if (pausePoint !== undefined && videoObserver.current === undefined) {
+  const initialiseIntersectionObserver = () => {
     videoObserver.current = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
-        if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && isPlaying.current) {
-          fadeOutImg();
-          isPlaying.current = false;
+        if (videoIsOffScreen(entry.intersectionRatio, intersectionThreshold)) {
           setIntersectionActive((intersectionActive) => false);
-        } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold) && !videoEnded.current && !modalActiveRef.current) {
-          fadeInImg();
-          isPlaying.current = true;
+        } else if (!videoIsOffScreen(entry.intersectionRatio, intersectionThreshold)) {
           setIntersectionActive((intersectionActive) => true);
         }
       });
     }, { threshold: intersectionThreshold });
     videoObserver.current.observe(pausePoint);
-  }
-
-  const fadeInImg = () => {
-    setImgFadeOut((imgFadeOut) => false);
-    setImgFadeIn((imgFadeIn) => true);
   };
 
-  const fadeOutImg = () => {
-    setImgFadeOut((imgFadeOut) => true);
-    setImgFadeIn((imgFadeIn) => false);
-  };
-
-  const handleVideoPlaying = () => {
-    fadeOutImg();
-  };
-
-  const handleVideoNearlyEnded = () => {
-    fadeInImg();
-  };
-
-  const handleVideoEnded = () => {
-    isPlaying.current = false;
-    videoEnded.current = true;
-  };
-
-  const handleMuteReplayButtonClick = () => {
-    if (videoHasEnded(videoEnded.current)) {
-      videoEnded.current = false;
-      fadeOutImg();
-      isPlaying.current = true;
-    } else {
-      setMuteActive((muteActive) => !muteActive);
-    }
-  };
-
-  const handleInfoButtonClick = () => {
-    fadeInImg();
-    isPlaying.current = false;
-  };
-
-  if (mutationObserver.current === undefined && !isEpsInfoBox) {
-    // Options for the observer (which mutations to observe)
+  const initialiseMutationObserver = () => {
     const config = { childList: true };
 
     const callback = function (mutationsList, observer) {
@@ -156,58 +114,67 @@ const MotionBackground = ({
       setModalActive((modalActive) => true);
     }
 
-    // Create an observer instance linked to the callback function
     mutationObserver.current = new MutationObserver(callback);
     mutationObserver.current.observe(portalRef, config);
-  }
+  };
+
+  const handleVideoEnded = () => {
+    setIsPlaying((isPlaying) => false);
+    setVideoEnded((videoEnded) => true);
+  };
+
+  const handleMuteReplayButtonClick = () => {
+    if (videoHasEnded(videoEnded)) {
+      setIsPlaying((isPlaying) => true);
+      setVideoEnded((videoEnded) => false);
+    } else {
+      setMuteActive((muteActive) => !muteActive);
+    }
+  };
+
+  const handleInfoButtonClick = () => {
+    setIsPlaying((isPlaying) => false);
+  };
 
   useEffect(() => {
     fetchItemData();
+    if (!isEpsInfoBox) {
+      initialiseMutationObserver();
+    }
   }, []);
 
   useEffect(() => {
-    if (intersectionActive && !modalActiveRef.current && vidExists) {
+    if (pausePoint !== undefined) {
+      initialiseIntersectionObserver();
+    }
+  }, [pausePoint]);
+
+  useEffect(() => {
+    if (intersectionActive && !modalActiveRef.current && vidExists && !videoEnded) {
       if (isVisible === false) {
-        isPlaying.current = false;
-        setToggleState((toggleState) => !toggleState);
+        setIsPlaying((isPlaying) => false);
       } else {
-        fadeOutImg();
-        isPlaying.current = true;
-        setToggleState((toggleState) => !toggleState);
+        setIsPlaying((isPlaying) => true);
       }
     }
   }, [isVisible]);
 
   useEffect(() => {
-    if (intersectionActive) {
+    if (intersectionActive && !videoEnded) {
       if (modalActiveRef.current) {
-        fadeInImg();
-        isPlaying.current = false;
-        setToggleState((toggleState) => !toggleState);
+        setIsPlaying((isPlaying) => false);
       } else {
-        if (imgFadeOut === true) {
-          fadeOutImg();
-        }
-
-        isPlaying.current = true;
-        setToggleState((toggleState) => !toggleState);
+        setIsPlaying((isPlaying) => true);
       }
     }
   }, [modalActive]);
 
   useEffect(() => {
-    if (!modalActiveRef.current) {
+    if (!modalActiveRef.current && !videoEnded) {
       if (!intersectionActive) {
-        fadeInImg();
-        isPlaying.current = false;
-        setToggleState((toggleState) => !toggleState);
+        setIsPlaying((isPlaying) => false);
       } else {
-        if (imgFadeOut === true) {
-          fadeOutImg();
-        }
-
-        isPlaying.current = true;
-        setToggleState((toggleState) => !toggleState);
+        setIsPlaying((isPlaying) => true);
       }
     }
   }, [intersectionActive]);
@@ -224,24 +191,18 @@ const MotionBackground = ({
               backdropPath={backdropPath}
               videoURL={videoURL}
               vidExists={vidExists}
-              isPlaying={isPlaying.current}
+              isPlaying={isPlaying}
               muteActive={muteActive}
-              imgFadeOut={imgFadeOut}
-              imgFadeIn={imgFadeIn}
-              handleVideoPlaying={handleVideoPlaying}
+              videoEnded={videoEnded}
               handleVideoEnded={handleVideoEnded}
-              handleVideoNearlyEnded={handleVideoNearlyEnded}
               handleItemLoaded={handleItemLoaded}
+              setVideoEnded={setVideoEnded}
               itemsLoaded={itemsLoaded}
             />
             <MotionBackgroundOverlay
-              mediaId={mediaId}
-              mediaType={mediaType}
-              mediaTitle={mediaTitle}
-              mediaTagline={mediaTagline}
+              overlayData={overlayData}
               vidExists={vidExists}
-              videoEnded={videoEnded.current}
-              ageRating={ageRating}
+              videoEnded={videoEnded}
               isEpsInfoBox={isEpsInfoBox}
               handleMuteReplayButtonClick={handleMuteReplayButtonClick}
               handleInfoButtonClick={handleInfoButtonClick}

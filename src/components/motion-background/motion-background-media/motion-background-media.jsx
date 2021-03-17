@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import ReactPlayer from 'react-player';
-// import YouTube from '@u-wave/react-youtube';
 import YouTube from 'react-youtube';
 import './motion-background-media.css';
 
@@ -31,11 +29,6 @@ const VideoContainer = styled.div`
 `;
 
 const BillboardVideo = styled.div`
-  // position: absolute;
-  // width: 100%;
-  // top:0;
-  // z-index: 0;
-  // height: 100%;
   position: relative; 
   width: 100%;
   height: 0;
@@ -56,61 +49,65 @@ const MotionBackgroundMedia = ({
   backdropPath,
   videoURL,
   vidExists,
+  videoEnded,
   isPlaying,
   muteActive,
-  imgFadeOut,
-  imgFadeIn,
-  handleVideoPlaying,
   handleVideoEnded,
-  handleVideoNearlyEnded,
   handleItemLoaded,
   itemsLoaded,
 }) => {
   const [playerEvent, setPlayerEvent] = useState();
   const [videoProgressInterval, setVideoProgressInterval] = useState();
-  const [videoEnded, setVideoEnded] = useState(false);
-  
+  const [imgFadeOut, setImgFadeOut] = useState(false);
+  const [imgFadeIn, setImgFadeIn] = useState(false);
+
+  const fadeInImg = () => {
+    setImgFadeOut((imgFadeOut) => false);
+    setImgFadeIn((imgFadeIn) => true);
+  };
+
+  const fadeOutImg = () => {
+    setImgFadeOut((imgFadeOut) => true);
+    setImgFadeIn((imgFadeIn) => false);
+  };
+
+  const initialiseProgressInterval = (e) => {
+    setVideoProgressInterval((videoProgressInterval) => setInterval(() => {
+      if (e.target.getCurrentTime()/e.target.getDuration() > 0.96) {
+        fadeInImg();
+      }
+    }, 500));
+  };
+
   const onReady = (e) => {
     setPlayerEvent((playerEvent) => e);
     if (isPlaying === true) {
-      handleVideoPlaying();
+      fadeOutImg();
       initialiseProgressInterval(e);
     } else {
       e.target.pauseVideo();
     }
   };
 
-  const initialiseProgressInterval = (e) => {
-    setVideoProgressInterval((videoProgressInterval) => setInterval(() => {
-      if (e.target.getCurrentTime()/e.target.getDuration() > 0.96) {
-        handleVideoNearlyEnded();
-      }
-    }, 500));
-  };
-
   const onPlayerStateChange = (e) => {
     if (e.data === 0) {
       handleVideoEnded();
+      playerEvent.target.seekTo(0);
       clearInterval(videoProgressInterval);
-      setVideoEnded((videoEnded) => true);
     }
   };
 
   useEffect(() => {
-    if (playerEvent) {
+    if (playerEvent && !videoEnded) {
       if (!isPlaying) {
-        console.log('pauseVideo');
+        fadeInImg();
         playerEvent.target.pauseVideo();
         clearInterval(videoProgressInterval);
 
-      } else if (videoEnded === true) {
-        playerEvent.target.seekTo(0);
-        initialiseProgressInterval(playerEvent);
-        playerEvent.target.playVideo();
-
       } else {
-        console.log(isPlaying);
-        handleVideoPlaying();
+        if (imgFadeOut === false) {
+          fadeOutImg();
+        }
         initialiseProgressInterval(playerEvent);
         playerEvent.target.playVideo();
       }

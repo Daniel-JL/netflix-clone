@@ -180,10 +180,9 @@ const EpisodesListContainer = ({
           <div>
             <ListContainer imagesLoaded={imagesLoaded}>
               <EpisodesList
-                numEpsPerSeason={numEpsPerSeason}
                 episodesListItemData={episodesListItemData}
                 selectedSeason={selectedSeason}
-                changeSelectedSeason={changeSelectedSeason}
+                numItemsPerLoad={maxItemsPerLoad}
                 isLoading={isLoading}
               />
             </ListContainer>
