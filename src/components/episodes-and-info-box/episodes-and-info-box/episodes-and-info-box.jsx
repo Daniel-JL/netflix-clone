@@ -56,13 +56,14 @@ const EpisodesAndInfoBox = ({
 }) => {
   const [epsInfoBoxData, setEpsInfoBoxData] = useState(epsAndInfoBoxProps);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [transitionComplete, setTransitionComplete] = useState(false);
   const history = useHistory();
   const ref = useRef();
   useOnClickOutside(ref, () => back());
   document.body.style.overflow = 'hidden';
 
   const back = () => {
-    setModalProps('', '', '', '', '', '', '');
+    setModalProps('', '', '', '', '', '', '', '');
     setScrollHidden();
     history.goBack();
     document.body.style.overflow = 'scroll';
@@ -70,7 +71,7 @@ const EpisodesAndInfoBox = ({
 
   const fetchMediaData = async () => {
     const currentUrl = history.location.pathname;
-    const mediaData = getMediaDataFromUrl(currentUrl)
+    const mediaData = getMediaDataFromUrl(currentUrl);
 
     const data = await getMediaData(mediaData.type, mediaData.id);
 
@@ -103,7 +104,9 @@ const EpisodesAndInfoBox = ({
   }, []);
 
   return (
-    <EpisodesAndInfoBoxContainer ref={ref}>
+    <EpisodesAndInfoBoxContainer
+      ref={ref}
+    >
       {dataLoaded
       && (
       <div>
@@ -112,15 +115,16 @@ const EpisodesAndInfoBox = ({
           mediaType={epsInfoBoxData.mediaType}
           mediaId={epsInfoBoxData.mediaId}
           handleItemLoaded={() => {}}
-          itemsLoaded={true}
+          itemsLoaded
+          transitionComplete={transitionComplete}
         />
         {epsInfoBoxData.mediaType === 'tv'
-          && (
-          <EpisodesListContainer
-            mediaId={epsInfoBoxData.mediaId}
-            numEpsPerSeason={epsInfoBoxData.runtimeOrNumberOfSeasons}
-          />
-          )}
+              && (
+              <EpisodesListContainer
+                mediaId={epsInfoBoxData.mediaId}
+                numEpsPerSeason={epsInfoBoxData.runtimeOrNumberOfSeasons}
+              />
+              )}
         <MoreLikeThisBoxContainer
           mediaId={epsInfoBoxData.mediaId}
           mediaType={epsInfoBoxData.mediaType}
@@ -128,6 +132,7 @@ const EpisodesAndInfoBox = ({
       </div>
       )}
     </EpisodesAndInfoBoxContainer>
+
   );
 };
 

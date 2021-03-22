@@ -42,7 +42,11 @@ const Tagline = styled.div`
 `;
 
 const AgeRatingAndControl = styled.div`
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 2vw;
+  width: 4vw;
 `;
 
 const MotionBackgroundOverlay = ({
@@ -108,7 +112,6 @@ const MotionBackgroundOverlay = ({
             onClick={handleMuteReplayButtonClick}
           />
           )}
-
         {ageRating}
       </AgeRatingAndControl>
     </BillboardRow>

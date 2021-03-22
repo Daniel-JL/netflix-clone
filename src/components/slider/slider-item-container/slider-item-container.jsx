@@ -96,6 +96,7 @@ const SliderItemContainer = ({
       sliderItemData.genres,
       sliderItemData.ageRating,
       sliderItemData.overview,
+      itemDimensions,
     );
   };
 

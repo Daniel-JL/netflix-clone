@@ -125,7 +125,7 @@ function EpisodesListItem({
                       () => handleImgLoadedSuccess()
                     }
                   />}
-                  overlayItem={<PlayButton>|></PlayButton>}
+                  overlayItem={<PlayButton />}
                   fadeIn={mouseOver}
                 />
               </ImgContainer>

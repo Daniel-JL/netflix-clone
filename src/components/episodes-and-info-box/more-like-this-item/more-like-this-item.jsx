@@ -59,7 +59,7 @@ function MoreLikeThisItem({
       >
         <ImageWithOverlay 
           image={<ItemImage src={imgSrc} onLoad={() => handleImgLoad()}/>}
-          overlayItem={<PlayButton>|></PlayButton>}
+          overlayItem={<PlayButton />}
           fadeIn={mouseOver}
           handleImgLoad={handleImgLoad}
         />

@@ -61,6 +61,7 @@ const Routes = () => {
     genres,
     ageRating,
     overview,
+    itemDimensions,
   ) => {
     setEpsAndInfoBoxProps((epsAndInfoBoxProps) => ({
       mediaId,
@@ -70,6 +71,7 @@ const Routes = () => {
       genres,
       ageRating,
       overview,
+      itemDimensions,
     }));
   };
 

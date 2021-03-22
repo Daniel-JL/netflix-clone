@@ -5,6 +5,7 @@ import PlayIcon from '../../../assets/images/play.png';
 import InfoIcon from '../../../assets/images/information.png';
 import MuteIcon from '../../../assets/images/mute.png';
 import ReplayIcon from '../../../assets/images/replay.png';
+import BackIcon from '../../../assets/images/back-arrow.png';
 
 const RectButton = styled.button`
   font-family: "Roboto", sans-serif;
@@ -116,9 +117,11 @@ export const DropdownLinkTextButton = styled(RectButton)`
 
 export const RoundPlayButton = styled(RoundButton)`
   background: url(${PlayIcon}) no-repeat center;
-  background-size: 1vw, 1vw;
+  background-size: 0.8vw, 0.8vw;
   background-color: white;
   font-size: 25px;
+  height: 2vw;
+  width: 2vw;
   
   &:hover {
     background-color: rgba(255,255,255, 0.8);
@@ -127,10 +130,21 @@ export const RoundPlayButton = styled(RoundButton)`
 
 export const PlayButton = styled(RoundPlayButton)`
   position: absolute;
-  background:rgba(255,255,255, 0.3);
+  background-color: rgba(255,255,255, 0.5);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+`;
+
+export const RoundBackButton = styled(RoundButton)`
+  background: url(${BackIcon}) no-repeat center;
+  background-size: 1vw, 1vw;
+  background-color: white;
+  font-size: 25px;
+
+  &:hover {
+    background-color: rgba(255,255,255, 0.8);
+  };
 `;
 
 export const RoundMuteButton = styled(RoundButton)`
@@ -155,9 +169,12 @@ export const RoundMuteButton = styled(RoundButton)`
 
 export const RoundEpsAndInfoButton = styled(RoundButton)`
   background: url(${InfoIcon}) no-repeat center;
-  background-size: 1.3vw, 1.3vw;
+  background-size: 1vw, 1vw;
   background-color: white;
   font-size: 25px;
+
+  height: 2vw;
+  width: 2vw;
   
   &:hover {
     background-color: rgba(255,255,255, 0.8);

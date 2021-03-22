@@ -122,14 +122,17 @@ const MoreLikeThisBoxContainer = ({
       {dataLoaded
       && (
         <BoxContainer imagesLoaded={imagesLoaded} imagesAvailable={imagesAvailable}>
+          {imgSrcArray.length === 0 
+            ? 'No similar items available'
+          : (
+          <div>
           <BoxTitle>More Like This</BoxTitle>
           <MoreLikeThisBox
             imgSrcArray={imgSrcArray}
             mediaDetails={mediaDetails}
           >
-            {imgSrcArray.length === 0 
-            ? 'No similar items available'
-            :  [
+          {
+              [
                 ...Array(imgSrcArray.length),
               ].map((value: undefined, index: number) => (
                 <GridItem data-index={index} key={index}>
@@ -140,8 +143,11 @@ const MoreLikeThisBoxContainer = ({
                   />
                 </GridItem>
               ))
-            }
+              }
           </MoreLikeThisBox>
+          </div>
+          )}
+
         </BoxContainer>
       )}
     </Container>
