@@ -53,7 +53,7 @@ const MotionBackgroundMedia = ({
   isPlaying,
   muteActive,
   handleVideoEnded,
-  handleItemLoaded,
+  handleImageLoaded,
   itemsLoaded,
 }) => {
   const [playerEvent, setPlayerEvent] = useState();
@@ -136,7 +136,7 @@ const MotionBackgroundMedia = ({
                 src={backdropPath}
                 fadeOut={imgFadeOut}
                 fadeIn={imgFadeIn}
-                onLoad={() => handleItemLoaded()}
+                onLoad={() => handleImageLoaded()}
               />
               {vidExists && itemsLoaded
               && (

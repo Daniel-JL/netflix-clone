@@ -6,6 +6,7 @@ import getVideos from '../../../helpers/getVideos';
 import LoadingSkeleton from '../../main-page/loading-skeleton/loading-skeleton';
 import MotionBackgroundMedia from '../motion-background-media/motion-background-media';
 import MotionBackgroundOverlay from '../motion-background-overlay/motion-background-overlay';
+import MotionBackgroundLoadingSkeleton from '../motion-background-skeleton-loader/motion-background-skeleton-loader';
 
 const MotionBackgroundContainer = styled.div`
   width: 100%;
@@ -24,6 +25,15 @@ const SpacingRow = styled.div`
   padding-top: 40%;
   z-index: 2;
   color: white;
+`;
+
+const ContentContainer = styled.div`
+  position: relative;
+  display: none;
+
+  ${({ imageLoaded }) => imageLoaded && `
+      display: block;
+  `}
 `;
 
 const videosAvailable = (numVideos) => numVideos > 0;
@@ -59,6 +69,7 @@ const MotionBackground = ({
   const [modalActive, setModalActive] = useState(false);
   const [isPlaying, setIsPlaying] = useState();
   const [videoEnded, setVideoEnded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const modalActiveRef = useRef(false);
   const intersectionThreshold = 0.2;
   const mutationObserver = useRef();
@@ -136,6 +147,12 @@ const MotionBackground = ({
     setIsPlaying((isPlaying) => false);
   };
 
+  const handleImageLoaded = () => {
+    handleItemLoaded();
+    setImageLoaded(true);
+    console.log('imageLoaded');
+  };
+
   useEffect(() => {
     fetchItemData();
     if (!isEpsInfoBox) {
@@ -181,35 +198,37 @@ const MotionBackground = ({
 
   return (
     <MotionBackgroundContainer isEpsInfoBox={isEpsInfoBox}>
-      {!dataLoaded && !isEpsInfoBox
+      {!imageLoaded && isEpsInfoBox && <MotionBackgroundLoadingSkeleton />}
+      <ContentContainer imageLoaded={imageLoaded}>
+        <MotionBackgroundMedia
+          isEpsInfoBox={isEpsInfoBox}
+          dataLoaded={dataLoaded}
+          backdropPath={backdropPath}
+          videoURL={videoURL}
+          vidExists={vidExists}
+          isPlaying={isPlaying}
+          muteActive={muteActive}
+          videoEnded={videoEnded}
+          handleVideoEnded={handleVideoEnded}
+          handleImageLoaded={handleImageLoaded}
+          setVideoEnded={setVideoEnded}
+          itemsLoaded={itemsLoaded}
+        />
+        <MotionBackgroundOverlay
+          overlayData={overlayData}
+          vidExists={vidExists}
+          videoEnded={videoEnded}
+          isEpsInfoBox={isEpsInfoBox}
+          handleMuteReplayButtonClick={handleMuteReplayButtonClick}
+          handleInfoButtonClick={handleInfoButtonClick}
+          setPausePoint={setPausePoint}
+        />
+      </ContentContainer>
+      {/* {!dataLoaded && isEpsInfoBox
         ? <LoadingSkeleton />
         : (
-          <div>
-            <MotionBackgroundMedia
-              isEpsInfoBox={isEpsInfoBox}
-              dataLoaded={dataLoaded}
-              backdropPath={backdropPath}
-              videoURL={videoURL}
-              vidExists={vidExists}
-              isPlaying={isPlaying}
-              muteActive={muteActive}
-              videoEnded={videoEnded}
-              handleVideoEnded={handleVideoEnded}
-              handleItemLoaded={handleItemLoaded}
-              setVideoEnded={setVideoEnded}
-              itemsLoaded={itemsLoaded}
-            />
-            <MotionBackgroundOverlay
-              overlayData={overlayData}
-              vidExists={vidExists}
-              videoEnded={videoEnded}
-              isEpsInfoBox={isEpsInfoBox}
-              handleMuteReplayButtonClick={handleMuteReplayButtonClick}
-              handleInfoButtonClick={handleInfoButtonClick}
-              setPausePoint={setPausePoint}
-            />
-          </div>
-        )}
+          
+        )} */}
 
       <SpacingRow />
     </MotionBackgroundContainer>

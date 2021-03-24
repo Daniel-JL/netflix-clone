@@ -41,7 +41,7 @@ const processTrendingMediaData = async (mediaType) => {
   return trendingMediaData;
 };
 
-const Routes = () => {
+const App = () => {
   const [epsAndInfoBoxProps, setEpsAndInfoBoxProps] = useState({});
   const location = useLocation();
   const background = location.state && location.state.background;
@@ -199,4 +199,4 @@ const Routes = () => {
   );
 };
 
-export default Routes;
+export default App;

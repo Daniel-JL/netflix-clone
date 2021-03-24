@@ -32,7 +32,7 @@ const Video = () => {
         className="videoFrame"
         url={myVideo}
         playing
-        controls={true}
+        controls={false}
         width="100%"
         height="100%"
       />

@@ -1,6 +1,18 @@
 import React from 'react';
-import { cleanup, fireEvent, render, getByTestId } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
-import { App } from './App';
+import { fireEvent, render } from '@testing-library/react';
+import renderer from 'react-test-renderer';
+import { Routes } from './routes';
 
+describe('Search input', () => {
+  it('should render correctly', () => {
+    const wrapper = renderer.create(<SearchBox />).toJSON();
 
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('should correctly load views depending on url', () => {
+    //  TODO
+    //  1. Check that each view component is mounted when specific urls are present
+  });
+
+});
