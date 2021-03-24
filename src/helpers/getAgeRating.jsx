@@ -1,7 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 import { React } from 'react';
 
-export const getAgeRating = async (mediaId, mediaType) => {
+const getAgeRating = async (mediaId, mediaType) => {
   let ageRating;
   let data;
   let ageRatingUrl;
@@ -37,3 +36,5 @@ export const getAgeRating = async (mediaId, mediaType) => {
 };
 
 const mediaIsMovie = (mediaType) => mediaType === 'movie';
+
+export default getAgeRating;

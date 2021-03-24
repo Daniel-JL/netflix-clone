@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-export const getMediaData = async (mediaType, mediaId) => {
+const getMediaData = async (mediaType, mediaId) => {
   let data;
 
   try {
@@ -14,3 +13,5 @@ export const getMediaData = async (mediaType, mediaId) => {
 
   return data;
 };
+
+export default getMediaData;
